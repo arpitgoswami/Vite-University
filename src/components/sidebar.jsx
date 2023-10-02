@@ -1,4 +1,8 @@
 function Sidebar() {
+  function exit() {
+    let a = document.getElementById("message");
+    message.style.display = "none";
+  }
   return (
     <>
       <nav
@@ -15,7 +19,7 @@ function Sidebar() {
           <li className="hover:text-gray-400">Courses</li>
         </ul>
         <div className="p-4 text-sm">All Categories</div>
-        <div className="mx-4  bg-gray-900 rounded-lg">
+        <div className="mx-4  bg-gray-900 rounded-lg" id="message">
           <div className="p-4">
             <div className="font-semibold">Customize your nav !</div>
             <div className="my-4 text-xs">
@@ -24,7 +28,7 @@ function Sidebar() {
             </div>
             <div className="flex space-x-8 text-blue-700 font-semibold">
               <a href="">Learn More</a>
-              <a href="">Got it</a>
+              <button onClick={exit}>Got it</button>
             </div>
           </div>
         </div>

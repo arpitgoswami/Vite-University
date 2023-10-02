@@ -3,6 +3,7 @@ import Sidebar from "./components/sidebar";
 import Student from "./pages/student";
 
 import Dashboard from "./pages/dashboard";
+
 import "./App.css";
 
 function App() {
