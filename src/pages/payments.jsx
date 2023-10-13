@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-function Student() {
+function Payments() {
   const [formData, setFormData] = useState({
     name: "",
     grade: "",
@@ -90,4 +90,4 @@ function Student() {
   );
 }
 
-export default Student;
+export default Payments;
