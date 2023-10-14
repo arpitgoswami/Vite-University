@@ -1,7 +1,5 @@
 import ReactDOM from "react-dom";
 
-import Login from "./components/login";
-
 import Dashboard from "./pages/dashboard";
 import Assignments from "./pages/assignments";
 import Academics from "./pages/academics";
@@ -78,7 +76,7 @@ function App() {
           style={{ marginLeft: "18.5rem" }}
         >
           <div id="workspace">
-            <Login />
+            <Dashboard />
           </div>
         </div>
       </div>
