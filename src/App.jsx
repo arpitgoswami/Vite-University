@@ -4,6 +4,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import Test from "./pages/Test";
 import ComingSoon from "./pages/ComingSoon";
+import Error404 from "./pages/Error404";
 
 import "./styles/App.css";
 
@@ -12,10 +13,11 @@ function App() {
     <>
       <Router>
         <Routes>
+          <Route path="*" element={<Error404 />} />
           <Route path="/" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/test" element={<Test />} />
-          <Route path="comingsoon" element={<ComingSoon />} />
+          <Route path="/comingsoon" element={<ComingSoon />} />
         </Routes>
       </Router>
     </>
