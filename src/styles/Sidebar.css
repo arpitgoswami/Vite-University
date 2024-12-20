@@ -1,0 +1,12 @@
+#menu div {
+  opacity: 0.8;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
+}
+
+#menu div:hover {
+  opacity: 1;
+  cursor: pointer;
+  transform: translateX(1rem);
+  transition-duration: 0.4s;
+}

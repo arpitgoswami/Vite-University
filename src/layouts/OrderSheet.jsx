@@ -24,7 +24,8 @@ function OrderSheet() {
 
   return (
     <div className="p-8 bg-gray-100 min-h-screen">
-      <h1 className="text-2xl font-bold text-gray-800 mb-6">Order Sheet</h1>
+      <h1 className="text-2xl font-bold text-gray-800">Order Sheet</h1>
+      <hr className="mt-4" />
       {data.length > 0 ? (
         <table className="w-full border border-gray-300 text-left bg-white shadow-md">
           <thead>

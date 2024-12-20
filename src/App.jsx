@@ -4,7 +4,7 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import ComingSoon from "./pages/ComingSoon";
 import Error404 from "./pages/Error404";
-import Edit from "./pages/Edit";
+import Edit from "./layouts/Edit";
 
 function App() {
   return (
