@@ -2,11 +2,9 @@ import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
-import Test from "./pages/Test";
 import ComingSoon from "./pages/ComingSoon";
 import Error404 from "./pages/Error404";
-
-import "./styles/App.css";
+import Edit from "./pages/Edit";
 
 function App() {
   return (
@@ -15,9 +13,10 @@ function App() {
         <Routes>
           <Route path="*" element={<Error404 />} />
           <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/test" element={<Test />} />
           <Route path="/comingsoon" element={<ComingSoon />} />
+          <Route path="/edit" element={<Edit />} />
         </Routes>
       </Router>
     </>

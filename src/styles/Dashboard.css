@@ -1,0 +1,5 @@
+#menu p:hover {
+  cursor: pointer;
+  opacity: 0.6;
+  transition-duration: 0.2s;
+}

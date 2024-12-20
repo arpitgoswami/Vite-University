@@ -16,7 +16,7 @@ function Login() {
       });
       alert(username, password);
       if (response.data === "Success") {
-        navigate("./dashboard");
+        navigate("../dashboard");
       } else {
         console.log(response.data);
       }
@@ -69,7 +69,7 @@ function Login() {
           <a
             href="#"
             className="text-blue-600 hover:underline"
-            onClick={() => navigate("./comingsoon")}
+            onClick={() => navigate("../comingsoon")}
           >
             Sign up
           </a>
