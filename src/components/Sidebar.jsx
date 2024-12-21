@@ -1,6 +1,7 @@
-import { GrAnalytics } from "react-icons/gr";
+import { SiBmcsoftware } from "react-icons/si";
 
 import { GrOverview } from "react-icons/gr";
+import { LuShoppingBag } from "react-icons/lu";
 import { MdBorderColor } from "react-icons/md";
 import { MdDataSaverOff } from "react-icons/md";
 import { TbBrandSentry } from "react-icons/tb";
@@ -17,10 +18,7 @@ function Sidebar({ onNavChange }) {
         className="fixed bg-[#2a2c2d] w-72 h-[100vh] text-[#fff] p-8 flex flex-col"
       >
         <div className="flex items-center space-x-2">
-          <GrAnalytics />
-          <span>
-            <b>ALPEX PHARMA</b>
-          </span>
+          <img src="./logo.jpg" />
         </div>
         <hr className="mt-8 mb-6 opacity-50" />
         <div id="menu" className="hover:opacity-0.4">
@@ -30,6 +28,13 @@ function Sidebar({ onNavChange }) {
           >
             <GrOverview />
             <span>Overview</span>
+          </div>
+          <div
+            className="mt-auto flex items-center space-x-2"
+            onClick={() => onNavChange("SalesReport")}
+          >
+            <LuShoppingBag />
+            <span>Sales Report</span>
           </div>
           <div
             className="mt-auto flex items-center space-x-2"
@@ -55,10 +60,10 @@ function Sidebar({ onNavChange }) {
             <span>Performance</span>
           </div>
         </div>
-        <div id="footer" className="mt-auto flex items-center space-x-2">
+        <button id="footer" className="mt-auto flex items-center space-x-2">
           <BiLogOutCircle />
           <span>Log out</span>
-        </div>
+        </button>
       </div>
     </>
   );

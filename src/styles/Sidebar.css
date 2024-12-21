@@ -1,12 +1,29 @@
 #menu div {
   opacity: 0.8;
+  cursor: pointer;
   padding-top: 1rem;
   padding-bottom: 1rem;
 }
 
 #menu div:hover {
   opacity: 1;
-  cursor: pointer;
-  transform: translateX(1rem);
   transition-duration: 0.4s;
+  transform: translateX(0.8rem);
+}
+
+#footer {
+  color: black;
+  padding-top: 5px;
+  padding-left: 2rem;
+  padding-bottom: 5px;
+  border-radius: 0.2rem;
+  background-color: #fff;
+}
+
+#footer:hover {
+  opacity: 0.8;
+  cursor: pointer;
+}
+
+#footer:active {
 }
