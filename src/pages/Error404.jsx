@@ -1,22 +1,35 @@
-import React from "react";
+import { useNavigate } from "react-router-dom";
 
 function Error404() {
+  const navigate = useNavigate();
   return (
-    <div className="min-h-screen bg-gradient-to-r from-gray-700 to-gray-900 flex flex-col justify-center items-center text-white">
-      <h1 className="text-6xl font-extrabold mb-4">404</h1>
-      <p className="text-2xl sm:text-3xl mb-6 text-center">
-        Oops! Page not found.
-      </p>
-      <p className="text-lg mb-6 text-center">
-        The page you're looking for doesn't exist or has been moved.
-      </p>
-      <a
-        href="/"
-        className="bg-blue-500 hover:bg-blue-600 text-white px-6 py-3 rounded-md font-semibold"
-      >
-        Go to Homepage
-      </a>
-    </div>
+    <>
+      <main className="flex justify-center items-center h-[100vh]">
+        <div className="text-center">
+          <p className="text-base font-semibold text-indigo-600">404</p>
+          <h1 className="mt-4 text-balance text-5xl font-semibold tracking-tight text-gray-900 sm:text-5xl">
+            Page not found
+          </h1>
+          <p className="mt-4 text-pretty text-md font-medium text-gray-500 sm:text-mdx">
+            Sorry, we couldn’t find the page you’re looking for.
+          </p>
+          <div className="mt-8 flex items-center justify-center gap-x-6">
+            <a
+              href="#"
+              className="rounded-md bg-indigo-600 px-3.5 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              onClick={() => {
+                navigate("../");
+              }}
+            >
+              Go back home
+            </a>
+            <a href="#" className="text-sm font-semibold text-gray-900">
+              Contact support <span aria-hidden="true">&rarr;</span>
+            </a>
+          </div>
+        </div>
+      </main>
+    </>
   );
 }
 

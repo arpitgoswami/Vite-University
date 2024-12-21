@@ -5,6 +5,10 @@ import Overview from "../layouts/Overview";
 import SalesReport from "../layouts/SalesReport";
 import OrderSheet from "../layouts/OrderSheet";
 
+import Searchbar from "../components/Searchbar";
+
+import TestSalesReport from "../test/testSalesReport";
+
 function Dashboard() {
   const [activeLayout, setActiveLayout] = useState("Overview");
 
@@ -14,9 +18,13 @@ function Dashboard() {
         <Sidebar onNavChange={setActiveLayout} />
       </div>
 
-      <div className="mx-72">
+      <div id="Searchbar">
+        <Searchbar />
+      </div>
+
+      <div className="ml-72">
         {activeLayout === "Overview" && <Overview />}
-        {activeLayout === "SalesReport" && <SalesReport />}
+        {activeLayout === "SalesReport" && <TestSalesReport />}
         {activeLayout === "OrderSheet" && <OrderSheet />}
       </div>
     </>
