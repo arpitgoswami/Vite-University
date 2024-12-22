@@ -1,27 +1,4 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
-
 function Overview() {
-  const [data, setData] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/order_sheet")
-      .then((response) => {
-        setData(response.data);
-        setLoading(false);
-      })
-      .catch((error) => {
-        console.error("Error fetching data:", error);
-        setLoading(false);
-      });
-  }, []);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
   return (
     <>
       <div className="flex p-8">

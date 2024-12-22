@@ -10,7 +10,25 @@ import { IoStatsChart } from "react-icons/io5";
 
 import { BiLogOutCircle } from "react-icons/bi";
 
+import axios from "axios";
+
 function Sidebar({ onNavChange }) {
+  const handleDeleteCookie = () => {
+    axios
+      .get("http://localhost:3000/delete-cookie", { withCredentials: true })
+      .then((response) => {
+        alert("You have been logged out.");
+        window.location.reload();
+      })
+      .catch((error) => {
+        console.error(
+          "Error deleting cookie:",
+          error.response?.data || error.message
+        );
+        alert("Failed to logout.");
+      });
+  };
+
   return (
     <>
       <div
@@ -60,7 +78,11 @@ function Sidebar({ onNavChange }) {
             <span>Performance</span>
           </div>
         </div>
-        <button id="footer" className="mt-auto flex items-center space-x-2">
+        <button
+          onClick={handleDeleteCookie}
+          id="footer"
+          className="mt-auto flex items-center space-x-2"
+        >
           <BiLogOutCircle />
           <span>Log out</span>
         </button>

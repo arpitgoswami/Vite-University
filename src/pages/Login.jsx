@@ -1,6 +1,4 @@
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import { useState, useNavigate, axios } from "../shared/SharedImports";
 
 function Login() {
   const navigate = useNavigate();
@@ -14,8 +12,8 @@ function Login() {
         username,
         password,
       });
-      if (response.data === "Login Success") {
-        navigate("../dashboard");
+      if (response.status === 200) {
+        createCookie(response.data);
       } else {
         console.log(response.data);
       }
@@ -23,6 +21,24 @@ function Login() {
       console.error("Error during login:", error);
       console.log("An error occurred during login.");
     }
+  };
+
+  const createCookie = (e) => {
+    axios
+      .get("http://localhost:3000/create-cookie", {
+        params: { data: e },
+        withCredentials: true,
+      })
+      .then((response) => {
+        console.log(response.data);
+        navigate("../dashboard");
+      })
+      .catch((error) => {
+        console.error(
+          "Error creating cookie:",
+          error.response?.data || error.message
+        );
+      });
   };
 
   return (
@@ -88,7 +104,7 @@ function Login() {
           <a
             href="#"
             className="font-semibold text-indigo-600 hover:text-indigo-500"
-            onClick={() => navigate("../comingsoon")}
+            onClick={() => navigate("../contact")}
           >
             Raise a query
           </a>
