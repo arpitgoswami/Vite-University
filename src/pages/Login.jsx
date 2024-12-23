@@ -50,7 +50,7 @@ function Login() {
         </h2>
       </div>
       <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-        <form className="space-y-6" onSubmit={() => navigate("../dasboard")>
+        <form className="space-y-6" onSubmit={() => navigate("../dasboard")}>
           <div>
             <label className="block text-sm/6 font-medium text-gray-900">
               Username
