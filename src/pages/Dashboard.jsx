@@ -14,19 +14,6 @@ function Dashboard() {
   const [message, setMessage] = useState("");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    axios
-      .get("http://localhost:3000/check-cookie", { withCredentials: true }) // Include credentials (cookies)
-      .then((result) => {
-        if (result.data.hasCookie) {
-          console.log(true);
-        } else {
-          navigate("../");
-        }
-      })
-      .catch((err) => console.log(err)); // Logs any error that occurs
-  }, []);
-
   return (
     <>
       <div id="Sidebar">
