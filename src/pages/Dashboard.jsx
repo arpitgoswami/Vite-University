@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 
 import Sidebar from "../components/Sidebar";
-import Searchbar from "../components/Searchbar";
+import Navbar from "../components/Navbar";
 
 import Overview from "../layouts/Overview";
 import OrderSheet from "../layouts/OrderSheet";
@@ -24,9 +24,9 @@ function Dashboard() {
         <Sidebar onNavChange={setActiveLayout} />
       </div>
 
-      {/*<div id="Searchbar">
-        <Searchbar />
-      </div>*/}
+      <div id="Searchbar">
+        <Navbar />
+      </div>
 
       <div className="ml-72">
         {activeLayout === "Overview" && <Overview />}
