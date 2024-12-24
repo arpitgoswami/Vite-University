@@ -1,20 +1,26 @@
 import axios from "@axios";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 const TestUpdate = () => {
-  const { id } = useParams(); // Get the id from route params
-  const [formData, setFormData] = useState(null); // Store API response here
-  const [inputValues, setInputValues] = useState({}); // Manage form input values
-  const [message, setMessage] = useState(""); // Feedback message
+  // State variables to manage form data, input values, and feedback messages
+  const [formData, setFormData] = useState(null);
+  const [inputValues, setInputValues] = useState({});
+  const [message, setMessage] = useState("");
+
+  // Extract 'id' from URL params and 'doc' from query parameters
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const { id } = useParams();
+  const doc = params.get("doc");
 
   useEffect(() => {
-    // Fetch data when the component mounts
+    // Fetch data based on 'doc' and 'id' when the component mounts
     const fetchData = async () => {
       try {
-        const response = await axios.get(`order_sheets/${id}`); // Replace with your API
-        setFormData(response.data); // Set form data from response
-        setInputValues(response.data); // Initialize form values
+        const response = await axios.get(`${doc}/${id}`); // API call using 'doc' and 'id'
+        setFormData(response.data); // Set fetched data to formData
+        setInputValues(response.data); // Initialize form input values
       } catch (error) {
         console.error("Error fetching data:", error);
         setMessage("Failed to load data.");
@@ -22,9 +28,9 @@ const TestUpdate = () => {
     };
 
     fetchData();
-  }, [id]);
+  }, [id, doc]); // Re-fetch data if either 'id' or 'doc' changes
 
-  // Handle form input changes
+  // Handle input field changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInputValues((prevValues) => ({
@@ -33,20 +39,20 @@ const TestUpdate = () => {
     }));
   };
 
-  // Handle form submission
+  // Handle form submission to update data
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(`order_sheets/${id}`, inputValues); // Replace with your update API
-      setMessage("Data updated successfully!");
+      const response = await axios.put(`${doc}/${id}`, inputValues); // API call to update data
+      setMessage("Data updated successfully!"); // Success feedback
       console.log("Updated data:", response.data);
     } catch (error) {
       console.error("Error updating data:", error);
-      setMessage("Failed to update data.");
+      setMessage("Failed to update data."); // Error feedback
     }
   };
 
-  // Render loading state if data is not fetched yet
+  // Show loading state until form data is fetched
   if (!formData) {
     return <div>Loading...</div>;
   }
@@ -73,7 +79,8 @@ const TestUpdate = () => {
                   htmlFor={key}
                   className="block text-sm/6 font-medium text-gray-900"
                 >
-                  {key.charAt(0).toUpperCase() + key.slice(1)}
+                  {key.charAt(0).toUpperCase() + key.slice(1)}{" "}
+                  {/* Capitalize key */}
                 </label>
                 <input
                   type="text"
@@ -94,6 +101,7 @@ const TestUpdate = () => {
             Update
           </button>
         </form>
+
         {message && (
           <p className="mt-4 text-sm font-medium text-green-600">{message}</p>
         )}

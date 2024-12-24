@@ -4,8 +4,8 @@ import Sidebar from "../components/Sidebar";
 import Searchbar from "../components/Searchbar";
 
 import Overview from "../layouts/Overview";
-import TestSalesReport from "../test/testSalesReport";
 import OrderSheet from "../layouts/OrderSheet";
+import SalesReport from "../layouts/SalesReport";
 
 import { readCookie } from "@cookie";
 
@@ -30,7 +30,7 @@ function Dashboard() {
 
       <div className="ml-72">
         {activeLayout === "Overview" && <Overview />}
-        {activeLayout === "SalesReport" && <TestSalesReport />}
+        {activeLayout === "SalesReport" && <SalesReport />}
         {activeLayout === "OrderSheet" && <OrderSheet />}
       </div>
     </>

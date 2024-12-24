@@ -18,6 +18,7 @@ export default defineConfig({
     alias: {
       "@axios": path.resolve(__dirname, "src/utils/axios"),
       "@cookie": path.resolve(__dirname, "src/utils/cookieUtils"),
+      "@function": path.resolve(__dirname, "src/utils/functions"),
       "@shared": path.resolve(__dirname, "src/shared"),
     },
   },

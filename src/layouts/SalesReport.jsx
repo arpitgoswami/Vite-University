@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { filterData, fetchData, handleDelete } from "@function";
-import Loading from "../components/Loading";
+import { useNavigate } from "react-router-dom";
 
 // Function to capitalize the first letter of each word in a string
 function capitalize(str) {
@@ -10,12 +10,13 @@ function capitalize(str) {
     .join(" ");
 }
 
-function OrderSheet() {
+function SalesReport() {
   const [data, setData] = useState([]); // State for storing data
   const [loading, setLoading] = useState(true); // Loading state
   const [searchQuery, setSearchQuery] = useState(""); // State for search query
+  const navigate = useNavigate(); // Navigate for adding new entry
 
-  const url = "users"; // Define the API endpoint
+  const url = "sales"; // Define the API endpoint
 
   // Fetch data on component mount
   useEffect(() => {
@@ -24,7 +25,7 @@ function OrderSheet() {
 
   // Loading and empty data handling
   if (loading) {
-    return <Loading />;
+    return <div>Loading...</div>;
   }
 
   if (data.length === 0) {
@@ -75,50 +76,63 @@ function OrderSheet() {
       </div>
 
       {/* Table for displaying filtered data */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-        {/* Displaying filtered data as cards */}
-        {filteredData.map((item, index) => (
-          <div
-            key={index}
-            className="bg-white p-4 shadow-lg rounded-lg border border-gray-300 hover:shadow-xl transition duration-150 ease-in-out"
-          >
-            {/* Card Content */}
-            <div className="flex flex-col space-y-2">
-              {/* Displaying each data field */}
+      <div className="overflow-x-auto">
+        <table className="text-xs table-auto w-full border-collapse border border-gray-300">
+          <thead>
+            <tr className="bg-gray-200">
+              {/* Table Header: Displaying limited columns */}
               {limitedColumns.map((column) => (
-                <div key={column} className="flex justify-between items-center">
-                  <span className="font-semibold text-gray-700">
-                    {capitalize(column)}:
-                  </span>
-                  <span className="text-gray-800">{item[column]}</span>
-                </div>
+                <th
+                  key={column}
+                  className="border border-gray-300 px-4 py-2 text-left"
+                >
+                  {capitalize(column)} {/* Capitalize the column name */}
+                </th>
               ))}
-            </div>
-
-            {/* Card Actions */}
-            <div className="mt-4 flex gap-4 justify-start">
-              {/* Edit Button */}
-              <button
-                onClick={() =>
-                  window.open(`/testUpdate/${item._id}?doc=${url}`, "_blank")
-                }
-                className="px-3 py-1 bg-purple-500 text-white rounded-md text-xs hover:bg-purple-600 focus:outline-none"
-              >
-                Edit
-              </button>
-              {/* Delete Button */}
-              <button
-                onClick={() => handleDelete(item._id, url)}
-                className="px-3 py-1 bg-red-500 text-white rounded-md text-xs hover:bg-red-600 focus:outline-none"
-              >
-                Delete
-              </button>
-            </div>
-          </div>
-        ))}
+              {/* Actions Column */}
+              <th className="border border-gray-300 px-4 py-2 text-left">
+                Actions
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* Table Body: Displaying filtered data */}
+            {filteredData.map((item, index) => (
+              <tr key={index}>
+                {/* Displaying each data field */}
+                {limitedColumns.map((column) => (
+                  <td key={column} className="border border-gray-300 px-4 py-2">
+                    {item[column]}
+                  </td>
+                ))}
+                <td className="border border-gray-300 px-4 py-2">
+                  {/* Edit Button */}
+                  <button
+                    onClick={() =>
+                      window.open(
+                        `/testUpdate/${item._id}?doc=${url}`,
+                        "_blank"
+                      )
+                    }
+                    className="px-2 py-1 bg-purple-500 text-white rounded-md text-xs hover:bg-purple-600"
+                  >
+                    Edit
+                  </button>
+                  {/* Delete Button */}
+                  <button
+                    onClick={() => handleDelete(item._id, url)}
+                    className="ml-2 px-2 py-1 bg-red-500 text-white rounded-md text-xs hover:bg-red-600"
+                  >
+                    Delete
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
     </div>
   );
 }
 
-export default OrderSheet;
+export default SalesReport;

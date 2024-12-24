@@ -5,10 +5,11 @@ import Dashboard from "./pages/Dashboard";
 import ComingSoon from "./pages/ComingSoon";
 import Error404 from "./pages/Error404";
 
-import TestSalesReport from "./test/testSalesReport";
 import TestUpdate from "./test/testUpdate";
+import TestCreate from "./test/testCreate";
 
 import Contact from "./pages/Contact";
+import SalesReport from "./layouts/SalesReport";
 
 function App() {
   return (
@@ -21,10 +22,13 @@ function App() {
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/comingsoon" element={<ComingSoon />} />
 
-          <Route path="/testSalesReport" element={<TestSalesReport />} />
           <Route path="/testUpdate/:id" element={<TestUpdate />} />
 
+          <Route path="/testCreate/:doc" element={<TestCreate />} />
+
           <Route path="/contact" element={<Contact />} />
+
+          <Route path="/salesreport" element={<SalesReport />} />
         </Routes>
       </Router>
     </>
