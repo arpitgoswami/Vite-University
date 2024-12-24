@@ -1,8 +1,8 @@
-import axios from "axios";
+import axios from "@axios";
 
 export const createCookie = (e) => {
   axios
-    .get("http://localhost:3000/create-cookie", {
+    .get("create-cookie", {
       params: { data: e },
       withCredentials: true,
     })
@@ -20,12 +20,12 @@ export const createCookie = (e) => {
 
 export const readCookie = () => {
   axios
-    .get("http://localhost:3000/check-cookie", { withCredentials: true })
+    .get("check-cookie", { withCredentials: true })
     .then((result) => {
       if (result.data.hasCookie) {
         console.log(true);
       } else {
-        window.location.href = "../";
+        console.log(false);
       }
     })
     .catch((err) => console.log(err));
@@ -33,7 +33,7 @@ export const readCookie = () => {
 
 export const handleDeleteCookie = () => {
   axios
-    .get("http://localhost:3000/delete-cookie", { withCredentials: true })
+    .get("delete-cookie", { withCredentials: true })
     .then((response) => {
       alert("You have been logged out.");
       window.location.href = "../";
