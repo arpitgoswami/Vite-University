@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import axios from "@axios";
+import { useState, useEffect } from "react";
 
 function TestSalesReport() {
   const [salesData, setSalesData] = useState([]);
@@ -21,7 +21,7 @@ function TestSalesReport() {
 
   useEffect(() => {
     axios
-      .get("http://localhost:3000/order_sheets")
+      .get("order_sheets")
       .then((result) => setSalesData(result.data))
       .catch((err) => console.log(err));
     setReload(0);
@@ -29,7 +29,7 @@ function TestSalesReport() {
 
   const handleDelete = (id) => {
     axios
-      .delete(`http://localhost:3000/order_sheets/${id}`)
+      .delete(`order_sheets/${id}`)
       .then((result) => {
         console.log("Deleted successfully:", result);
       })
@@ -42,7 +42,7 @@ function TestSalesReport() {
   const handleSubmit = (e) => {
     e.preventDefault();
     axios
-      .post("http://localhost:3000/order_sheets/", formData)
+      .post("order_sheets/", formData)
       .then((result) => console.log(result))
       .catch((err) => console.log(err));
     setReload(1);
@@ -51,7 +51,7 @@ function TestSalesReport() {
   const handleSearch = (e) => {
     e.preventDefault();
     axios
-      .get(`http://localhost:3000/order_sheets/${id}`)
+      .get(`order_sheets/${id}`)
       .then((result) => {
         const data = Array.isArray(result.data) ? result.data : [result.data];
         setSearchData(data);
@@ -151,32 +151,30 @@ function TestSalesReport() {
       </form>
 
       <div className="mt-6">
-        <div className="flex items-end justify-between w-[100vw] ">
-          <div>
-            <div className="text-sm/6 font-semibold">Search Record</div>
-            <hr className="my-2" />
-            <form className="flex space-x-4" onSubmit={handleSearch}>
-              <input
-                type="text"
-                id="search"
-                name="search"
-                value={id}
-                onChange={(e) => setId(e.target.value)}
-                placeholder="Enter id value"
-                className="mt-1 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                required
-              />
+        <div>
+          <div className="text-sm/6 font-semibold">Search Record</div>
+          <hr className="my-2" />
+          <form className="flex space-x-4" onSubmit={handleSearch}>
+            <input
+              type="text"
+              id="search"
+              name="search"
+              value={id}
+              onChange={(e) => setId(e.target.value)}
+              placeholder="Enter id value"
+              className="mt-1 block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
+              required
+            />
 
-              <button
-                type="submit"
-                className="mt-2 flex w-min justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              >
-                Search
-              </button>
-            </form>
-          </div>
+            <button
+              type="submit"
+              className="mt-2 flex w-min justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            >
+              Search
+            </button>
+          </form>
         </div>
-        <table className="mt-2 table-auto w-full text-sm text-left text-gray-700 border rounded-lg overflow-hidden">
+        <table className="mt-2 hidden table-auto w-full text-sm text-left text-gray-700 border rounded-lg overflow-hidden">
           <thead className="bg-gray-100 text-gray-800">
             <tr className="border-b">
               <th className="px-4 py-2">ID</th>

@@ -1,14 +1,16 @@
-import { useState, useNavigate, axios } from "../shared/SharedImports";
+import axios from "@axios";
+import { createCookie } from "@cookie";
+
+import { useState } from "react";
 
 function Login() {
-  const navigate = useNavigate();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:3000/login", {
+      const response = await axios.post("login", {
         username,
         password,
       });
@@ -21,24 +23,6 @@ function Login() {
       console.error("Error during login:", error);
       console.log("An error occurred during login.");
     }
-  };
-
-  const createCookie = (e) => {
-    axios
-      .get("http://localhost:3000/create-cookie", {
-        params: { data: e },
-        withCredentials: true,
-      })
-      .then((response) => {
-        console.log(response.data);
-        navigate("../dashboard");
-      })
-      .catch((error) => {
-        console.error(
-          "Error creating cookie:",
-          error.response?.data || error.message
-        );
-      });
   };
 
   return (

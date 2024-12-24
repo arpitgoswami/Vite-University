@@ -4,7 +4,6 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import ComingSoon from "./pages/ComingSoon";
 import Error404 from "./pages/Error404";
-import Update from "./layouts/Update";
 
 import TestSalesReport from "./test/testSalesReport";
 import TestUpdate from "./test/testUpdate";
@@ -21,7 +20,6 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/dashboard" element={<Dashboard />} />
           <Route path="/comingsoon" element={<ComingSoon />} />
-          <Route path="/update/:id" element={<Update />} />
 
           <Route path="/testSalesReport" element={<TestSalesReport />} />
           <Route path="/testUpdate/:id" element={<TestUpdate />} />

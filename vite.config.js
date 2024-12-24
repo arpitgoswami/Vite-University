@@ -1,5 +1,6 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
+import path from "path"; // Import the path module to resolve paths
 
 // https://vite.dev/config/
 export default defineConfig({
@@ -8,6 +9,17 @@ export default defineConfig({
   },
   server: {
     historyApiFallback: true,
+    proxy: {
+      // Proxy API requests to the backend
+      "/api": "http://localhost:3000/", // Adjust the URL for your backend
+    },
+  },
+  resolve: {
+    alias: {
+      "@axios": path.resolve(__dirname, "src/utils/axios"),
+      "@cookie": path.resolve(__dirname, "src/utils/cookieUtils"),
+      "@shared": path.resolve(__dirname, "src/shared"),
+    },
   },
   plugins: [react()],
 });

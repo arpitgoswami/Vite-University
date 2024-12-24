@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
+import axios from "@axios";
+import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
 
 const TestUpdate = () => {
   const { id } = useParams(); // Get the id from route params
@@ -12,9 +12,7 @@ const TestUpdate = () => {
     // Fetch data when the component mounts
     const fetchData = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3000/order_sheets/${id}`
-        ); // Replace with your API
+        const response = await axios.get(`order_sheets/${id}`); // Replace with your API
         setFormData(response.data); // Set form data from response
         setInputValues(response.data); // Initialize form values
       } catch (error) {
@@ -39,10 +37,7 @@ const TestUpdate = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.put(
-        `http://localhost:3000/order_sheets/${id}`,
-        inputValues
-      ); // Replace with your update API
+      const response = await axios.put(`order_sheets/${id}`, inputValues); // Replace with your update API
       setMessage("Data updated successfully!");
       console.log("Updated data:", response.data);
     } catch (error) {
