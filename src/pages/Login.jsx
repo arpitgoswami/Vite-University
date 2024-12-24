@@ -16,6 +16,7 @@ function Login() {
       });
       if (response.status === 200) {
         createCookie(response.data);
+        window.location.href = "../dashboard";
       } else {
         console.log(response.data);
       }
