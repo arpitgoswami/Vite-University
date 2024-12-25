@@ -58,7 +58,7 @@ function Login() {
                 <a
                   href="#"
                   className="font-semibold text-indigo-600 hover:text-indigo-500"
-                  onClick={() => navigate("../comingsoon")}
+                  onClick={() => window.location.href = "../contact"}
                 >
                   Forgot password?
                 </a>
@@ -88,7 +88,7 @@ function Login() {
           <a
             href="#"
             className="font-semibold text-indigo-600 hover:text-indigo-500"
-            onClick={() => navigate("../contact")}
+            onClick={() => window.location.href = "../contact"}
           >
             Raise a query
           </a>

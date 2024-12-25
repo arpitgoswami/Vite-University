@@ -19,6 +19,7 @@ export default defineConfig({
       "@axios": path.resolve(__dirname, "src/utils/axios"),
       "@cookie": path.resolve(__dirname, "src/utils/cookieUtils"),
       "@function": path.resolve(__dirname, "src/utils/functions"),
+      "@generatePDF": path.resolve(__dirname, "src/utils/generatePDF"),
       "@shared": path.resolve(__dirname, "src/shared"),
     },
   },

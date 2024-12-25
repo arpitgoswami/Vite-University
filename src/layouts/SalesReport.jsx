@@ -125,6 +125,15 @@ function SalesReport() {
                   >
                     Delete
                   </button>
+
+                  <button
+                    onClick={() =>
+                      window.open(`/invoice/${item._id}/${url}`, "_blank")
+                    }
+                    className="ml-2 px-2 py-1 bg-red-500 text-white rounded-md text-xs hover:bg-red-600"
+                  >
+                    Genrate Invoice
+                  </button>
                 </td>
               </tr>
             ))}

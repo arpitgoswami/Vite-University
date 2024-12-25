@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from "react";
-import { filterData, fetchData, handleDelete } from "@function";
 import { useNavigate } from "react-router-dom";
+import { filterData, fetchData, handleDelete } from "@function";
+import { generatePDF } from "@generatePDF";
 
+// Import the generatePDF function
 // Function to capitalize the first letter of each word in a string
 function capitalize(str) {
   return str
     .split(" ")
-    .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+    .map((word) => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
     .join(" ");
 }
 
@@ -20,8 +22,24 @@ function OrderSheet() {
 
   // Fetch data on component mount
   useEffect(() => {
-    fetchData(url, setData, setLoading);
-  }, []);
+    let isMounted = true; // Flag to check if the component is still mounted
+
+    const fetchDataAsync = async () => {
+      try {
+        await fetchData(url, setData, setLoading);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
+    };
+
+    if (isMounted) {
+      fetchDataAsync();
+    }
+
+    return () => {
+      isMounted = false; // Cleanup function to avoid state updates after unmount
+    };
+  }, []); // Empty dependency array for running once on mount
 
   // Loading and empty data handling
   if (loading) {
@@ -35,7 +53,7 @@ function OrderSheet() {
   // Get column names from the first data record
   const columns = Object.keys(data[0]);
 
-  // Limit columns to display
+  // Limit columns to display (show only the first 5)
   const limitedColumns = columns.slice(0, 5);
 
   // Filter data based on the search query and limited columns
@@ -53,12 +71,20 @@ function OrderSheet() {
           >
             Reload
           </button>
+
           {/* Add New Entry Button */}
           <button
             onClick={() => window.open(`/testCreate/${url}`, "_blank")} // Navigate to create page
             className="bg-green-500 text-white text-sm/6 px-3 py-1.5 rounded-md hover:bg-green-600"
           >
             Add New Entry
+          </button>
+          {/* Download PDF Button */}
+          <button
+            onClick={() => generatePDF()} // Trigger PDF download
+            className="bg-gray-500 text-white text-sm/6 px-3 py-1.5 rounded-md hover:bg-gray-600"
+          >
+            Download PDF
           </button>
         </div>
       </div>

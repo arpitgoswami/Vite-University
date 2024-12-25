@@ -52,6 +52,18 @@ const TestUpdate = () => {
     }
   };
 
+  // Function to trigger print dialog
+  const printPage = () => {
+    const printWindow = window.open("", "", "height=600,width=800");
+    printWindow.document.write("<html><head><title>Print</title></head><body>");
+    printWindow.document.write(
+      document.getElementById("printable-content").innerHTML
+    );
+    printWindow.document.write("</body></html>");
+    printWindow.document.close();
+    printWindow.print();
+  };
+
   // Show loading state until form data is fetched
   if (!formData) {
     return <div>Loading...</div>;
@@ -64,6 +76,12 @@ const TestUpdate = () => {
         <div className="flex justify-center mb-6">
           <img src="../logo.jpg" alt="Logo" className="w-[20rem] mb-8" />
         </div>
+        <button
+          onClick={() => navigate(-1)} // Go back to the previous page
+          className="rounded-md bg-gray-500 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-400 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-500"
+        >
+          Back
+        </button>
 
         <div className="text-sm font-semibold text-gray-800 mb-4">
           Update Entry
@@ -105,6 +123,37 @@ const TestUpdate = () => {
         {message && (
           <p className="mt-4 text-sm font-medium text-green-600">{message}</p>
         )}
+
+        {/* Print Button */}
+        <div className="mt-4 flex justify-center">
+          <button
+            onClick={printPage}
+            className="flex justify-center rounded-md bg-blue-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-blue-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-blue-600"
+          >
+            Print
+          </button>
+        </div>
+
+        {/* Printable content */}
+        <div id="printable-content" style={{ display: "none" }}>
+          <div className="text-center">
+            <h1 className="text-2xl font-bold">Printable Form Data</h1>
+            <div className="mt-4">
+              <strong>Document ID: </strong>
+              {id}
+            </div>
+            <div className="mt-2">
+              {Object.keys(formData).map((key) => (
+                <div key={key}>
+                  <strong>
+                    {key.charAt(0).toUpperCase() + key.slice(1)}:{" "}
+                  </strong>
+                  {formData[key]}
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
