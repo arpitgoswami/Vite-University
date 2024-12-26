@@ -11,6 +11,8 @@ import TestCreate from "./test/testCreate";
 import Contact from "./pages/Contact";
 import SalesReport from "./layouts/SalesReport";
 
+import TestRoute from "./test/testRoute";
+
 import Invoice from "./components/Invoice";
 
 function App() {
@@ -31,11 +33,9 @@ function App() {
           <Route path="/contact" element={<Contact />} />
 
           <Route path="/salesreport" element={<SalesReport />} />
+          <Route path="/testroute" element={<TestRoute />} />
 
           <Route path="/invoice/:id/:doc" element={<Invoice />} />
-
-
-          
         </Routes>
       </Router>
     </>

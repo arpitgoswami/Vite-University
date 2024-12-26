@@ -2,6 +2,7 @@ import axios from "@axios";
 import { createCookie } from "@cookie";
 
 import { useState } from "react";
+import { ToastContainer, toast } from "react-toastify";
 
 function Login() {
   const [username, setUsername] = useState("");
@@ -14,21 +15,32 @@ function Login() {
         username,
         password,
       });
+
       if (response.status === 200) {
         createCookie(response.data);
-      } else {
-        console.log(response.data);
       }
     } catch (error) {
-      console.error("Error during login:", error);
-      console.log("An error occurred during login.");
+      if (error.response?.status === 400) {
+        toast.error("The password is incorrect.", {
+          autoClose: 2000,
+        });
+      } else if (error.response?.status === 404) {
+        toast.error("No user found with this username.", {
+          autoClose: 2000,
+        });
+      } else {
+        console.error("Error during login:", error);
+        toast.error("Sever could not be accessed.", {
+          autoClose: 2000,
+        });
+      }
     }
   };
 
   return (
     <div className="flex h-[100vh] flex-1 flex-col justify-center px-6 py-12 lg:px-8">
       <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-        <img src="./logo.jpg" className="mx-auto h-10 w-auto" />
+        <img src="/logo.jpg" className="mx-auto h-10 w-auto" />
         <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
           Sign in to your account
         </h2>
@@ -58,7 +70,7 @@ function Login() {
                 <a
                   href="#"
                   className="font-semibold text-indigo-600 hover:text-indigo-500"
-                  onClick={() => window.location.href = "../contact"}
+                  onClick={() => (window.location.href = "../contact")}
                 >
                   Forgot password?
                 </a>
@@ -88,12 +100,14 @@ function Login() {
           <a
             href="#"
             className="font-semibold text-indigo-600 hover:text-indigo-500"
-            onClick={() => window.location.href = "../contact"}
+            onClick={() => (window.location.href = "../contact")}
           >
             Raise a query
           </a>
         </p>
       </div>
+
+      <ToastContainer />
     </div>
   );
 }

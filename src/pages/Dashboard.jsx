@@ -7,6 +7,8 @@ import Overview from "../layouts/Overview";
 import OrderSheet from "../layouts/OrderSheet";
 import SalesReport from "../layouts/SalesReport";
 
+import DataTable from "../components/interface/DataTable";
+
 import { readCookie } from "@cookie";
 
 function Dashboard() {
@@ -24,12 +26,12 @@ function Dashboard() {
         <Sidebar onNavChange={setActiveLayout} />
       </div>
 
-      <div id="Searchbar">
+      {/*<div id="Searchbar">
         <Navbar />
-      </div>
+      </div>*/}
 
       <div className="ml-72">
-        {activeLayout === "Overview" && <Overview />}
+        {activeLayout === "Overview" && <DataTable />}
         {activeLayout === "SalesReport" && <SalesReport />}
         {activeLayout === "OrderSheet" && <OrderSheet />}
       </div>

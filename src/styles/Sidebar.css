@@ -6,3 +6,15 @@
   color: #fff;
   background-color: #1e2939;
 }
+
+#footer:hover {
+  background-color: #9d0000 !important;
+}
+
+#footer:focus {
+  background-color: #8d0000 !important;
+}
+
+#innerButtons button:focus {
+  background-color: #101828 !important;
+}

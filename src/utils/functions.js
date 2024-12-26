@@ -1,4 +1,5 @@
 import axios from "@axios";
+import { toast } from "react-toastify";
 
 export function filterData(data, searchQuery, columns) {
   if (!searchQuery) return data;
@@ -22,13 +23,26 @@ export async function fetchData(url, setData, setLoading) {
   }
 }
 
-export const handleDelete = (id, url) => {
+export const handleDelete = (id, url, setReload) => {
+  const isConfirmed = window.confirm(
+    "Are you sure you want to delete this item?"
+  );
+
+  if (!isConfirmed) {
+    return;
+  }
+
   axios
     .delete(`${url}/${id}`)
     .then((result) => {
-      console.log("Deleted successfully:", result);
+      toast.success("Data updated successfully!", {
+        autoClose: 1000,
+        onClose: () => setReload(1),
+      });
     })
     .catch((err) => {
-      console.error("Error deleting:", err);
+      toast.error("Failed to delete item.", {
+        autoClose: 2000,
+      });
     });
 };

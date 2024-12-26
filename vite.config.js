@@ -17,6 +17,7 @@ export default defineConfig({
   resolve: {
     alias: {
       "@axios": path.resolve(__dirname, "src/utils/axios"),
+      "@interface": path.resolve(__dirname, "src/components/interface"),
       "@cookie": path.resolve(__dirname, "src/utils/cookieUtils"),
       "@function": path.resolve(__dirname, "src/utils/functions"),
       "@generatePDF": path.resolve(__dirname, "src/utils/generatePDF"),

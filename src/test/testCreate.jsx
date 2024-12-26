@@ -1,28 +1,27 @@
 import axios from "@axios";
 import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
+import { ToastContainer, toast } from "react-toastify";
 
 const TestCreate = () => {
-  const { doc } = useParams(); // Get the 'doc' from route params
+  const { doc } = useParams();
   const [inputValues, setInputValues] = useState({});
-  const [message, setMessage] = useState(""); // Feedback message
-  const [fields, setFields] = useState([]); // To store the field names
-  const [loading, setLoading] = useState(true); // Loading state
+  const [fields, setFields] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Fetch field names (labels) from the API when the component mounts
+  const navigate = useNavigate();
+
   useEffect(() => {
     const fetchFields = async () => {
       try {
-        // Fetch a sample record or schema to get the fields
-        const response = await axios.get(`${doc}`); // Replace with actual endpoint to get a sample or schema
+        const response = await axios.get(`${doc}`);
         if (response.data && response.data.length > 0) {
-          const firstRecord = response.data[0]; // Get the first record if the response is an array
-          setFields(Object.keys(firstRecord)); // Extract field names from the first record
+          const firstRecord = response.data[0];
+          setFields(Object.keys(firstRecord));
         }
-        setLoading(false); // Set loading to false after data is fetched
+        setLoading(false);
       } catch (error) {
         console.error("Error fetching fields:", error);
-        setMessage("Failed to load fields.");
         setLoading(false);
       }
     };
@@ -30,7 +29,6 @@ const TestCreate = () => {
     fetchFields();
   }, [doc]);
 
-  // Handle form input changes
   const handleChange = (e) => {
     const { name, value } = e.target;
     setInputValues((prevValues) => ({
@@ -39,30 +37,36 @@ const TestCreate = () => {
     }));
   };
 
-  // Handle form submission to create new data
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      // API call to create new entry using the dynamic doc endpoint
       const response = await axios.post(`${doc}`, inputValues);
-      setMessage("Data created successfully!"); // Success feedback
+      toast.success("Data created successfully!", {
+        autoClose: 1000,
+        onClose: () => navigate(-1),
+      });
       console.log("Created data:", response.data);
     } catch (error) {
       console.error("Error creating data:", error);
-      setMessage("Failed to create data."); // Error feedback
+      toast.error("Failed to create data.", {
+        autoClose: 2000,
+      });
     }
   };
 
+  const handleBack = () => {
+    navigate(-1); // Go back to the previous page
+  };
+
   if (loading) {
-    return <div>Loading...</div>; // Loading state while fetching field data
+    return <div>Loading...</div>;
   }
 
   return (
     <div className="flex p-6 justify-center">
       <div className="w-[60vw]">
-        {/* Logo Section */}
         <div className="flex justify-center mb-6">
-          <img src="../logo.jpg" alt="Logo" className="w-[20rem] mb-8" />
+          <img src="/logo.jpg" alt="Logo" className="w-[20rem] mb-8" />
         </div>
 
         <div className="text-sm font-semibold text-gray-800 mb-4">
@@ -73,42 +77,64 @@ const TestCreate = () => {
 
         <form onSubmit={handleSubmit}>
           <div className="grid grid-cols-2 gap-4">
-            {/* Dynamically generate form fields based on the fetched field names */}
-            {fields.map((field) => (
-              <div key={field}>
-                <label
-                  htmlFor={field}
-                  className="block text-sm/6 font-medium text-gray-900"
-                >
-                  {field.charAt(0).toUpperCase() + field.slice(1)}{" "}
-                  {/* Capitalize the first letter of the field */}
-                </label>
-                <input
-                  type="text"
-                  id={field}
-                  name={field}
-                  value={inputValues[field] || ""}
-                  onChange={handleChange}
-                  placeholder={`Enter ${field}`}
-                  className="mt-1 block w-full rounded-md bg-gray-50 px-3 py-2 text-sm text-gray-800 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600"
-                  // Disable _id field
-                  disabled={field === "_id"}
-                />
-              </div>
-            ))}
+            {fields.map(
+              (field) =>
+                field !== "_id" && (
+                  <div key={field}>
+                    <label
+                      htmlFor={field}
+                      className="block text-sm/6 font-medium text-gray-900"
+                    >
+                      {field.charAt(0).toUpperCase() + field.slice(1)}
+                    </label>
+                    <input
+                      type="text"
+                      id={field}
+                      name={field}
+                      value={inputValues[field] || ""}
+                      onChange={handleChange}
+                      placeholder={`Enter ${field}`}
+                      className="mt-1 block w-full rounded-md bg-gray-50 px-3 py-2 text-sm text-gray-800 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600"
+                    />
+                  </div>
+                )
+            )}
           </div>
-          <button
-            type="submit"
-            className="mt-6 flex justify-center rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Create
-          </button>
-        </form>
 
-        {message && (
-          <p className="mt-4 text-sm font-medium text-green-600">{message}</p>
-        )}
+          <div className="mt-6 flex justify-between">
+            <button
+              type="button"
+              onClick={handleBack}
+              className="flex items-center justify-center rounded-md bg-gray-600 px-5 py-2 text-sm font-semibold text-white shadow-md hover:bg-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-400"
+            >
+              <svg
+                className="w-4 h-4 mr-2"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  strokeWidth="2"
+                  d="M15 19l-7-7 7-7"
+                ></path>
+              </svg>
+              Back
+            </button>
+
+            <button
+              type="submit"
+              className="flex justify-center items-center rounded-md bg-indigo-600 px-5 py-2 text-sm font-semibold text-white shadow-md hover:bg-indigo-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-400"
+            >
+              Create
+            </button>
+          </div>
+        </form>
       </div>
+      <ToastContainer />
     </div>
   );
 };
