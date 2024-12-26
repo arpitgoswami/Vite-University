@@ -1,8 +1,7 @@
 import DataTable from "@interface/DataTable";
-import DataTable2 from "@interface/DataTable2";
 
 function OrderSheet() {
-  return <DataTable url={"users"} />;
+  return <DataTable url={"order_sheets"} />;
 }
 
 export default OrderSheet;

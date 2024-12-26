@@ -1,12 +1,18 @@
+import React from "react";
+import { CircularProgress, Box } from "@mui/material";
+
 function Loading() {
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="spinner-square">
-        <div className="bg-indigo-500 square-1 square"></div>
-        <div className="bg-indigo-500 square-2 square"></div>
-        <div className="bg-indigo-500 square-3 square"></div>
-      </div>
-    </div>
+    <Box
+      sx={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        height: "100vh",
+      }}
+    >
+      <CircularProgress />
+    </Box>
   );
 }
 

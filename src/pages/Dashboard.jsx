@@ -31,7 +31,7 @@ function Dashboard() {
       </div>*/}
 
       <div className="ml-72">
-        {activeLayout === "Overview" && <DataTable />}
+        {activeLayout === "Overview" && <Overview />}
         {activeLayout === "SalesReport" && <SalesReport />}
         {activeLayout === "OrderSheet" && <OrderSheet />}
       </div>

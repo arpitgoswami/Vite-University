@@ -1,5 +1,7 @@
+import DataCard from "@interface/DataCard";
+
 function Overview() {
-  return <>fsd</>;
+  return <DataCard url={"users"} />;
 }
 
 export default Overview;

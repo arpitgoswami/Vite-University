@@ -17,28 +17,28 @@ import Invoice from "./components/Invoice";
 
 function App() {
   return (
-    <>
-      <Router>
-        <Routes>
-          <Route path="*" element={<Error404 />} />
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/comingsoon" element={<ComingSoon />} />
+    <Router>
+      <Routes>
+        {/* Fallback route for unmatched paths */}
+        <Route path="*" element={<Error404 />} />
 
-          <Route path="/testUpdate/:id" element={<TestUpdate />} />
+        {/* Public Routes */}
+        <Route path="/" element={<Login />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/comingsoon" element={<ComingSoon />} />
+        <Route path="/contact" element={<Contact />} />
 
-          <Route path="/testCreate/:doc" element={<TestCreate />} />
+        {/* Test Routes */}
+        <Route path="/testUpdate/:id" element={<TestUpdate />} />
+        <Route path="/testCreate/:doc" element={<TestCreate />} />
+        <Route path="/testroute" element={<TestRoute />} />
 
-          <Route path="/contact" element={<Contact />} />
-
-          <Route path="/salesreport" element={<SalesReport />} />
-          <Route path="/testroute" element={<TestRoute />} />
-
-          <Route path="/invoice/:id/:doc" element={<Invoice />} />
-        </Routes>
-      </Router>
-    </>
+        {/* Layout and Component Routes */}
+        <Route path="/salesreport" element={<SalesReport />} />
+        <Route path="/invoice/:id/:doc" element={<Invoice />} />
+      </Routes>
+    </Router>
   );
 }
 
