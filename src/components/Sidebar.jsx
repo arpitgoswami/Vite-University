@@ -22,6 +22,7 @@ import {
   BarChart as BarChartIcon,
   ShoppingCart as ShoppingCartIcon,
   Assessment as AssessmentIcon,
+  Description,
   ExpandLess,
   ExpandMore,
 } from "@mui/icons-material";
@@ -96,6 +97,8 @@ function Sidebar({ onNavChange }) {
               </ListItemButton>
             </ListItem>
 
+            <Divider />
+
             {/* Purchase Order */}
             <ListItem disablePadding>
               <ListItemButton onClick={handlePurchaseOrderClick}>
@@ -115,6 +118,9 @@ function Sidebar({ onNavChange }) {
                     sx={{ pl: 8 }}
                     onClick={() => onNavChange("OrderSheet")}
                   >
+                    <ListItemIcon>
+                      <Description />
+                    </ListItemIcon>
                     <ListItemText primary="Order Sheet" />
                   </ListItemButton>
                 </ListItem>
@@ -123,6 +129,9 @@ function Sidebar({ onNavChange }) {
                     sx={{ pl: 8 }}
                     onClick={() => onNavChange("RFD")}
                   >
+                    <ListItemIcon>
+                      <Description />
+                    </ListItemIcon>
                     <ListItemText primary="RFD" />
                   </ListItemButton>
                 </ListItem>
@@ -131,11 +140,16 @@ function Sidebar({ onNavChange }) {
                     sx={{ pl: 8 }}
                     onClick={() => onNavChange("Cancelled")}
                   >
+                    <ListItemIcon sx={{}}>
+                      <Description />
+                    </ListItemIcon>
                     <ListItemText primary="Cancelled" />
                   </ListItemButton>
                 </ListItem>
               </List>
             </Collapse>
+
+            <Divider />
 
             {/* Performance */}
             <ListItem disablePadding>
