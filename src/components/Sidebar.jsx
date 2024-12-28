@@ -1,100 +1,168 @@
-import { GrOverview } from "react-icons/gr";
-import { LuShoppingBag } from "react-icons/lu";
-import { MdBorderColor } from "react-icons/md";
-import { MdDataSaverOff } from "react-icons/md";
-import { TbBrandSentry } from "react-icons/tb";
-import { TbCancel } from "react-icons/tb";
-import { IoStatsChart } from "react-icons/io5";
-import { BiLogOutCircle } from "react-icons/bi";
-import { VscCircleFilled } from "react-icons/vsc";
+import React from "react";
+import { ToastContainer } from "react-toastify";
 
 import { handleDeleteCookie } from "@cookie";
 
-import { ToastContainer } from "react-toastify";
+import {
+  Drawer,
+  List,
+  ListItem,
+  ListItemButton,
+  ListItemText,
+  ListItemIcon,
+  Collapse,
+  Divider,
+  Button,
+  Box,
+  Typography,
+} from "@mui/material";
+
+import {
+  Dashboard as DashboardIcon,
+  BarChart as BarChartIcon,
+  ShoppingCart as ShoppingCartIcon,
+  Assessment as AssessmentIcon,
+  ExpandLess,
+  ExpandMore,
+} from "@mui/icons-material";
 
 function Sidebar({ onNavChange }) {
+  const [openPurchaseOrder, setOpenPurchaseOrder] = React.useState(false);
+
+  const handlePurchaseOrderClick = () => {
+    setOpenPurchaseOrder(!openPurchaseOrder);
+  };
+
   return (
-    <>
-      <div
-        id="sidebar"
-        className="fixed p-4 bg-[#101828] w-72 h-[100vh] text-[#99A1AF] flex flex-col shadow-lg"
+    <Drawer
+      variant="permanent"
+      sx={{
+        width: 288,
+        flexShrink: 0,
+        [`& .MuiDrawer-paper`]: {
+          width: 288,
+          boxSizing: "border-box",
+        },
+      }}
+    >
+      <Box
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          height: "100%",
+          justifyContent: "space-between",
+        }}
       >
-        {/* Header */}
-        <div
-          className="mb-6 cursor-pointer flex drop-shadow-md"
-          onClick={() => (window.location.href = "../dashboard")}
-        >
-          <img src="logo-no-bg.png" className="w-52" alt="Logo" />
-        </div>
-
-        {/* Menu */}
-        <div id="menu" className="flex flex-col space-y-1">
-          <button
-            className="flex p-2 text-sm/6 items-center space-x-2 rounded-md hover:bg-[#1E2939] hover:shadow transition-all duration-200 cursor-pointer"
-            onClick={() => onNavChange("Overview")}
-            autoFocus
+        {/* Top Section */}
+        <Box>
+          {/* Logo */}
+          <Box
+            sx={{
+              padding: 2,
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              cursor: "pointer",
+            }}
+            onClick={() => (window.location.href = "../dashboard")}
           >
-            <GrOverview size={20} />
-            <span className="font-medium">Overview</span>
-          </button>
+            <Typography variant="h6" fontWeight="bold">
+              <img src="/logo.jpg" />
+            </Typography>
+          </Box>
 
-          <button
-            className="flex p-2 items-center space-x-2 rounded-md hover:bg-[#1E2939] hover:shadow transition-all duration-200 cursor-pointer"
-            onClick={() => onNavChange("SalesReport")}
+          {/* Divider */}
+          <Divider />
+
+          {/* Navigation */}
+          <List>
+            {/* Overview */}
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => onNavChange("Overview")}>
+                <ListItemIcon>
+                  <DashboardIcon />
+                </ListItemIcon>
+                <ListItemText primary="Overview" />
+              </ListItemButton>
+            </ListItem>
+
+            {/* Sales Report */}
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => onNavChange("SalesReport")}>
+                <ListItemIcon>
+                  <BarChartIcon />
+                </ListItemIcon>
+                <ListItemText primary="Sales Report" />
+              </ListItemButton>
+            </ListItem>
+
+            {/* Purchase Order */}
+            <ListItem disablePadding>
+              <ListItemButton onClick={handlePurchaseOrderClick}>
+                <ListItemIcon>
+                  <ShoppingCartIcon />
+                </ListItemIcon>
+                <ListItemText primary="Purchase Order" />
+                {openPurchaseOrder ? <ExpandLess /> : <ExpandMore />}
+              </ListItemButton>
+            </ListItem>
+
+            {/* Sub-tabs for Purchase Order */}
+            <Collapse in={openPurchaseOrder} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItem disablePadding>
+                  <ListItemButton
+                    sx={{ pl: 8 }}
+                    onClick={() => onNavChange("OrderSheet")}
+                  >
+                    <ListItemText primary="Order Sheet" />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton
+                    sx={{ pl: 8 }}
+                    onClick={() => onNavChange("RFD")}
+                  >
+                    <ListItemText primary="RFD" />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem disablePadding>
+                  <ListItemButton
+                    sx={{ pl: 8 }}
+                    onClick={() => onNavChange("Cancelled")}
+                  >
+                    <ListItemText primary="Cancelled" />
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            </Collapse>
+
+            {/* Performance */}
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => onNavChange("Performance")}>
+                <ListItemIcon>
+                  <AssessmentIcon />
+                </ListItemIcon>
+                <ListItemText primary="Performance" />
+              </ListItemButton>
+            </ListItem>
+          </List>
+        </Box>
+
+        {/* Logout Button */}
+        <Box sx={{ p: 2 }}>
+          <Button
+            variant="contained"
+            color="error"
+            fullWidth
+            onClick={handleDeleteCookie}
           >
-            <LuShoppingBag size={20} />
-            <span className="text-sm/6 font-medium">Sales Report</span>
-          </button>
-
-          <button
-            className="flex p-2 items-center space-x-2 rounded-md hover:bg-[#1E2939] hover:shadow transition-all duration-200 cursor-pointer"
-            onClick={() => onNavChange("PurchaseOrder")}
-          >
-            <TbBrandSentry size={20} />
-            <span className="text-sm/6 font-medium">Purchase Order</span>
-          </button>
-
-          <div id="innerButtons" className="ml-6">
-            <button
-              className="flex p-1 items-center space-x-2 rounded-md transition-all duration-200 cursor-pointer"
-              onClick={() => onNavChange("OrderSheet")}
-            >
-              <VscCircleFilled size={10} />
-              <span className="text-sm/6 font-medium">Order Sheet</span>
-            </button>
-
-            <button className="flex p-1 items-center space-x-2 rounded-md transition-all duration-200 cursor-pointer">
-              <VscCircleFilled size={10} />
-              <span className="text-sm/6 font-medium">RFD</span>
-            </button>
-
-            <button className="flex px-1 pt-1 pb-2 items-center space-x-2 rounded-md transition-all duration-200 cursor-pointer">
-              <VscCircleFilled size={10} />
-              <span className="text-sm/6 font-medium">Cancelled</span>
-            </button>
-          </div>
-
-          <button
-            className="flex p-2 items-center space-x-2 rounded-md hover:bg-[#1E2939] hover:shadow transition-all duration-200 cursor-pointer"
-            onClick={() => onNavChange("Performance")}
-          >
-            <IoStatsChart size={20} />
-            <span className="text-sm/6 font-medium">Performance</span>
-          </button>
-        </div>
-
-        {/* Footer */}
-        <button
-          onClick={handleDeleteCookie}
-          id="footer"
-          className="mt-auto flex p-2 items-center bg-[#DC2626] text-[#fff] space-x-2 rounded-md hover:bg-[#1E2939] hover:shadow transition-all duration-200 cursor-pointer"
-        >
-          <BiLogOutCircle size={20} />
-          <span className="text-sm/6 font-semibold">Log out</span>
-        </button>
-      </div>
+            Log out
+          </Button>
+        </Box>
+      </Box>
       <ToastContainer />
-    </>
+    </Drawer>
   );
 }
 

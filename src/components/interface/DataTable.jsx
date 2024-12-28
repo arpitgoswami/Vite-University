@@ -10,6 +10,7 @@ import {
   IconButton,
   TextField,
   Alert,
+  Box,
 } from "@mui/material";
 import {
   Refresh as ReloadIcon,
@@ -22,8 +23,6 @@ function DataTable({ url }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
-
-  const serial = 1;
 
   const navigate = useNavigate();
 
@@ -44,9 +43,17 @@ function DataTable({ url }) {
 
   if (loading) {
     return (
-      <div>
+      <Box
+        sx={{
+          backgroundColor: "#f5f5f5", // Same background as earlier
+          minHeight: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <Loading />
-      </div>
+      </Box>
     );
   }
 
@@ -55,7 +62,19 @@ function DataTable({ url }) {
   }
 
   if (data.length === 0) {
-    return <div>No data available</div>;
+    return (
+      <Box
+        sx={{
+          backgroundColor: "#f5f5f5",
+          minHeight: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h6">No data available</Typography>
+      </Box>
+    );
   }
 
   const filteredData = data.filter((item) =>
@@ -69,49 +88,41 @@ function DataTable({ url }) {
 
   const columns = [
     ...Object.keys(data[0])
-      .filter((column) => column !== "_id") // Exclude '_id' from the columns
+      .filter((column) => column !== "_id")
       .slice(0, 5)
       .map((column) => ({
         field: column,
         headerName: column.charAt(0).toUpperCase() + column.slice(1),
         flex: 1,
-        headerClassName: "bold-header",
       })),
     {
       field: "actions",
       headerName: "Actions",
       width: 150,
       sortable: false,
-      headerClassName: "bold-header",
       renderCell: (params) => (
-        <div className="flex gap-2">
+        <Box sx={{ display: "flex", gap: 1 }}>
           <Tooltip title="Edit" arrow>
-            <span>
-              <IconButton
-                color="primary"
-                disabled={isSingleEntry}
-                onClick={() =>
-                  navigate(`/testUpdate/${params.row._id}?doc=${url}`)
-                }
-              >
-                <EditIcon />
-              </IconButton>
-            </span>
+            <IconButton
+              color="primary"
+              disabled={isSingleEntry}
+              onClick={() =>
+                navigate(`/testUpdate/${params.row._id}?doc=${url}`)
+              }
+            >
+              <EditIcon />
+            </IconButton>
           </Tooltip>
           <Tooltip title="Delete" arrow>
-            <span>
-              <IconButton
-                color="secondary"
-                disabled={isSingleEntry}
-                onClick={() =>
-                  handleDelete(params.row._id, url, fetchDataAsync)
-                }
-              >
-                <DeleteIcon />
-              </IconButton>
-            </span>
+            <IconButton
+              color="secondary"
+              disabled={isSingleEntry}
+              onClick={() => handleDelete(params.row._id, url, fetchDataAsync)}
+            >
+              <DeleteIcon />
+            </IconButton>
           </Tooltip>
-        </div>
+        </Box>
       ),
     },
   ];
@@ -121,77 +132,83 @@ function DataTable({ url }) {
     ...item,
   }));
 
-  const styles = {
-    "& .bold-header": {
-      fontWeight: "bold",
-    },
-  };
-
   return (
-    <div className="container mx-auto p-4 sm:p-6">
-      <div className="flex items-center justify-between mb-4">
-        <Typography
-          variant="h6"
-          color="textPrimary"
-          sx={{ fontSize: "1rem", fontWeight: 600 }}
-        >
-          Sales Data
-        </Typography>
-        <div className="flex gap-2">
-          <Button
-            startIcon={<ReloadIcon />}
-            variant="contained"
-            color="primary"
-            sx={{ padding: "6px 12px", fontSize: "0.875rem" }}
-            onClick={fetchDataAsync}
-          >
-            Reload
-          </Button>
-          <Button
-            startIcon={<EditIcon />}
-            variant="contained"
-            color="success"
-            sx={{ padding: "6px 12px", fontSize: "0.875rem" }}
-            onClick={() => navigate(`/testCreate/${url}`)}
-          >
-            Add New Entry
-          </Button>
-        </div>
-      </div>
-
-      <TextField
-        variant="outlined"
-        label="Search"
-        fullWidth
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
+    <Box
+      sx={{
+        backgroundColor: "#f5f5f5",
+        minHeight: "100vh",
+        padding: "16px",
+      }}
+    >
+      <Box
         sx={{
-          marginBottom: "12px",
-          "& .MuiInputBase-root": { fontSize: "0.875rem" },
+          backgroundColor: "#ffffff",
+          borderRadius: "8px",
+          padding: "16px",
+          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
         }}
-      />
-
-      {filteredData.length === 0 ? (
-        <Typography
-          variant="body1"
-          color="textSecondary"
-          sx={{ textAlign: "center" }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "16px",
+          }}
         >
-          No matching records found.
-        </Typography>
-      ) : (
-        <div style={{ height: 400, width: "100%" }}>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5, 10, 25]}
-            disableSelectionOnClick
-            sx={styles}
-          />
-        </div>
-      )}
-    </div>
+          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+            Sales Data
+          </Typography>
+          <Box sx={{ display: "flex", gap: "8px" }}>
+            <Button
+              startIcon={<ReloadIcon />}
+              variant="contained"
+              color="primary"
+              onClick={fetchDataAsync}
+            >
+              Reload
+            </Button>
+            <Button
+              startIcon={<EditIcon />}
+              variant="contained"
+              color="success"
+              onClick={() => navigate(`/testCreate/${url}`)}
+            >
+              Add New Entry
+            </Button>
+          </Box>
+        </Box>
+
+        <TextField
+          variant="outlined"
+          label="Search"
+          fullWidth
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          sx={{ marginBottom: "16px" }}
+        />
+
+        {filteredData.length === 0 ? (
+          <Typography
+            variant="body1"
+            color="textSecondary"
+            sx={{ textAlign: "center" }}
+          >
+            No matching records found.
+          </Typography>
+        ) : (
+          <Box sx={{ height: 400, width: "100%" }}>
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              pageSize={5}
+              rowsPerPageOptions={[5, 10, 25]}
+              disableSelectionOnClick
+            />
+          </Box>
+        )}
+      </Box>
+    </Box>
   );
 }
 
