@@ -21,11 +21,10 @@ function App() {
       <Routes>
         {/* Fallback route for unmatched paths */}
         <Route path="*" element={<Error404 />} />
-
         {/* Public Routes */}
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/dashboard" element={<Dashboard />} />
+
         <Route path="/comingsoon" element={<ComingSoon />} />
         <Route path="/contact" element={<Contact />} />
 
@@ -35,8 +34,11 @@ function App() {
         <Route path="/testroute" element={<TestRoute />} />
 
         {/* Layout and Component Routes */}
-        <Route path="/salesreport" element={<SalesReport />} />
         <Route path="/invoice/:id/:doc" element={<Invoice />} />
+
+        {/* Dashboard Routes */}
+        <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/dashboard/:path" element={<Dashboard />} />
       </Routes>
     </Router>
   );

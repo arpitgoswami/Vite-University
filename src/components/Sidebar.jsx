@@ -1,5 +1,6 @@
 import React from "react";
 import { ToastContainer } from "react-toastify";
+import { useNavigate } from "react-router-dom";
 
 import { handleDeleteCookie } from "@cookie";
 
@@ -29,6 +30,7 @@ import {
 
 function Sidebar({ onNavChange }) {
   const [openPurchaseOrder, setOpenPurchaseOrder] = React.useState(false);
+  const navigate = useNavigate();
 
   const handlePurchaseOrderClick = () => {
     setOpenPurchaseOrder(!openPurchaseOrder);
@@ -79,7 +81,7 @@ function Sidebar({ onNavChange }) {
           <List>
             {/* Overview */}
             <ListItem disablePadding>
-              <ListItemButton onClick={() => onNavChange("Overview")}>
+              <ListItemButton onClick={() => navigate("../dashboard/overview")}>
                 <ListItemIcon>
                   <DashboardIcon />
                 </ListItemIcon>
@@ -89,7 +91,9 @@ function Sidebar({ onNavChange }) {
 
             {/* Sales Report */}
             <ListItem disablePadding>
-              <ListItemButton onClick={() => onNavChange("SalesReport")}>
+              <ListItemButton
+                onClick={() => navigate("../dashboard/salesreport")}
+              >
                 <ListItemIcon>
                   <BarChartIcon />
                 </ListItemIcon>
@@ -116,7 +120,7 @@ function Sidebar({ onNavChange }) {
                 <ListItem disablePadding>
                   <ListItemButton
                     sx={{ pl: 8 }}
-                    onClick={() => onNavChange("OrderSheet")}
+                    onClick={() => navigate("../dashboard/ordersheet")}
                   >
                     <ListItemIcon>
                       <Description />

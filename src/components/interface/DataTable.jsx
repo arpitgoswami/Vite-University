@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import { fetchData, handleDelete } from "@function";
 import Loading from "../Loading";
 import { DataGrid } from "@mui/x-data-grid";
+
 import {
   Button,
   Typography,
@@ -12,7 +13,9 @@ import {
   Alert,
   Box,
 } from "@mui/material";
+
 import {
+  Visibility as ViewIcon,
   Refresh as ReloadIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
@@ -84,8 +87,6 @@ function DataTable({ url }) {
       .includes(searchQuery.toLowerCase())
   );
 
-  const isSingleEntry = filteredData.length === 1;
-
   const columns = [
     ...Object.keys(data[0])
       .filter((column) => column !== "_id")
@@ -98,32 +99,48 @@ function DataTable({ url }) {
     {
       field: "actions",
       headerName: "Actions",
-      width: 150,
+      width: 200,
       sortable: false,
-      renderCell: (params) => (
-        <Box sx={{ display: "flex", gap: 1 }}>
-          <Tooltip title="Edit" arrow>
-            <IconButton
-              color="primary"
-              disabled={isSingleEntry}
-              onClick={() =>
-                navigate(`/testUpdate/${params.row._id}?doc=${url}`)
-              }
-            >
-              <EditIcon />
-            </IconButton>
-          </Tooltip>
-          <Tooltip title="Delete" arrow>
-            <IconButton
-              color="secondary"
-              disabled={isSingleEntry}
-              onClick={() => handleDelete(params.row._id, url, fetchDataAsync)}
-            >
-              <DeleteIcon />
-            </IconButton>
-          </Tooltip>
-        </Box>
-      ),
+      renderCell: (params) => {
+        const isDeleteDisabled =
+          searchQuery.trim() === "" && filteredData.length === 1;
+
+        return (
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Tooltip title="View" arrow>
+              <IconButton
+                color="info"
+                onClick={() =>
+                  window.open(`/invoice/${params.row._id}/${url}`, "_blank")
+                }
+              >
+                <ViewIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Edit" arrow>
+              <IconButton
+                color="primary"
+                onClick={() =>
+                  navigate(`/testUpdate/${params.row._id}?doc=${url}`)
+                }
+              >
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Delete" arrow>
+              <IconButton
+                color="secondary"
+                disabled={isDeleteDisabled}
+                onClick={() =>
+                  handleDelete(params.row._id, url, fetchDataAsync)
+                }
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        );
+      },
     },
   ];
 

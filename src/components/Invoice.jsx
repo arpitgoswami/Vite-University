@@ -24,6 +24,7 @@ const InvoiceTable = () => {
           ? response.data
           : [response.data]; // Ensure fetchedData is always an array
         setData(fetchedData);
+        console.log(data);
       } catch (error) {
         console.error("Error fetching data:", error);
         setError("Failed to load data.");
@@ -42,6 +43,11 @@ const InvoiceTable = () => {
   if (error) {
     return <div>{error}</div>;
   }
+
+  const amount = data[0].RATE * data[0].QTY;
+  const gst = (amount / 100) * data[0].GST;
+  const gstAmount = gst + amount;
+  const grandTotal = gstAmount + data[0].CYC - data[0].ADVANCE;
 
   return (
     <>
@@ -73,7 +79,7 @@ const InvoiceTable = () => {
                   contentEditable
                   suppressContentEditableWarning
                 >
-                  M/S CYNAK PHARMA
+                  {data[0]["COMPANY NAME"]}
                 </td>
               </tr>
               <tr>
@@ -85,7 +91,7 @@ const InvoiceTable = () => {
                   contentEditable
                   suppressContentEditableWarning
                 >
-                  Panchkula
+                  {data[0]["COMPANY ADDRESS"]}
                 </td>
               </tr>
               <tr>
@@ -97,7 +103,7 @@ const InvoiceTable = () => {
                   contentEditable
                   suppressContentEditableWarning
                 >
-                  12-Dec-2024
+                  {new Date().toLocaleDateString("en-GB")}{" "}
                 </td>
               </tr>
               <tr>
@@ -152,7 +158,6 @@ const InvoiceTable = () => {
           </table>
         </div>
 
-        {/* Table Section */}
         <table className="text-xs table-auto w-full border-collapse border border-gray-300">
           <thead>
             <tr className="bg-gray-200">
@@ -161,7 +166,17 @@ const InvoiceTable = () => {
               </th>
               {data.length > 0 &&
                 Object.keys(data[0])
-                  .filter((column) => column !== "_id") // Exclude '_id' column
+                  .filter(
+                    (column) =>
+                      ![
+                        "_id",
+                        "GST",
+                        "CYC",
+                        "ADVANCE",
+                        "COMPANY NAME",
+                        "COMPANY ADDRESS",
+                      ].includes(column)
+                  ) // Exclude unwanted columns
                   .map((column) => (
                     <th
                       key={column}
@@ -179,7 +194,17 @@ const InvoiceTable = () => {
                   {index + 1}
                 </td>
                 {Object.keys(item)
-                  .filter((column) => column !== "_id") // Exclude '_id' column
+                  .filter(
+                    (column) =>
+                      ![
+                        "_id",
+                        "GST",
+                        "CYC",
+                        "ADVANCE",
+                        "COMPANY NAME",
+                        "COMPANY ADDRESS",
+                      ].includes(column)
+                  ) // Exclude unwanted columns
                   .map((column) => (
                     <td
                       key={column}
@@ -291,16 +316,55 @@ const InvoiceTable = () => {
           </div>
         </div>
 
-        <div className="mt-8 text-xs text-right">
-          <b>Grand Total:</b> 2,50,400 | <b>Advance</b>: 30%
+        <div className="mt-4 w-full">
+          <table className="text-xs table-auto w-full border-collapse border border-gray-300">
+            <tbody>
+              <tr>
+                <td className="border border-gray-300 px-1 py-0.5 font-bold bg-gray-100">
+                  GST
+                </td>
+                <td className="border border-gray-300 px-1 py-0.5 text-left">
+                  {data[0].GST}
+                </td>
+                <td className="border border-gray-300 px-1 py-0.5 font-bold bg-gray-100">
+                  Amount
+                </td>
+                <td className="border border-gray-300 px-1 py-0.5 text-left">
+                  {amount}
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-1 py-0.5 font-bold bg-gray-100">
+                  CYC
+                </td>
+                <td className="border border-gray-300 px-1 py-0.5 text-left">
+                  {data[0].CYC}
+                </td>
+                <td className="border border-gray-300 px-1 py-0.5 font-bold bg-gray-100">
+                  GST Included Amount
+                </td>
+                <td className="border border-gray-300 px-1 py-0.5 text-left">
+                  {gstAmount}
+                </td>
+              </tr>
+              <tr>
+                <td className="border border-gray-300 px-1 py-0.5 font-bold bg-gray-100">
+                  Advance
+                </td>
+                <td className="border border-gray-300 px-1 py-0.5 text-left">
+                  {data[0].ADVANCE}
+                </td>
+                <td className="border border-gray-300 px-1 py-0.5 font-bold bg-gray-100">
+                  Grand Total
+                </td>
+                <td className="border border-gray-300 px-1 py-0.5 text-left">
+                  {grandTotal}
+                </td>
+              </tr>
+            </tbody>
+          </table>
         </div>
       </div>
-      <button
-        onClick={() => generatePDF(contentRef)} // Pass the ref to the function
-        className="bg-gray-500 text-white text-xs/6 px-3 py-1.5 rounded-md hover:bg-gray-600 mt-4"
-      >
-        Download PDF
-      </button>
     </>
   );
 };

@@ -4,9 +4,10 @@ import App from "./App.jsx";
 
 import { ThemeProvider, CssBaseline, createTheme } from "@mui/material";
 
+import "@fontsource/inter";
+
 import "./styles/App.css";
 import "./styles/Sidebar.css";
-import "./styles/Font.css";
 
 const theme = createTheme();
 
