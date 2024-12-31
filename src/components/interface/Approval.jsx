@@ -45,29 +45,6 @@ const Approval = () => {
     fetchData();
   }, [id, doc]);
 
-  const handleApprovalChange = async (event) => {
-    const newStatus = event.target.value;
-    setStatusInput(newStatus);
-
-    try {
-      const response = await axios.put("/status/updateById", {
-        id: sales_id,
-        status: newStatus + " by " + " Admin",
-      });
-
-      console.log("Status updated:", response.data);
-      toast.success("Status updated successfully!", {
-        autoClose: 2000,
-        onClick: () => {
-          handleBack;
-        },
-      });
-    } catch (error) {
-      console.error("Error updating status:", error);
-      toast.error("Failed to update status.");
-    }
-  };
-
   const handleBack = () => {
     navigate(-1);
   };
@@ -77,10 +54,15 @@ const Approval = () => {
     try {
       const response = await axios.put("/status/updateById", {
         id: sales_id,
-        status: statusInput + " by Admin",
+        status: statusInput + " by " + "Admin",
       });
       console.log("Status updated:", response.data);
-      toast.success("Status updated successfully!");
+      toast.success("Status updated successfully!", {
+        autoClose: 2000,
+      });
+      setTimeout(() => {
+        navigate(-1);
+      }, 2000);
     } catch (error) {
       console.error("Error updating status:", error);
       toast.error("Failed to update status.");

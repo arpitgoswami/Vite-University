@@ -5,15 +5,15 @@ import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
 
 function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [USERNAME, setUsername] = useState("");
+  const [PASSWORD, setPassword] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const response = await axios.post("login", {
-        username,
-        password,
+        USERNAME,
+        PASSWORD,
       });
 
       if (response.status === 200) {
