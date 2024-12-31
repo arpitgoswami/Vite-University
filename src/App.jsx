@@ -12,6 +12,7 @@ import Contact from "./pages/Contact";
 import SalesReport from "./layouts/SalesReport";
 
 import TestRoute from "./test/testRoute";
+import Approval from "./components/interface/Approval";
 
 import Invoice from "./components/Invoice";
 
@@ -32,6 +33,10 @@ function App() {
         <Route path="/testUpdate/:id" element={<TestUpdate />} />
         <Route path="/testCreate/:doc" element={<TestCreate />} />
         <Route path="/testroute" element={<TestRoute />} />
+
+        {/* Approval Routes */}
+        <Route path="/approval" element={<Approval />} />
+        <Route path="/approval/:id" element={<Approval />} />
 
         {/* Layout and Component Routes */}
         <Route path="/invoice/:id/:doc" element={<Invoice />} />

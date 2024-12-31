@@ -23,7 +23,7 @@ export async function fetchData(url, setData, setLoading) {
   }
 }
 
-export const handleDelete = (id, url, setReload) => {
+export const handleDelete = (id, url) => {
   const isConfirmed = window.confirm(
     "Are you sure you want to delete this item?"
   );
@@ -37,7 +37,7 @@ export const handleDelete = (id, url, setReload) => {
     .then((result) => {
       toast.success("Data updated successfully!", {
         autoClose: 1000,
-        onClose: () => setReload(1),
+        onClose: () => window.location.reload(),
       });
     })
     .catch((err) => {

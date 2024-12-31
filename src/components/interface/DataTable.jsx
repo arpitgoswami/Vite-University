@@ -131,9 +131,7 @@ function DataTable({ url }) {
               <IconButton
                 color="secondary"
                 disabled={isDeleteDisabled}
-                onClick={() =>
-                  handleDelete(params.row._id, url, fetchDataAsync)
-                }
+                onClick={() => handleDelete(params.row._id, url)}
               >
                 <DeleteIcon />
               </IconButton>
