@@ -17,7 +17,8 @@ function Login() {
       });
 
       if (response.status === 200) {
-        createCookie(response.data);
+        const token = response.data.token;
+        document.cookie = `authToken=${token}; Secure; HttpOnly; Path=/; SameSite=Strict`;
       }
     } catch (error) {
       if (error.response?.status === 400) {
@@ -30,7 +31,7 @@ function Login() {
         });
       } else {
         console.error("Error during login:", error);
-        toast.error("Sever could not be accessed.", {
+        toast.error("Server could not be accessed.", {
           autoClose: 2000,
         });
       }
