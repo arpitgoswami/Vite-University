@@ -1,5 +1,6 @@
 import axios from "@axios";
 import { createCookie } from "@cookie";
+import { Token } from "@mui/icons-material";
 
 import { useState } from "react";
 import { ToastContainer, toast } from "react-toastify";
@@ -18,8 +19,13 @@ function Login() {
 
       if (response.status === 200) {
         const token = response.data.token;
-        console.log(response.data.token);
         document.cookie = `authToken=${token};`;
+        toast.success("Login successful!", {
+          onClose: () => {
+            window.location.href = "../dashboard";
+          },
+          autoClose: 1000,
+        });
       }
     } catch (error) {
       if (error.response?.status === 400) {
