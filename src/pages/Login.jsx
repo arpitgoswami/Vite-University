@@ -18,7 +18,8 @@ function Login() {
 
       if (response.status === 200) {
         const token = response.data.token;
-        document.cookie = `authToken=${token}; Secure; HttpOnly; Path=/; SameSite=Strict`;
+        console.log(response.data.token);
+        document.cookie = `authToken=${token};`;
       }
     } catch (error) {
       if (error.response?.status === 400) {
