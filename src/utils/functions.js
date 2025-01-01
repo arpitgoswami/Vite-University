@@ -65,12 +65,6 @@ export const verifyToken = async () => {
     const response = await axios.post("/status/verifyToken", { token });
 
     if (response.data.message === true) {
-      console.log("Token is valid:", {
-        USERNAME: response.data.USERNAME,
-        AUTHORIZATION: response.data.AUTHORIZATION,
-        iat: response.data.iat,
-        exp: response.data.exp,
-      });
       return {
         valid: true,
         USERNAME: response.data.USERNAME,

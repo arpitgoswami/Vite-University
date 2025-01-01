@@ -1,210 +1,234 @@
-import React, { useState } from "react";
-import * as XLSX from "xlsx";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import { fetchData, handleDelete } from "@function";
+import Loading from "../Loading";
+import { DataGrid } from "@mui/x-data-grid";
 
-const ExcelView = () => {
-  // Sample data structure for demo
-  const initialData = [
-    { id: 1, name: "John Doe", age: 28, email: "john@example.com" },
-    { id: 2, name: "Jane Smith", age: 34, email: "jane@example.com" },
-    { id: 3, name: "Sam Brown", age: 25, email: "sam@example.com" },
+import {
+  Button,
+  Typography,
+  Tooltip,
+  IconButton,
+  TextField,
+  Alert,
+  Box,
+} from "@mui/material";
+
+import {
+  Visibility as ViewIcon,
+  Refresh as ReloadIcon,
+  Edit as EditIcon,
+  Delete as DeleteIcon,
+} from "@mui/icons-material";
+
+function ExcelView({ url, header, isViewAllowed }) {
+  url = "sales";
+  header = "Sales Entry";
+  isViewAllowed = "true";
+
+  const [data, setData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const navigate = useNavigate();
+
+  // Fetch data asynchronously from the given URL
+  const fetchDataAsync = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await fetchData(url, setData, setLoading);
+    } catch (err) {
+      setError("Failed to fetch data. Please try again later.");
+      console.error("Error fetching data:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchDataAsync();
+  }, [url]);
+
+  if (loading) {
+    return (
+      <Box
+        sx={{
+          backgroundColor: "#f5f5f5", // Background color
+          minHeight: "100vh", // Full viewport height
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Loading />
+      </Box>
+    );
+  }
+
+  if (error) {
+    return <Alert severity="error">{error}</Alert>;
+  }
+
+  if (data.length === 0) {
+    return (
+      <Box
+        sx={{
+          backgroundColor: "#f5f5f5",
+          minHeight: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h6">No data available</Typography>
+      </Box>
+    );
+  }
+
+  const filteredData = data.filter((item) =>
+    Object.values(item)
+      .join(" ")
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
+  );
+
+  const columns = [
+    ...Object.keys(data[0])
+      .filter((column) => column !== "_id")
+      .map((column) => ({
+        field: column,
+        headerName: column.charAt(0).toUpperCase() + column.slice(1),
+        flex: 1,
+      })),
+    {
+      field: "actions",
+      headerName: "Actions",
+      width: 200,
+      sortable: false,
+      renderCell: (params) => {
+        const isDeleteDisabled = data.length === 1;
+
+        return (
+          <Box sx={{ display: "flex", gap: 1 }}>
+            <Tooltip title="View" arrow>
+              <IconButton
+                color="info"
+                sx={{ display: isViewAllowed ? "block" : "none" }}
+                onClick={() =>
+                  window.open(`/invoice/${params.row._id}/${url}`, "_blank")
+                }
+              >
+                <ViewIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Edit" arrow>
+              <IconButton
+                color="primary"
+                onClick={() =>
+                  navigate(`/testUpdate/${params.row._id}?doc=${url}`)
+                }
+              >
+                <EditIcon />
+              </IconButton>
+            </Tooltip>
+            <Tooltip title="Delete" arrow>
+              <IconButton
+                color="secondary"
+                disabled={isDeleteDisabled}
+                onClick={() => handleDelete(params.row._id, url)}
+              >
+                <DeleteIcon />
+              </IconButton>
+            </Tooltip>
+          </Box>
+        );
+      },
+    },
   ];
 
-  const [data, setData] = useState(initialData);
-  const [editingRow, setEditingRow] = useState(null);
-  const [newRow, setNewRow] = useState({ name: "", age: "", email: "" });
-
-  const handleEdit = (row) => {
-    setEditingRow(row.id);
-    setNewRow(row);
-  };
-
-  const handleDelete = (id) => {
-    setData(data.filter((row) => row.id !== id));
-  };
-
-  const handleSave = () => {
-    setData(data.map((row) => (row.id === editingRow ? newRow : row)));
-    setEditingRow(null);
-    setNewRow({ name: "", age: "", email: "" });
-  };
-
-  const handleCancel = () => {
-    setEditingRow(null);
-    setNewRow({ name: "", age: "", email: "" });
-  };
-
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setNewRow({ ...newRow, [name]: value });
-  };
-
-  const handleAddRow = () => {
-    setData([
-      ...data,
-      {
-        id: Date.now(),
-        name: newRow.name,
-        age: newRow.age,
-        email: newRow.email,
-      },
-    ]);
-    setNewRow({ name: "", age: "", email: "" });
-  };
-
-  const exportToExcel = () => {
-    const ws = XLSX.utils.json_to_sheet(data);
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, "Data");
-    XLSX.writeFile(wb, "data.xlsx");
-  };
+  const rows = filteredData.map((item) => ({
+    id: item._id,
+    ...item,
+  }));
 
   return (
-    <div className="p-4">
-      <div className="flex justify-between items-center mb-4">
-        <h1 className="text-xl font-bold">Excel View</h1>
-        <button
-          onClick={exportToExcel}
-          className="bg-blue-500 text-white py-2 px-4 rounded"
+    <Box
+      sx={{
+        backgroundColor: "#f5f5f5",
+        minHeight: "100vh",
+        padding: "16px",
+      }}
+    >
+      <Box
+        sx={{
+          backgroundColor: "#ffffff",
+          borderRadius: "8px",
+          padding: "16px",
+          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "16px",
+          }}
         >
-          Export to Excel
-        </button>
-      </div>
+          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+            {header}
+          </Typography>
+          <Box sx={{ display: "flex", gap: "8px" }}>
+            <Button
+              startIcon={<ReloadIcon />}
+              variant="contained"
+              color="primary"
+              onClick={fetchDataAsync}
+            >
+              Reload
+            </Button>
+            <Button
+              startIcon={<EditIcon />}
+              variant="contained"
+              color="success"
+              onClick={() => navigate(`/testCreate/${url}`)}
+            >
+              Add New Entry
+            </Button>
+          </Box>
+        </Box>
 
-      <div className="overflow-x-auto">
-        <table className="min-w-full table-auto border-collapse border border-gray-200">
-          <thead>
-            <tr>
-              <th className="border px-4 py-2">ID</th>
-              <th className="border px-4 py-2">Name</th>
-              <th className="border px-4 py-2">Age</th>
-              <th className="border px-4 py-2">Email</th>
-              <th className="border px-4 py-2">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {data.map((row) => (
-              <tr key={row.id}>
-                <td className="border px-4 py-2">{row.id}</td>
-                <td className="border px-4 py-2">
-                  {editingRow === row.id ? (
-                    <input
-                      type="text"
-                      name="name"
-                      value={newRow.name}
-                      onChange={handleInputChange}
-                      className="border px-2 py-1"
-                    />
-                  ) : (
-                    row.name
-                  )}
-                </td>
-                <td className="border px-4 py-2">
-                  {editingRow === row.id ? (
-                    <input
-                      type="number"
-                      name="age"
-                      value={newRow.age}
-                      onChange={handleInputChange}
-                      className="border px-2 py-1"
-                    />
-                  ) : (
-                    row.age
-                  )}
-                </td>
-                <td className="border px-4 py-2">
-                  {editingRow === row.id ? (
-                    <input
-                      type="email"
-                      name="email"
-                      value={newRow.email}
-                      onChange={handleInputChange}
-                      className="border px-2 py-1"
-                    />
-                  ) : (
-                    row.email
-                  )}
-                </td>
-                <td className="border px-4 py-2">
-                  {editingRow === row.id ? (
-                    <div>
-                      <button
-                        onClick={handleSave}
-                        className="bg-green-500 text-white py-1 px-2 rounded mr-2"
-                      >
-                        Save
-                      </button>
-                      <button
-                        onClick={handleCancel}
-                        className="bg-red-500 text-white py-1 px-2 rounded"
-                      >
-                        Cancel
-                      </button>
-                    </div>
-                  ) : (
-                    <div>
-                      <button
-                        onClick={() => handleEdit(row)}
-                        className="bg-yellow-500 text-white py-1 px-2 rounded mr-2"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(row.id)}
-                        className="bg-red-500 text-white py-1 px-2 rounded"
-                      >
-                        Delete
-                      </button>
-                    </div>
-                  )}
-                </td>
-              </tr>
-            ))}
-            <tr>
-              <td className="border px-4 py-2"></td>
-              <td className="border px-4 py-2">
-                <input
-                  type="text"
-                  name="name"
-                  value={newRow.name}
-                  onChange={handleInputChange}
-                  className="border px-2 py-1"
-                  placeholder="Name"
-                />
-              </td>
-              <td className="border px-4 py-2">
-                <input
-                  type="number"
-                  name="age"
-                  value={newRow.age}
-                  onChange={handleInputChange}
-                  className="border px-2 py-1"
-                  placeholder="Age"
-                />
-              </td>
-              <td className="border px-4 py-2">
-                <input
-                  type="email"
-                  name="email"
-                  value={newRow.email}
-                  onChange={handleInputChange}
-                  className="border px-2 py-1"
-                  placeholder="Email"
-                />
-              </td>
-              <td className="border px-4 py-2">
-                <button
-                  onClick={handleAddRow}
-                  className="bg-blue-500 text-white py-1 px-2 rounded"
-                >
-                  Add Row
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-    </div>
+        <TextField
+          variant="outlined"
+          label="Search"
+          fullWidth
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          sx={{ marginBottom: "16px" }}
+        />
+
+        {filteredData.length === 0 ? (
+          <Typography
+            variant="body1"
+            color="textSecondary"
+            sx={{ textAlign: "center" }}
+          >
+            No matching records found.
+          </Typography>
+        ) : (
+          <Box sx={{ height: 400, width: "100%" }}>
+            <DataGrid
+              rows={rows}
+              columns={columns}
+              pageSize={5}
+              rowsPerPageOptions={[5, 10, 25]}
+              disableSelectionOnClick
+            />
+          </Box>
+        )}
+      </Box>
+    </Box>
   );
-};
+}
 
 export default ExcelView;

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import { generatePDF } from "@generatePDF";
 import axios from "@axios";
 import { useRef } from "react";
 

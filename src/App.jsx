@@ -13,6 +13,8 @@ import Approval from "./components/interface/Approval";
 import Invoice from "./components/Invoice";
 import PrivateRoute from "./pages/PrivateRoute"; // Import PrivateRoute
 
+import ExcelView from "./components/interface/ExcelView";
+
 function App() {
   return (
     <Router>
@@ -32,6 +34,15 @@ function App() {
           element={
             <PrivateRoute>
               <TestUpdate />
+            </PrivateRoute>
+          }
+        />
+
+        <Route
+          path="/excelview"
+          element={
+            <PrivateRoute>
+              <ExcelView />
             </PrivateRoute>
           }
         />
@@ -81,14 +92,6 @@ function App() {
         />
 
         {/* Dashboard Routes */}
-        <Route
-          path="/dashboard"
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
         <Route
           path="/dashboard/:path"
           element={

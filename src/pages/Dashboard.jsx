@@ -24,6 +24,7 @@ function Dashboard() {
 
       <div className="ml-72">
         {params.path === "overview" && <Overview />}
+        {params.path === " " && <Overview />}
         {params.path === "salesreport" && <SalesReport />}
         {params.path === "ordersheet" && <OrderSheet />}
         {params.path === "ppic" && <PPIC />}

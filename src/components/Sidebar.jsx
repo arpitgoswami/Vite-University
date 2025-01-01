@@ -70,7 +70,7 @@ function Sidebar({ onNavChange }) {
               alignItems: "center",
               cursor: "pointer",
             }}
-            onClick={() => (window.location.href = "../dashboard")}
+            onClick={() => (window.location.href = "../dashboard/overview")}
           >
             <Typography variant="h6" fontWeight="bold">
               <img src="/logo.jpg" alt="Logo" />

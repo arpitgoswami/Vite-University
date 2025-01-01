@@ -20,7 +20,7 @@ function Login() {
         document.cookie = `authToken=${token};`;
         toast.success("Login successful!", {
           onClose: () => {
-            window.location.href = "../dashboard";
+            window.location.href = "../dashboard/overview";
           },
           autoClose: 1000,
         });

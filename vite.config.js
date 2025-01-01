@@ -20,7 +20,6 @@ export default defineConfig({
       "@interface": path.resolve(__dirname, "src/components/interface"),
       "@cookie": path.resolve(__dirname, "src/utils/cookieUtils"),
       "@function": path.resolve(__dirname, "src/utils/functions"),
-      "@generatePDF": path.resolve(__dirname, "src/utils/generatePDF"),
       "@shared": path.resolve(__dirname, "src/shared"),
     },
   },
