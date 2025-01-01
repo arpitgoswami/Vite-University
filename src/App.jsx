@@ -4,17 +4,14 @@ import Login from "./pages/Login";
 import Dashboard from "./pages/Dashboard";
 import ComingSoon from "./pages/ComingSoon";
 import Error404 from "./pages/Error404";
-
 import TestUpdate from "./test/testUpdate";
 import TestCreate from "./test/testCreate";
-
 import Contact from "./pages/Contact";
-import SalesReport from "./layouts/SalesReport";
 
 import TestRoute from "./test/testRoute";
 import Approval from "./components/interface/Approval";
-
 import Invoice from "./components/Invoice";
+import PrivateRoute from "./pages/PrivateRoute"; // Import PrivateRoute
 
 function App() {
   return (
@@ -22,28 +19,84 @@ function App() {
       <Routes>
         {/* Fallback route for unmatched paths */}
         <Route path="*" element={<Error404 />} />
+
         {/* Public Routes */}
         <Route path="/" element={<Login />} />
         <Route path="/login" element={<Login />} />
-
         <Route path="/comingsoon" element={<ComingSoon />} />
         <Route path="/contact" element={<Contact />} />
 
         {/* Test Routes */}
-        <Route path="/testUpdate/:id" element={<TestUpdate />} />
-        <Route path="/testCreate/:doc" element={<TestCreate />} />
-        <Route path="/testroute" element={<TestRoute />} />
+        <Route
+          path="/testUpdate/:id"
+          element={
+            <PrivateRoute>
+              <TestUpdate />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/testCreate/:doc"
+          element={
+            <PrivateRoute>
+              <TestCreate />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/testroute"
+          element={
+            <PrivateRoute>
+              <TestRoute />
+            </PrivateRoute>
+          }
+        />
 
         {/* Approval Routes */}
-        <Route path="/approval" element={<Approval />} />
-        <Route path="/approval/:id" element={<Approval />} />
+        <Route
+          path="/approval"
+          element={
+            <PrivateRoute>
+              <Approval />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/approval/:id"
+          element={
+            <PrivateRoute>
+              <Approval />
+            </PrivateRoute>
+          }
+        />
 
         {/* Layout and Component Routes */}
-        <Route path="/invoice/:id/:doc" element={<Invoice />} />
+        <Route
+          path="/invoice/:id/:doc"
+          element={
+            <PrivateRoute>
+              <Invoice />
+            </PrivateRoute>
+          }
+        />
 
         {/* Dashboard Routes */}
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/dashboard/:path" element={<Dashboard />} />
+        <Route
+          path="/dashboard"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
+        <Route
+          path="/dashboard/:path"
+          element={
+            <PrivateRoute>
+              <Dashboard />
+            </PrivateRoute>
+          }
+        />
       </Routes>
     </Router>
   );

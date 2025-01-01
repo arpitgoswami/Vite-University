@@ -3,7 +3,7 @@ import DataTable from "@interface/DataTable";
 function SalesReport() {
   return (
     <>
-      <DataTable url={"sales"} />
+      <DataTable url={"sales"} header={"Sales Entry"} isViewAllowed={"true"} />
     </>
   );
 }

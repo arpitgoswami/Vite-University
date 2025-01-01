@@ -21,7 +21,7 @@ import {
   Delete as DeleteIcon,
 } from "@mui/icons-material";
 
-function DataTable({ url }) {
+function DataTable({ url, header, isViewAllowed }) {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -102,14 +102,14 @@ function DataTable({ url }) {
       width: 200,
       sortable: false,
       renderCell: (params) => {
-        const isDeleteDisabled =
-          searchQuery.trim() === "" && filteredData.length === 1;
+        const isDeleteDisabled = data.length === 1;
 
         return (
           <Box sx={{ display: "flex", gap: 1 }}>
             <Tooltip title="View" arrow>
               <IconButton
                 color="info"
+                sx={{ display: isViewAllowed }}
                 onClick={() =>
                   window.open(`/invoice/${params.row._id}/${url}`, "_blank")
                 }
@@ -172,7 +172,7 @@ function DataTable({ url }) {
           }}
         >
           <Typography variant="h6" sx={{ fontWeight: 600 }}>
-            Sales Data
+            {header}
           </Typography>
           <Box sx={{ display: "flex", gap: "8px" }}>
             <Button

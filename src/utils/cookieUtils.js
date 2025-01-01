@@ -11,19 +11,6 @@ export function createCookie(token) {
   });
 }
 
-export const readCookie = () => {
-  axios
-    .get("check-cookie", { withCredentials: true })
-    .then((result) => {
-      if (result.data.hasCookie) {
-        console.log(true);
-      } else {
-        console.log(false);
-      }
-    })
-    .catch((err) => console.log(err));
-};
-
 export const handleDeleteCookie = () => {
   const cookies = document.cookie.split(";");
   cookies.forEach((cookie) => {

@@ -1,18 +1,18 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { filterData, fetchData, handleDelete } from "@function";
+import { fetchData, handleDelete } from "@function";
 import Loading from "../Loading";
-
-// Material UI Components
 import {
+  Button,
+  Typography,
+  Tooltip,
+  IconButton,
+  TextField,
+  Alert,
+  Box,
   Card,
   CardContent,
   CardActions,
-  Button,
-  TextField,
-  Typography,
-  Grid,
-  IconButton,
 } from "@mui/material";
 
 import {
@@ -21,146 +21,196 @@ import {
   Delete as DeleteIcon,
 } from "@mui/icons-material";
 
-function DataCard({ url }) {
+function DataCard({ url, header }) {
   const [data, setData] = useState([]);
-  const [reload, setReload] = useState();
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
 
   const navigate = useNavigate();
 
-  useEffect(() => {
-    let isMounted = true;
-
-    const fetchDataAsync = async () => {
-      try {
-        await fetchData(url, setData, setLoading); // Use 'url' prop here
-        setReload(0);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-
-    if (isMounted) {
-      fetchDataAsync();
+  const fetchDataAsync = async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      await fetchData(url, setData, setLoading);
+    } catch (err) {
+      setError("Failed to fetch data. Please try again later.");
+      console.error("Error fetching data:", err);
     }
+  };
 
-    return () => {
-      isMounted = false;
-    };
-  }, [reload, url]);
+  useEffect(() => {
+    fetchDataAsync();
+  }, [url]);
 
   if (loading) {
     return (
-      <div>
+      <Box
+        sx={{
+          backgroundColor: "#f5f5f5",
+          minHeight: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
         <Loading />
-      </div>
+      </Box>
     );
   }
 
-  if (data.length === 0) {
-    return <div>No data available</div>;
+  if (error) {
+    return <Alert severity="error">{error}</Alert>;
   }
 
-  const columns = Object.keys(data[0]);
-  const limitedColumns = columns.slice(0, 5);
-  const filteredData = filterData(data, searchQuery, limitedColumns);
+  if (data.length === 0) {
+    return (
+      <Box
+        sx={{
+          backgroundColor: "#f5f5f5",
+          minHeight: "100vh",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Typography variant="h6">No data available</Typography>
+      </Box>
+    );
+  }
+
+  const filteredData = data.filter((item) =>
+    Object.values(item)
+      .join(" ")
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase())
+  );
 
   return (
-    <div className="container mx-auto p-4 sm:p-6 overflow-hidden">
-      <div className="flex items-end justify-between mb-4">
-        <Typography
-          variant="body2"
-          color="textPrimary"
-          sx={{ fontSize: "0.875rem" }}
+    <Box
+      sx={{
+        backgroundColor: "#f5f5f5",
+        minHeight: "100vh",
+        padding: "16px",
+      }}
+    >
+      <Box
+        sx={{
+          backgroundColor: "#ffffff",
+          borderRadius: "8px",
+          padding: "16px",
+          boxShadow: "0 2px 4px rgba(0, 0, 0, 0.1)",
+        }}
+      >
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            marginBottom: "16px",
+          }}
         >
-          Sales Data
-        </Typography>
-        <div className="flex gap-2">
-          <Button
-            startIcon={<ReloadIcon />}
-            variant="contained"
-            color="primary"
-            sx={{ padding: "4px 8px", fontSize: "0.75rem" }}
-            onClick={() => fetchData(url, setData, setLoading)}
-          >
-            Reload
-          </Button>
+          <Typography variant="h6" sx={{ fontWeight: 600 }}>
+            {header}
+          </Typography>
+          <Box sx={{ display: "flex", gap: "8px" }}>
+            <Button
+              startIcon={<ReloadIcon />}
+              variant="contained"
+              color="primary"
+              onClick={fetchDataAsync}
+            >
+              Reload
+            </Button>
+            <Button
+              startIcon={<EditIcon />}
+              variant="contained"
+              color="success"
+              onClick={() => navigate(`/testCreate/${url}`)}
+            >
+              Add New Entry
+            </Button>
+          </Box>
+        </Box>
 
-          <Button
-            startIcon={<EditIcon />}
-            variant="contained"
-            color="success"
-            sx={{ padding: "4px 8px", fontSize: "0.75rem" }}
-            onClick={() => navigate(`/testCreate/${url}`)}
-          >
-            Add New Entry
-          </Button>
-        </div>
-      </div>
-
-      <div className="mb-4">
         <TextField
           variant="outlined"
-          label="Search..."
+          label="Search"
           fullWidth
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
-          sx={{
-            marginBottom: "8px",
-            "& .MuiInputBase-root": { fontSize: "0.75rem" },
-          }}
+          sx={{ marginBottom: "16px" }}
         />
-      </div>
 
-      <Grid container spacing={2}>
-        {filteredData.map((item, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <Card>
-              <CardContent>
-                {limitedColumns
-                  .filter((column) => column !== "_id")
-                  .map((column) => (
-                    <Typography
-                      key={column}
-                      variant="body2"
-                      color="textSecondary"
-                      sx={{ fontSize: "0.75rem" }}
-                    >
-                      <strong>
-                        {column.charAt(0).toUpperCase() + column.slice(1)}:{" "}
-                      </strong>
-                      {item[column]}
+        {filteredData.length === 0 ? (
+          <Typography
+            variant="body1"
+            color="textSecondary"
+            sx={{ textAlign: "center" }}
+          >
+            No matching records found.
+          </Typography>
+        ) : (
+          <Box
+            sx={{
+              display: "grid",
+              gridTemplateColumns: "repeat(3, 1fr)",
+              gap: 2,
+            }}
+          >
+            {filteredData.map((item) => {
+              // Remove sensitive fields like 'password' from the data before rendering
+              const { PASSWORD, ...restItem } = item;
+
+              return (
+                <Card key={item._id} sx={{ maxWidth: 345 }}>
+                  <CardContent>
+                    <Typography variant="h6">{item.name}</Typography>
+                    {/* Add other fields you want to display here */}
+                    <Typography variant="body2" color="textSecondary">
+                      {Object.keys(restItem).map((key) =>
+                        key !== "_id" && key !== "name" ? (
+                          <div key={key}>
+                            {" "}
+                            {/* Use div instead of p */}
+                            <strong>
+                              {key.charAt(0).toUpperCase() + key.slice(1)}:
+                            </strong>{" "}
+                            {restItem[key]}
+                          </div>
+                        ) : null
+                      )}
                     </Typography>
-                  ))}
-              </CardContent>
-              <CardActions>
-                <IconButton
-                  color="primary"
-                  onClick={() => navigate(`/testUpdate/${item._id}?doc=${url}`)}
-                  disabled={data.length === 1}
-                  sx={{ fontSize: "0.75rem" }}
-                >
-                  <EditIcon />
-                </IconButton>
-                <IconButton
-                  color="secondary"
-                  onClick={() => {
-                    if (data.length > 1) {
-                      handleDelete(item._id, url, setReload);
-                    }
-                  }}
-                  disabled={data.length === 1}
-                  sx={{ fontSize: "0.75rem" }}
-                >
-                  <DeleteIcon />
-                </IconButton>
-              </CardActions>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
-    </div>
+                  </CardContent>
+
+                  <CardActions sx={{ justifyContent: "space-between" }}>
+                    <Tooltip title="Edit" arrow>
+                      <IconButton
+                        color="primary"
+                        onClick={() =>
+                          navigate(`/testUpdate/${item._id}?doc=${url}`)
+                        }
+                      >
+                        <EditIcon />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip title="Delete" arrow>
+                      <IconButton
+                        color="secondary"
+                        onClick={() => handleDelete(item._id, url)}
+                      >
+                        <DeleteIcon />
+                      </IconButton>
+                    </Tooltip>
+                  </CardActions>
+                </Card>
+              );
+            })}
+          </Box>
+        )}
+      </Box>
+    </Box>
   );
 }
 

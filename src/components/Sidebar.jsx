@@ -23,9 +23,12 @@ import {
   BarChart as BarChartIcon,
   ShoppingCart as ShoppingCartIcon,
   Assessment as AssessmentIcon,
-  Description,
+  Description as DescriptionIcon,
   ExpandLess,
   ExpandMore,
+  Person as PersonIcon,
+  People as PeopleIcon,
+  Inventory as InventoryIcon,
 } from "@mui/icons-material";
 
 function Sidebar({ onNavChange }) {
@@ -70,7 +73,7 @@ function Sidebar({ onNavChange }) {
             onClick={() => (window.location.href = "../dashboard")}
           >
             <Typography variant="h6" fontWeight="bold">
-              <img src="/logo.jpg" />
+              <img src="/logo.jpg" alt="Logo" />
             </Typography>
           </Box>
 
@@ -101,6 +104,26 @@ function Sidebar({ onNavChange }) {
               </ListItemButton>
             </ListItem>
 
+            {/* PPIC Register */}
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => navigate("../dashboard/ppic")}>
+                <ListItemIcon>
+                  <InventoryIcon />
+                </ListItemIcon>
+                <ListItemText primary="PPIC Register" />
+              </ListItemButton>
+            </ListItem>
+
+            {/* Users */}
+            <ListItem disablePadding>
+              <ListItemButton onClick={() => navigate("../dashboard/users")}>
+                <ListItemIcon>
+                  <PeopleIcon />
+                </ListItemIcon>
+                <ListItemText primary="Users" />
+              </ListItemButton>
+            </ListItem>
+
             <Divider />
 
             {/* Purchase Order */}
@@ -123,7 +146,7 @@ function Sidebar({ onNavChange }) {
                     onClick={() => navigate("../dashboard/ordersheet")}
                   >
                     <ListItemIcon>
-                      <Description />
+                      <DescriptionIcon />
                     </ListItemIcon>
                     <ListItemText primary="Order Sheet" />
                   </ListItemButton>
@@ -134,7 +157,7 @@ function Sidebar({ onNavChange }) {
                     onClick={() => onNavChange("RFD")}
                   >
                     <ListItemIcon>
-                      <Description />
+                      <DescriptionIcon />
                     </ListItemIcon>
                     <ListItemText primary="RFD" />
                   </ListItemButton>
@@ -144,8 +167,8 @@ function Sidebar({ onNavChange }) {
                     sx={{ pl: 8 }}
                     onClick={() => onNavChange("Cancelled")}
                   >
-                    <ListItemIcon sx={{}}>
-                      <Description />
+                    <ListItemIcon>
+                      <DescriptionIcon />
                     </ListItemIcon>
                     <ListItemText primary="Cancelled" />
                   </ListItemButton>

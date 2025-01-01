@@ -6,8 +6,8 @@ import Navbar from "../components/Navbar";
 import Overview from "../layouts/Overview";
 import OrderSheet from "../layouts/OrderSheet";
 import SalesReport from "../layouts/SalesReport";
-
-import { readCookie } from "@cookie";
+import PPIC from "../layouts/PPIC";
+import Users from "../layouts/Users";
 
 function Dashboard() {
   const params = useParams();
@@ -26,6 +26,8 @@ function Dashboard() {
         {params.path === "overview" && <Overview />}
         {params.path === "salesreport" && <SalesReport />}
         {params.path === "ordersheet" && <OrderSheet />}
+        {params.path === "ppic" && <PPIC />}
+        {params.path === "users" && <Users />}
       </div>
     </>
   );
