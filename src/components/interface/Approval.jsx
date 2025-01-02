@@ -135,6 +135,7 @@ const Approval = () => {
                   value={statusInput}
                   onChange={(e) => setStatusInput(e.target.value)}
                   label="Status"
+                  required
                 >
                   <MenuItem value="Approved">Approved</MenuItem>
                   <MenuItem value="Disapproved">Disapproved</MenuItem>

@@ -1,27 +1,25 @@
 import React, { useState, useEffect } from "react";
-import {
-  AppBar,
-  Toolbar,
-  IconButton,
-  Badge,
-  Typography,
-  Box,
-  Card,
-  CardContent,
-  Divider,
-} from "@mui/material";
-import NotificationsIcon from "@mui/icons-material/Notifications";
-import CloseIcon from "@mui/icons-material/Close";
-import HomeIcon from "@mui/icons-material/Home";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axios from "@axios";
+
+import { readCookie } from "../utils/cookieUtils";
+import { handleDeleteCookie } from "../utils/cookieUtils";
+
+import { ToastContainer } from "react-toastify";
+
+import { RiAccountCircleLine } from "react-icons/ri";
+import { RxDashboard } from "react-icons/rx";
+import { TbReport } from "react-icons/tb";
+import { PiCashRegisterBold } from "react-icons/pi";
+import { HiOutlineUsers } from "react-icons/hi2";
 
 function Navbar() {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const location = useLocation();
   const navigate = useNavigate(); // Initialize useNavigate
   const [pendingCount, setPendingCount] = useState(null);
   const [pendingSales, setPendingSales] = useState([]); // Store pending sales records
+
+  const username = readCookie("username");
 
   useEffect(() => {
     const fetchPendingCount = async () => {
@@ -47,96 +45,169 @@ function Navbar() {
 
   return (
     <>
-      <AppBar
-        position="sticky"
-        sx={{ backgroundColor: "white", boxShadow: "none" }}
-      >
-        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          <Typography
-            variant="body2"
-            sx={{
-              color: "gray",
-              textTransform: "capitalize",
-              display: "flex",
-              alignItems: "center",
-            }}
-          >
-            <HomeIcon sx={{ marginRight: 1 }} />
-            {"> " + formatPathname(location.pathname)}
-          </Typography>
-          <IconButton color="inherit" onClick={toggleSidebar}>
-            <Badge
-              badgeContent={pendingCount}
-              color="primary"
-              sx={{ position: "relative" }}
-            >
-              <NotificationsIcon sx={{ color: "gray" }} />
-            </Badge>
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      {isSidebarOpen && (
-        <Box
-          className="fixed top-0 right-0 w-64 h-full bg-white text-gray-800 shadow-xl p-4 border-l border-gray-300"
-          sx={{
-            position: "fixed",
-            top: 0,
-            right: 0,
-            width: 256,
-            height: "100vh",
-            backgroundColor: "white",
-            borderLeft: "1px solid #ccc",
-            boxShadow: "3px 0 10px rgba(0,0,0,0.1)",
-            padding: 2,
-            overflowY: "auto",
-            zIndex: 1200,
-          }}
-        >
-          <Typography variant="h6" sx={{ marginBottom: 2 }}>
-            Notifications
-          </Typography>
-          {pendingSales.length > 0 ? (
-            pendingSales.map((sale, index) => (
-              <Box key={index} sx={{ marginBottom: 2 }}>
-                <Card
-                  sx={{ maxWidth: 300, cursor: "pointer" }}
-                  onClick={() =>
-                    navigate(
-                      `/approval/${sale["SALES ID"]}?doc=sales&sales_id=${sale._id}`
-                    )
-                  }
+      <div className="navbar bg-base-100 border">
+        <div className="navbar-start">
+          <div className="drawer">
+            <input id="my-drawer" type="checkbox" className="drawer-toggle" />
+            <div className="drawer-content">
+              {/* Page content here */}
+              <label htmlFor="my-drawer" className="btn btn-ghost btn-square">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
                 >
-                  <CardContent>
-                    <Typography variant="body2" sx={{ fontSize: "0.875rem" }}>
-                      SALES ID: {sale["SALES ID"]}
-                    </Typography>
-                  </CardContent>
-                </Card>
-                {index < pendingSales.length - 1 && (
-                  <Divider sx={{ marginY: 1 }} />
-                )}
-              </Box>
-            ))
-          ) : (
-            <Typography variant="body2" color="gray">
-              No pending approvals.
-            </Typography>
-          )}
-          <Box sx={{ marginTop: 2 }}>
-            <IconButton
-              className="mt-4 bg-indigo-500 px-4 py-2 rounded-md text-white hover:bg-indigo-600"
-              onClick={toggleSidebar}
-              sx={{
-                backgroundColor: "indigo",
-                color: "white",
-                "&:hover": { backgroundColor: "indigo" },
-              }}
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M4 6h16M4 12h16M4 18h7"
+                  />
+                </svg>
+              </label>
+            </div>
+            <div className="drawer-side z-10">
+              <label
+                htmlFor="my-drawer"
+                aria-label="close sidebar"
+                className="drawer-overlay"
+              ></label>
+              <ul className="menu bg-base-200 text-base-content min-h-full w-80 p-4">
+                {/* Sidebar content here */}
+                <li>
+                  <a
+                    onClick={() => {
+                      navigate("../dashboard/overview");
+                    }}
+                  >
+                    <RxDashboard />
+                    Overview
+                  </a>
+                </li>
+                <li>
+                  <a
+                    onClick={() => {
+                      navigate("../dashboard/salesreport");
+                    }}
+                  >
+                    <TbReport />
+                    Sales Report
+                  </a>
+                </li>
+                <li>
+                  <a
+                    onClick={() => {
+                      navigate("../dashboard/ppic");
+                    }}
+                  >
+                    <PiCashRegisterBold />
+                    PPIC Register
+                  </a>
+                </li>
+                <li>
+                  <a
+                    onClick={() => {
+                      navigate("../dashboard/users");
+                    }}
+                  >
+                    <HiOutlineUsers />
+                    Users
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div className="navbar-center">
+          <a
+            className="hover:opacity-80 cursor-pointer"
+            onClick={() => navigate("../dashboard/overview")}
+          >
+            <img src="/logo.jpg" className="w-[14rem]" />
+          </a>
+        </div>
+        <div className="navbar-end">
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-square btn-ghost"
             >
-              <CloseIcon />
-            </IconButton>
-          </Box>
-        </Box>
-      )}
+              <div className="indicator">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                  />
+                </svg>
+                {pendingCount > 0 && (
+                  <span className="indicator-item indicator-end badge badge-xs badge-primary"></span>
+                )}
+              </div>
+            </div>
+
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+            >
+              {pendingSales.length > 0 ? (
+                pendingSales.map((sale, index) => (
+                  <li key={index}>
+                    <a
+                      onClick={() =>
+                        navigate(
+                          `/approval/${sale["SALES ID"]}?doc=sales&sales_id=${sale._id}`
+                        )
+                      }
+                    >
+                      <p>Approval {index + 1}</p>
+                    </a>
+                  </li>
+                ))
+              ) : (
+                <li>
+                  <a>
+                    <p>No pending approvals.</p>
+                  </a>
+                </li>
+              )}
+            </ul>
+          </div>
+
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-ghost btn-square"
+            >
+              <RiAccountCircleLine size={20} />
+            </div>
+            <ul
+              tabIndex={0}
+              className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
+            >
+              <li>
+                <a>Profile</a>
+              </li>
+              <div className="divider mt-0 mb-0"></div>
+              <li>
+                <a onClick={() => handleDeleteCookie(username)}>Logout</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <ToastContainer />
     </>
   );
 }

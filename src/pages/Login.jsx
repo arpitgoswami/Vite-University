@@ -17,7 +17,11 @@ function Login() {
 
       if (response.status === 200) {
         const token = response.data.token;
+        const authorization = response.data.authorization;
+        const username = response.data.username;
         document.cookie = `authToken=${token};`;
+        document.cookie = `authorization=${authorization};`;
+        document.cookie = `username=${username};`;
         toast.success("Login successful!", {
           onClose: () => {
             window.location.href = "../dashboard/overview";
@@ -62,7 +66,7 @@ function Login() {
                 type="text"
                 placeholder="Enter your username"
                 className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={(e) => setUsername(e.target.value.toLowerCase())}
                 required
               />
             </div>

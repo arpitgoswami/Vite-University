@@ -13,95 +13,101 @@ import Approval from "./components/interface/Approval";
 import Invoice from "./components/Invoice";
 import PrivateRoute from "./pages/PrivateRoute"; // Import PrivateRoute
 
+import Overview2 from "./layouts/Overview2";
 import ExcelView from "./components/interface/ExcelView";
+import Navbar from "./components/Navbar";
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        {/* Fallback route for unmatched paths */}
-        <Route path="*" element={<Error404 />} />
+    <section className="font-sans">
+      <Router>
+        <Routes>
+          {/* Fallback route for unmatched paths */}
+          <Route path="*" element={<Error404 />} />
 
-        {/* Public Routes */}
-        <Route path="/" element={<Login />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/comingsoon" element={<ComingSoon />} />
-        <Route path="/contact" element={<Contact />} />
+          {/* Public Routes */}
+          <Route path="/" element={<Login />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/comingsoon" element={<ComingSoon />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/overview2" element={<Overview2 />} />
+          <Route path="/navbar" element={<Navbar />} />
 
-        {/* Test Routes */}
-        <Route
-          path="/testUpdate/:id"
-          element={
-            <PrivateRoute>
-              <TestUpdate />
-            </PrivateRoute>
-          }
-        />
+          {/* Test Routes */}
+          <Route
+            path="/testUpdate/:id"
+            element={
+              <PrivateRoute>
+                <TestUpdate />
+              </PrivateRoute>
+            }
+          />
 
-        <Route
-          path="/excelview"
-          element={
-            <PrivateRoute>
-              <ExcelView />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/testCreate/:doc"
-          element={
-            <PrivateRoute>
-              <TestCreate />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/testroute"
-          element={
-            <PrivateRoute>
-              <TestRoute />
-            </PrivateRoute>
-          }
-        />
+          <Route
+            path="/excelview"
+            element={
+              <PrivateRoute>
+                <ExcelView />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/testCreate/:doc"
+            element={
+              <PrivateRoute>
+                <TestCreate />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/testroute"
+            element={
+              <PrivateRoute>
+                <TestRoute />
+              </PrivateRoute>
+            }
+          />
 
-        {/* Approval Routes */}
-        <Route
-          path="/approval"
-          element={
-            <PrivateRoute>
-              <Approval />
-            </PrivateRoute>
-          }
-        />
-        <Route
-          path="/approval/:id"
-          element={
-            <PrivateRoute>
-              <Approval />
-            </PrivateRoute>
-          }
-        />
+          {/* Approval Routes */}
+          <Route
+            path="/approval"
+            element={
+              <PrivateRoute>
+                <Approval />
+              </PrivateRoute>
+            }
+          />
+          <Route
+            path="/approval/:id"
+            element={
+              <PrivateRoute>
+                <Approval />
+              </PrivateRoute>
+            }
+          />
 
-        {/* Layout and Component Routes */}
-        <Route
-          path="/invoice/:id/:doc"
-          element={
-            <PrivateRoute>
-              <Invoice />
-            </PrivateRoute>
-          }
-        />
+          {/* Layout and Component Routes */}
+          <Route
+            path="/invoice/:id/:doc"
+            element={
+              <PrivateRoute>
+                <Invoice />
+              </PrivateRoute>
+            }
+          />
 
-        {/* Dashboard Routes */}
-        <Route
-          path="/dashboard/:path"
-          element={
-            <PrivateRoute>
-              <Dashboard />
-            </PrivateRoute>
-          }
-        />
-      </Routes>
-    </Router>
+          {/* Dashboard Routes */}
+          <Route
+            path="/dashboard/:path"
+            element={
+              <PrivateRoute>
+                <Dashboard />
+              </PrivateRoute>
+            }
+          />
+        </Routes>
+      </Router>
+    </section>
   );
 }
 

@@ -31,6 +31,8 @@ import {
   Inventory as InventoryIcon,
 } from "@mui/icons-material";
 
+import { readCookie } from "../utils/cookieUtils";
+
 function Sidebar({ onNavChange }) {
   const [openPurchaseOrder, setOpenPurchaseOrder] = React.useState(false);
   const navigate = useNavigate();
@@ -38,6 +40,8 @@ function Sidebar({ onNavChange }) {
   const handlePurchaseOrderClick = () => {
     setOpenPurchaseOrder(!openPurchaseOrder);
   };
+
+  const username = readCookie("username");
 
   return (
     <Drawer
@@ -143,17 +147,6 @@ function Sidebar({ onNavChange }) {
                 <ListItem disablePadding>
                   <ListItemButton
                     sx={{ pl: 8 }}
-                    onClick={() => navigate("../dashboard/ordersheet")}
-                  >
-                    <ListItemIcon>
-                      <DescriptionIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Order Sheet" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton
-                    sx={{ pl: 8 }}
                     onClick={() => onNavChange("RFD")}
                   >
                     <ListItemIcon>
@@ -196,7 +189,7 @@ function Sidebar({ onNavChange }) {
             variant="contained"
             color="error"
             fullWidth
-            onClick={handleDeleteCookie}
+            onClick={() => handleDeleteCookie(username)}
           >
             Log out
           </Button>

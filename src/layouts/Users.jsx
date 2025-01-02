@@ -1,7 +1,7 @@
 import DataCard from "@interface/DataCard";
 
 function Users() {
-  return <DataCard url={"users"} header={"Users"} isViewAllowed={"none"} />;
+  return <DataCard url={"user"} header={"Users"} isViewAllowed={"none"} />;
 }
 
 export default Users;

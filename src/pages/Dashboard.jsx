@@ -4,32 +4,27 @@ import Sidebar from "../components/Sidebar";
 import Navbar from "../components/Navbar";
 
 import Overview from "../layouts/Overview";
-import OrderSheet from "../layouts/OrderSheet";
+import Overview2 from "../layouts/Overview2";
+
 import SalesReport from "../layouts/SalesReport";
 import PPIC from "../layouts/PPIC";
 import Users from "../layouts/Users";
+
+import BreadCrums from "../components/BreadCrums";
 
 function Dashboard() {
   const params = useParams();
 
   return (
     <>
-      <div id="Sidebar">
-        <Sidebar />
-      </div>
-
-      <div className="ml-72">
-        <Navbar />
-      </div>
-
-      <div className="ml-72">
-        {params.path === "overview" && <Overview />}
-        {params.path === " " && <Overview />}
-        {params.path === "salesreport" && <SalesReport />}
-        {params.path === "ordersheet" && <OrderSheet />}
-        {params.path === "ppic" && <PPIC />}
-        {params.path === "users" && <Users />}
-      </div>
+      <Navbar />
+      <BreadCrums />
+      {params.path === "overview" && <Overview />}
+      {params.path === "overview2" && <Overview2 />}
+      {params.path === " " && <Overview />}
+      {params.path === "salesreport" && <SalesReport />}
+      {params.path === "ppic" && <PPIC />}
+      {params.path === "users" && <Users />}
     </>
   );
 }

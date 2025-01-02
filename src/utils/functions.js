@@ -1,5 +1,6 @@
 import axios from "@axios";
 import { toast } from "react-toastify";
+import React from "react";
 
 export function filterData(data, searchQuery, columns) {
   if (!searchQuery) return data;
@@ -24,27 +25,48 @@ export async function fetchData(url, setData, setLoading) {
 }
 
 export const handleDelete = (id, url) => {
-  const isConfirmed = window.confirm(
-    "Are you sure you want to delete this item?"
+  const confirmDelete = () => {
+    axios
+      .delete(`${url}/${id}`)
+      .then((result) => {
+        toast.success("Data deleted successfully!", {
+          autoClose: 1000,
+          onClose: () => window.location.reload(),
+        });
+      })
+      .catch((err) => {
+        toast.error("Failed to delete item.", {
+          autoClose: 2000,
+        });
+      });
+  };
+
+  // Creating the custom toast content using React.createElement
+  toast.info(
+    React.createElement(
+      "div",
+      null,
+      React.createElement(
+        "p",
+        null,
+        "Are you sure you want to delete this item?"
+      ),
+      React.createElement(
+        "button",
+        {
+          onClick: confirmDelete,
+          style: { marginRight: "10px" },
+        },
+        "Yes"
+      ),
+      React.createElement("button", { onClick: () => toast.dismiss() }, "No")
+    ),
+    {
+      autoClose: false, // Prevent auto close
+      closeButton: false, // Hide the close button
+      position: "top-center",
+    }
   );
-
-  if (!isConfirmed) {
-    return;
-  }
-
-  axios
-    .delete(`${url}/${id}`)
-    .then((result) => {
-      toast.success("Data updated successfully!", {
-        autoClose: 1000,
-        onClose: () => window.location.reload(),
-      });
-    })
-    .catch((err) => {
-      toast.error("Failed to delete item.", {
-        autoClose: 2000,
-      });
-    });
 };
 
 export const verifyToken = async () => {

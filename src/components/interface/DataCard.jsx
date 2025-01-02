@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { fetchData, handleDelete } from "@function";
+import { fetchData } from "@function";
 import Loading from "../Loading";
+
+import { HandleDelete } from "../../utils/HandleDelete";
+
 import {
   Button,
   Typography,
@@ -198,7 +201,7 @@ function DataCard({ url, header }) {
                     <Tooltip title="Delete" arrow>
                       <IconButton
                         color="secondary"
-                        onClick={() => handleDelete(item._id, url)}
+                        onClick={() => HandleDelete(item._id, url)}
                       >
                         <DeleteIcon />
                       </IconButton>
