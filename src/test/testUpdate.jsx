@@ -22,7 +22,7 @@ const TestUpdate = () => {
         setInputValues(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
-        setMessage("Failed to load data.");
+        toast.error("Failed to load data.");
       }
     };
 
@@ -84,19 +84,30 @@ const TestUpdate = () => {
                   <div key={key}>
                     <label
                       htmlFor={key}
-                      className="block text-sm/6 font-medium text-gray-900"
+                      className="block text-sm font-medium text-gray-900"
                     >
                       {key.charAt(0).toUpperCase() + key.slice(1)}
                     </label>
-                    <input
-                      type="text"
-                      id={key}
-                      name={key}
-                      value={inputValues[key] || ""}
-                      onChange={handleChange}
-                      placeholder={`Enter ${key}`}
-                      className="mt-1 block w-full rounded-md bg-gray-50 px-3 py-2 text-sm text-gray-800 outline outline-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:outline-indigo-600"
-                    />
+                    {key.toLowerCase().includes("date") ? (
+                      <input
+                        type="date"
+                        id={key}
+                        name={key}
+                        value={inputValues[key] || ""}
+                        onChange={handleChange}
+                        className="mt-1 block w-full rounded-md bg-gray-50 px-3 py-2 text-sm text-gray-800 outline-none border border-gray-300 focus:ring-2 focus:ring-indigo-600"
+                      />
+                    ) : (
+                      <input
+                        type="text"
+                        id={key}
+                        name={key}
+                        value={inputValues[key] || ""}
+                        onChange={handleChange}
+                        placeholder={`Enter ${key}`}
+                        className="mt-1 block w-full rounded-md bg-gray-50 px-3 py-2 text-sm text-gray-800 outline-none border border-gray-300 focus:ring-2 focus:ring-indigo-600"
+                      />
+                    )}
                   </div>
                 )
             )}

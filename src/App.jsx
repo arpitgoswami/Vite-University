@@ -15,11 +15,10 @@ import PrivateRoute from "./pages/PrivateRoute"; // Import PrivateRoute
 
 import Overview2 from "./layouts/Overview2";
 import ExcelView from "./components/interface/ExcelView";
-import Navbar from "./components/Navbar";
 
 function App() {
   return (
-    <section className="font-sans">
+    <section className="font-sans" style={{ fontFamily: "Poppins" }}>
       <Router>
         <Routes>
           {/* Fallback route for unmatched paths */}
@@ -31,7 +30,6 @@ function App() {
           <Route path="/comingsoon" element={<ComingSoon />} />
           <Route path="/contact" element={<Contact />} />
           <Route path="/overview2" element={<Overview2 />} />
-          <Route path="/navbar" element={<Navbar />} />
 
           {/* Test Routes */}
           <Route

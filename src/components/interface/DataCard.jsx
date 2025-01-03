@@ -10,8 +10,10 @@ function DataCard({ url, header, isViewAllowed }) {
   const [error, setError] = useState(null);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedRows, setSelectedRows] = useState([]);
+
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage, setItemsPerPage] = useState(20);
+
   const [sortColumn, setSortColumn] = useState(null);
   const [sortOrder, setSortOrder] = useState("asc");
 
@@ -22,8 +24,9 @@ function DataCard({ url, header, isViewAllowed }) {
     setError(null);
     try {
       await fetchData(url, setData, setLoading);
-    } catch {
+    } catch (err) {
       setError("Failed to fetch data. Please try again later.");
+      console.error("Error fetching data:", err);
     }
   };
 
@@ -31,51 +34,54 @@ function DataCard({ url, header, isViewAllowed }) {
     fetchDataAsync();
   }, [url]);
 
-  if (loading) return <Loading />;
-  if (error) return <div>{error}</div>;
-  if (data.length === 0) return <div>No data available</div>;
+  if (loading) {
+    return (
+      <div>
+        <Loading />
+      </div>
+    );
+  }
 
-  const filteredData = data.filter((item) =>
-    Object.values(item)
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (data.length === 0) {
+    return <div>No data available</div>;
+  }
+
+  const filteredData = data.filter((item) => {
+    return Object.values(item)
       .map((value) => String(value).toLowerCase())
       .join(" ")
-      .includes(searchQuery.toLowerCase())
-  );
+      .includes(searchQuery.toLowerCase());
+  });
 
   const sortedData = [...filteredData].sort((a, b) => {
     if (!sortColumn) return 0;
     const aValue = a[sortColumn];
     const bValue = b[sortColumn];
-    return sortOrder === "asc"
-      ? aValue.localeCompare(bValue)
-      : bValue.localeCompare(aValue);
+
+    if (aValue < bValue) return sortOrder === "asc" ? -1 : 1;
+    if (aValue > bValue) return sortOrder === "asc" ? 1 : -1;
+    return 0;
   });
 
+  const totalItems = sortedData.length;
+  const totalPages = Math.ceil(totalItems / itemsPerPage);
   const paginatedData = sortedData.slice(
     (currentPage - 1) * itemsPerPage,
     currentPage * itemsPerPage
   );
 
-  const totalItems = sortedData.length;
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-  const columns = Object.keys(data[0])
-    .filter((column) => column !== "_id")
-    .slice(0, 8);
-
-  const handleSort = (column) => {
-    if (sortColumn === column) {
-      setSortOrder(sortOrder === "asc" ? "desc" : "asc");
-    } else {
-      setSortColumn(column);
-      setSortOrder("asc");
-    }
-  };
-
   const handleRowSelect = (id) => {
-    setSelectedRows((prev) =>
-      prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
-    );
+    setSelectedRows((prevSelected) => {
+      if (prevSelected.includes(id)) {
+        return prevSelected.filter((item) => item !== id);
+      } else {
+        return [...prevSelected, id];
+      }
+    });
   };
 
   const handleBulkDelete = () => {
@@ -90,14 +96,18 @@ function DataCard({ url, header, isViewAllowed }) {
   return (
     <div className="p-4">
       <div>
+        <p className="text-3xl font-bold">{header} Data</p>
+        <p className="text-md opacity-50">Live {header} Record</p>
         <div className="flex space-x-2 mt-8">
-          <input
-            className="input input-bordered flex items-center w-full"
-            type="text"
-            placeholder="Search Entry..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-          />
+          <label className="input input-bordered flex items-center gap-2 w-full">
+            <input
+              className="w-full"
+              type="text"
+              placeholder="Search Entry..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </label>
           <button className="btn btn-primary" onClick={fetchDataAsync}>
             Reload
           </button>
@@ -154,47 +164,25 @@ function DataCard({ url, header, isViewAllowed }) {
         {paginatedData.length === 0 ? (
           <p>No matching records found.</p>
         ) : (
-          <table className="table table-sm mt-4">
-            <thead>
-              <tr>
-                <th>
-                  <input
-                    type="checkbox"
-                    className="checkbox"
-                    onChange={(e) => {
-                      setSelectedRows(
-                        e.target.checked ? data.map((item) => item._id) : []
-                      );
-                    }}
-                    checked={selectedRows.length === data.length}
-                  />
-                </th>
-                <th>ACTIONS</th>
-                {columns.map((column) => (
-                  <th
-                    key={column}
-                    onClick={() => handleSort(column)}
-                    className="cursor-pointer"
-                  >
-                    {column.charAt(0).toUpperCase() + column.slice(1)}
-                    {sortColumn === column &&
-                      (sortOrder === "asc" ? " ↑" : " ↓")}
-                  </th>
-                ))}
-              </tr>
-            </thead>
-            <tbody>
-              {paginatedData.map((item) => (
-                <tr key={item._id}>
-                  <td>
-                    <input
-                      type="checkbox"
-                      className="checkbox"
-                      onChange={() => handleRowSelect(item._id)}
-                      checked={selectedRows.includes(item._id)}
-                    />
-                  </td>
-                  <td>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-4">
+            {paginatedData.map((item) => (
+              <div
+                key={item._id}
+                className="card card-compact bg-base-100 shadow-md"
+              >
+                <div className="card-body">
+                  {Object.entries(item).map(
+                    ([key, value]) =>
+                      key !== "_id" && (
+                        <div key={key} className="flex justify-between">
+                          <span className="font-semibold">
+                            {key.charAt(0).toUpperCase() + key.slice(1)}:
+                          </span>
+                          <span>{String(value)}</span>
+                        </div>
+                      )
+                  )}
+                  <div className="card-actions justify-end space-x-2 mt-4">
                     {isViewAllowed && (
                       <button
                         className="btn btn-neutral btn-xs"
@@ -220,14 +208,11 @@ function DataCard({ url, header, isViewAllowed }) {
                     >
                       Delete
                     </button>
-                  </td>
-                  {columns.map((column) => (
-                    <td key={column}>{item[column]}</td>
-                  ))}
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
         )}
       </div>
     </div>

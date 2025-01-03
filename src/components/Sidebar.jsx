@@ -1,202 +1,270 @@
-import React from "react";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { ToastContainer } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-
-import { handleDeleteCookie } from "@cookie";
-
-import {
-  Drawer,
-  List,
-  ListItem,
-  ListItemButton,
-  ListItemText,
-  ListItemIcon,
-  Collapse,
-  Divider,
-  Button,
-  Box,
-  Typography,
-} from "@mui/material";
-
-import {
-  Dashboard as DashboardIcon,
-  BarChart as BarChartIcon,
-  ShoppingCart as ShoppingCartIcon,
-  Assessment as AssessmentIcon,
-  Description as DescriptionIcon,
-  ExpandLess,
-  ExpandMore,
-  Person as PersonIcon,
-  People as PeopleIcon,
-  Inventory as InventoryIcon,
-} from "@mui/icons-material";
 
 import { readCookie } from "../utils/cookieUtils";
+import { handleDeleteCookie } from "../utils/cookieUtils";
 
-function Sidebar({ onNavChange }) {
-  const [openPurchaseOrder, setOpenPurchaseOrder] = React.useState(false);
+import axios from "@axios";
+
+import { FaBars } from "react-icons/fa";
+import { HiMiniBars3, HiMiniBars3BottomRight } from "react-icons/hi2";
+
+import { RxDashboard } from "react-icons/rx";
+import { TbProgressAlert } from "react-icons/tb";
+import { HiOutlineDocumentReport } from "react-icons/hi";
+import { LuUsersRound } from "react-icons/lu";
+import { CgProfile } from "react-icons/cg";
+import { BiLogOutCircle } from "react-icons/bi";
+import { MdOutlineNotificationsActive } from "react-icons/md";
+
+function Sidebar() {
+  const [isCollapsed, setIsCollapsed] = useState(true);
+  const [isMenuActive, setIsMenuActive] = useState(true);
+  const [pendingCount, setPendingCount] = useState(null);
+  const [pendingSales, setPendingSales] = useState([]);
+  const location = useLocation();
   const navigate = useNavigate();
 
-  const handlePurchaseOrderClick = () => {
-    setOpenPurchaseOrder(!openPurchaseOrder);
+  const formatPathname = (pathname) => {
+    const segments = pathname.split("/").filter(Boolean);
+    return segments[segments.length - 1] || "";
   };
 
   const username = readCookie("username");
 
+  useEffect(() => {
+    const fetchPendingCount = async () => {
+      try {
+        const response = await axios.get("/status/pending");
+        setPendingCount(response.data.pendingCount);
+        setPendingSales(response.data.pendingRecords);
+      } catch (error) {
+        console.error("Error fetching pending count:", error);
+      }
+    };
+    fetchPendingCount();
+  }, []);
+
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 1020) {
+        setIsMenuActive(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => {
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
   return (
-    <Drawer
-      variant="permanent"
-      sx={{
-        width: 288,
-        flexShrink: 0,
-        [`& .MuiDrawer-paper`]: {
-          width: 288,
-          boxSizing: "border-box",
-        },
-      }}
-    >
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          height: "100%",
-          justifyContent: "space-between",
-        }}
+    <div className="flex">
+      {/* Sidebar */}
+      <aside
+        className={`fixed text-lg h-screen z-10 bg-[#151A2D] text-white transition-all duration-200 ${
+          isCollapsed ? "w-20" : "w-64"
+        }`}
       >
-        {/* Top Section */}
-        <Box>
-          {/* Logo */}
-          <Box
-            sx={{
-              padding: 2,
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              cursor: "pointer",
-            }}
-            onClick={() => (window.location.href = "../dashboard/overview")}
+        <header className={`flex items-center justify-between p-4`}>
+          <img
+            src="/logo.jpg"
+            className={`w-[11rem] h-auto rounded-sm ${
+              isCollapsed ? "hidden" : "block"
+            }`}
+          />
+          <button
+            className={`btn btn-square btn-ghost bg-white text-[#151A2D] hover:bg-white hover:opacity-80 btn-sm duration-500  ${
+              isCollapsed ? "w-full" : ""
+            }`}
+            onClick={() => setIsCollapsed(!isCollapsed)}
           >
-            <Typography variant="h6" fontWeight="bold">
-              <img src="/logo.jpg" alt="Logo" />
-            </Typography>
-          </Box>
+            {isCollapsed ? (
+              <HiMiniBars3 size={26} />
+            ) : (
+              <HiMiniBars3BottomRight size={26} />
+            )}
+          </button>
+        </header>
 
-          {/* Divider */}
-          <Divider />
-
-          {/* Navigation */}
-          <List>
-            {/* Overview */}
-            <ListItem disablePadding>
-              <ListItemButton onClick={() => navigate("../dashboard/overview")}>
-                <ListItemIcon>
-                  <DashboardIcon />
-                </ListItemIcon>
-                <ListItemText primary="Overview" />
-              </ListItemButton>
-            </ListItem>
-
-            {/* Sales Report */}
-            <ListItem disablePadding>
-              <ListItemButton
-                onClick={() => navigate("../dashboard/salesreport")}
+        <nav
+          className={`flex mt-4 justify-center ${
+            isMenuActive || !isCollapsed ? "block" : "hidden lg:block"
+          }`}
+        >
+          <ul className="space-y-2">
+            <li onClick={() => navigate("../dashboard/overview")}>
+              <a
+                className={`btn btn-ghost hover:bg-[#fff] hover:text-[#151A2D] ${
+                  isCollapsed ? "btn-square" : "text-lg"
+                }`}
               >
-                <ListItemIcon>
-                  <BarChartIcon />
-                </ListItemIcon>
-                <ListItemText primary="Sales Report" />
-              </ListItemButton>
-            </ListItem>
+                <RxDashboard size={24} />
+                {!isCollapsed && <span>Dashboard</span>}
+              </a>
+            </li>
+            <li onClick={() => navigate("../dashboard/notification")}>
+              <a
+                className={`btn btn-ghost hover:bg-[#fff] hover:text-[#151A2D] ${
+                  isCollapsed ? "btn-square" : "text-lg"
+                }`}
+              >
+                <MdOutlineNotificationsActive size={20} />
+                {!isCollapsed && <span>Notifications</span>}
+              </a>
+            </li>
+            <li onClick={() => navigate("../dashboard/salesreport")}>
+              <a
+                className={`btn btn-ghost hover:bg-[#fff] hover:text-[#151A2D] ${
+                  isCollapsed ? "btn-square" : "text-lg"
+                }`}
+              >
+                <TbProgressAlert size={20} />
+                {!isCollapsed && <span>Sales Report</span>}
+              </a>
+            </li>
+            <li onClick={() => navigate("../dashboard/salesreport")}>
+              <a
+                className={`btn btn-ghost hover:bg-[#fff] hover:text-[#151A2D] ${
+                  isCollapsed ? "btn-square" : "text-lg"
+                }`}
+              >
+                <HiOutlineDocumentReport size={20} />
+                {!isCollapsed && <span>PPIC Register</span>}
+              </a>
+            </li>
+            <li onClick={() => navigate("../dashboard/analytics")}>
+              <a
+                className={`btn btn-ghost hover:bg-[#fff] hover:text-[#151A2D] ${
+                  isCollapsed ? "btn-square" : "text-lg"
+                }`}
+              >
+                <LuUsersRound size={20} />
+                {!isCollapsed && <span>Analytics</span>}
+              </a>
+            </li>
+            <li>
+              <a
+                className={`btn btn-ghost hover:bg-[#fff] hover:text-[#151A2D] ${
+                  isCollapsed ? "btn-square" : "text-lg"
+                }`}
+              >
+                <CgProfile size={20} />
+                {!isCollapsed && <span>Profile</span>}
+              </a>
+            </li>
+            <li
+              onClick={() => {
+                handleDeleteCookie(username);
+              }}
+            >
+              <a
+                className={`btn btn-error hover:bg-[#fff] hover:text-[#151A2D] ${
+                  isCollapsed ? "btn-square" : "text-lg"
+                }`}
+              >
+                <BiLogOutCircle size={20} />
+                {!isCollapsed && <span>Logout</span>}
+              </a>
+            </li>
+          </ul>
+        </nav>
+      </aside>
 
-            {/* PPIC Register */}
-            <ListItem disablePadding>
-              <ListItemButton onClick={() => navigate("../dashboard/ppic")}>
-                <ListItemIcon>
-                  <InventoryIcon />
-                </ListItemIcon>
-                <ListItemText primary="PPIC Register" />
-              </ListItemButton>
-            </ListItem>
-
-            {/* Users */}
-            <ListItem disablePadding>
-              <ListItemButton onClick={() => navigate("../dashboard/users")}>
-                <ListItemIcon>
-                  <PeopleIcon />
-                </ListItemIcon>
-                <ListItemText primary="Users" />
-              </ListItemButton>
-            </ListItem>
-
-            <Divider />
-
-            {/* Purchase Order */}
-            <ListItem disablePadding>
-              <ListItemButton onClick={handlePurchaseOrderClick}>
-                <ListItemIcon>
-                  <ShoppingCartIcon />
-                </ListItemIcon>
-                <ListItemText primary="Purchase Order" />
-                {openPurchaseOrder ? <ExpandLess /> : <ExpandMore />}
-              </ListItemButton>
-            </ListItem>
-
-            {/* Sub-tabs for Purchase Order */}
-            <Collapse in={openPurchaseOrder} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItem disablePadding>
-                  <ListItemButton
-                    sx={{ pl: 8 }}
-                    onClick={() => onNavChange("RFD")}
-                  >
-                    <ListItemIcon>
-                      <DescriptionIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="RFD" />
-                  </ListItemButton>
-                </ListItem>
-                <ListItem disablePadding>
-                  <ListItemButton
-                    sx={{ pl: 8 }}
-                    onClick={() => onNavChange("Cancelled")}
-                  >
-                    <ListItemIcon>
-                      <DescriptionIcon />
-                    </ListItemIcon>
-                    <ListItemText primary="Cancelled" />
-                  </ListItemButton>
-                </ListItem>
-              </List>
-            </Collapse>
-
-            <Divider />
-
-            {/* Performance */}
-            <ListItem disablePadding>
-              <ListItemButton onClick={() => onNavChange("Performance")}>
-                <ListItemIcon>
-                  <AssessmentIcon />
-                </ListItemIcon>
-                <ListItemText primary="Performance" />
-              </ListItemButton>
-            </ListItem>
-          </List>
-        </Box>
-
-        {/* Logout Button */}
-        <Box sx={{ p: 2 }}>
-          <Button
-            variant="contained"
-            color="error"
-            fullWidth
-            onClick={() => handleDeleteCookie(username)}
-          >
-            Log out
-          </Button>
-        </Box>
-      </Box>
+      {/* Navbar */}
+      <div
+        className={`flex-1 transition-all duration-200  bg-gray-300 ${
+          isCollapsed ? "ml-20" : "ml-64"
+        }`}
+      >
+        <div className="navbar h-4 border-b border-gray-300">
+          <div className="flex-1 breadcrumbs text-sm">
+            <ul>
+              <li
+                className="btn btn-square btn-ghost"
+                onClick={() => navigate("../dashboard/overview")}
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  className="h-4 w-4 stroke-current"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+                  />
+                </svg>
+              </li>
+              <li>
+                <p>Dashboard</p>
+              </li>
+              <li>
+                <span className="inline-flex items-center capitalize">
+                  {formatPathname(location.pathname)}
+                </span>
+              </li>
+            </ul>
+          </div>
+          <div className="dropdown dropdown-end">
+            <div
+              tabIndex={0}
+              role="button"
+              className="btn btn-square btn-ghost"
+            >
+              <div className="indicator">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  className="h-5 w-5"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                >
+                  <path
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="2"
+                    d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"
+                  />
+                </svg>
+                {pendingCount > 0 && (
+                  <span className="indicator-item indicator-end badge badge-xs badge-primary"></span>
+                )}
+              </div>
+            </div>
+            <ul
+              tabIndex={0}
+              className="dropdown-content menu bg-base-100 rounded-box z-[1] w-52 p-2 shadow"
+            >
+              {pendingSales.length > 0 ? (
+                pendingSales.map((sale, index) => (
+                  <li key={index}>
+                    <a
+                      onClick={() =>
+                        navigate(
+                          `/approval/${sale["SALES ID"]}?doc=sales&sales_id=${sale._id}`
+                        )
+                      }
+                    >
+                      <p>Approval {index + 1}</p>
+                    </a>
+                  </li>
+                ))
+              ) : (
+                <li>
+                  <a>
+                    <p>No alerts ..</p>
+                  </a>
+                </li>
+              )}
+            </ul>
+          </div>
+        </div>
+      </div>
       <ToastContainer />
-    </Drawer>
+    </div>
   );
 }
 

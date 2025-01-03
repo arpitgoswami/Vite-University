@@ -1,7 +1,6 @@
 import { useParams } from "react-router-dom";
 
 import Sidebar from "../components/Sidebar";
-import Navbar from "../components/Navbar";
 
 import Overview from "../layouts/Overview";
 import Overview2 from "../layouts/Overview2";
@@ -17,14 +16,16 @@ function Dashboard() {
 
   return (
     <>
-      <Navbar />
-      <BreadCrums />
-      {params.path === "overview" && <Overview />}
-      {params.path === "overview2" && <Overview2 />}
-      {params.path === " " && <Overview />}
-      {params.path === "salesreport" && <SalesReport />}
-      {params.path === "ppic" && <PPIC />}
-      {params.path === "users" && <Users />}
+      <Sidebar />
+
+      <div className="ml-20">
+        {params.path === "overview" && <Overview />}
+        {params.path === "overview2" && <Overview2 />}
+        {params.path === " " && <Overview />}
+        {params.path === "salesreport" && <SalesReport />}
+        {params.path === "ppic" && <PPIC />}
+        {params.path === "users" && <Users />}
+      </div>
     </>
   );
 }
