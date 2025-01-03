@@ -14,7 +14,6 @@ import { PiCashRegisterBold } from "react-icons/pi";
 import { HiOutlineUsers } from "react-icons/hi2";
 
 function Navbar() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const navigate = useNavigate(); // Initialize useNavigate
   const [pendingCount, setPendingCount] = useState(null);
   const [pendingSales, setPendingSales] = useState([]); // Store pending sales records
@@ -33,15 +32,6 @@ function Navbar() {
     };
     fetchPendingCount();
   }, []);
-
-  const toggleSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  const formatPathname = (pathname) => {
-    const segments = pathname.split("/").filter(Boolean);
-    return segments.join(" > ");
-  };
 
   return (
     <>

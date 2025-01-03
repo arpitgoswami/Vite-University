@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import { fetchData } from "@function";
 import Loading from "../Loading";
 import { HandleDelete } from "../../utils/HandleDelete";
-import Modal from "../Modal";
 
 function DataTable({ url, header, isViewAllowed }) {
   const [data, setData] = useState([]);
@@ -82,7 +81,7 @@ function DataTable({ url, header, isViewAllowed }) {
 
   const columns = Object.keys(data[0])
     .filter((column) => column !== "_id")
-    .slice(0, 10);
+    .slice(0, 8);
 
   // Handle sorting
   const handleSort = (column) => {
