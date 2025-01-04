@@ -20,7 +20,7 @@ export const handleDeleteCookie = (username) => {
   });
 
   axios
-    .post("/logout", { USERNAME: username })
+    .post("/logout", { username: username })
     .then((response) => {
       if (response.status === 200) {
         toast.success("You have been logged out.", {

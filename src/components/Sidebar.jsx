@@ -7,8 +7,8 @@ import { handleDeleteCookie } from "../utils/cookieUtils";
 
 import axios from "@axios";
 
-import { FaBars } from "react-icons/fa";
 import { HiMiniBars3, HiMiniBars3BottomRight } from "react-icons/hi2";
+import { BiTask } from "react-icons/bi";
 
 import { RxDashboard } from "react-icons/rx";
 import { TbProgressAlert } from "react-icons/tb";
@@ -101,6 +101,16 @@ function Sidebar() {
               >
                 <RxDashboard size={24} />
                 {!isCollapsed && <span>Dashboard</span>}
+              </a>
+            </li>
+            <li onClick={() => navigate("../dashboard/tasks")}>
+              <a
+                className={`btn btn-ghost hover:bg-[#fff] hover:text-[#151A2D] ${
+                  isCollapsed ? "btn-square" : "text-lg"
+                }`}
+              >
+                <BiTask size={24} />
+                {!isCollapsed && <span>Tasks</span>}
               </a>
             </li>
             <li onClick={() => navigate("../dashboard/notification")}>

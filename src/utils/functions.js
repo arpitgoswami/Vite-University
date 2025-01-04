@@ -89,8 +89,8 @@ export const verifyToken = async () => {
     if (response.data.message === true) {
       return {
         valid: true,
-        USERNAME: response.data.USERNAME,
-        AUTHORIZATION: response.data.AUTHORIZATION,
+        username: response.data.username,
+        authorization: response.data.authorization,
         iat: response.data.iat,
         exp: response.data.exp,
       };
