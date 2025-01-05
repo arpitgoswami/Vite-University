@@ -1,11 +1,15 @@
-import DataTable from "@interface/DataTable";
+import DataTable from '@interface/DataTable'
 
 function SalesReport() {
-  return (
-    <>
-      <DataTable url={"sales"} header={"Sales Entry"} isViewAllowed={true} />
-    </>
-  );
+    return (
+        <>
+            <DataTable
+                url={'sales'}
+                header={'Sales Entry'}
+                isViewAllowed={true}
+            />
+        </>
+    )
 }
 
-export default SalesReport;
+export default SalesReport

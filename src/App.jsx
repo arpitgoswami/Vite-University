@@ -1,114 +1,104 @@
-import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
-import Login from "./pages/Login";
-import Dashboard from "./pages/Dashboard";
-import ComingSoon from "./pages/ComingSoon";
-import Error404 from "./pages/Error404";
-import TestUpdate from "./test/testUpdate";
-import TestCreate from "./test/testCreate";
-import Contact from "./pages/Contact";
+import Login from './pages/authorization/Login'
+import Dashboard from './pages/Dashboard'
+import ComingSoon from './pages/others/ComingSoon'
+import Error404 from './pages/others/Error404'
+import TestUpdate from './test/testUpdate'
+import TestCreate from './test/testCreate'
+import Contact from './pages/others/Contact'
 
-import TestRoute from "./test/testRoute";
-import Approval from "./components/interface/Approval";
-import Invoice from "./components/Invoice";
-import PrivateRoute from "./pages/PrivateRoute"; // Import PrivateRoute
+import Approval from './components/interface/Approval'
+import Invoice from './components/Invoice'
+import PrivateRoute from './pages/others/PrivateRoute' // Import PrivateRoute
 
-import Overview2 from "./layouts/Tasks";
-import ExcelView from "./components/interface/ExcelView";
+import ExcelView from './components/interface/ExcelView'
 
-import TestRoute2 from "./test/testRoute2";
+import Tasks from './layouts/Tasks'
 
 function App() {
-  return (
-    <section className="font-sans" style={{ fontFamily: "Poppins" }}>
-      <Router>
-        <Routes>
-          {/* Fallback route for unmatched paths */}
-          <Route path="*" element={<Error404 />} />
+    return (
+        <section style={{ fontFamily: 'Poppins' }}>
+            <Router>
+                <Routes>
+                    {/* Fallback route for unmatched paths */}
+                    <Route path="*" element={<Error404 />} />
 
-          {/* Public Routes */}
-          <Route path="/" element={<Login />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/comingsoon" element={<ComingSoon />} />
-          <Route path="/contact" element={<Contact />} />
-          <Route path="/overview2" element={<Overview2 />} />
+                    {/* Public Routes */}
+                    <Route path="/" element={<Login />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/comingsoon" element={<ComingSoon />} />
+                    <Route path="/contact" element={<Contact />} />
+                    <Route path="/tasks" element={<Tasks />} />
 
-          {/* Test Routes */}
-          <Route
-            path="/testUpdate/:id"
-            element={
-              <PrivateRoute>
-                <TestUpdate />
-              </PrivateRoute>
-            }
-          />
+                    {/* Test Routes */}
+                    <Route
+                        path="/testUpdate/:id"
+                        element={
+                            <PrivateRoute>
+                                <TestUpdate />
+                            </PrivateRoute>
+                        }
+                    />
 
-          <Route
-            path="/excelview"
-            element={
-              <PrivateRoute>
-                <ExcelView />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/testCreate/:doc"
-            element={
-              <PrivateRoute>
-                <TestCreate />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/testroute"
-            element={
-              <PrivateRoute>
-                <TestRoute />
-              </PrivateRoute>
-            }
-          />
+                    <Route
+                        path="/excelview"
+                        element={
+                            <PrivateRoute>
+                                <ExcelView />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/testCreate/:doc"
+                        element={
+                            <PrivateRoute>
+                                <TestCreate />
+                            </PrivateRoute>
+                        }
+                    />
 
-          {/* Approval Routes */}
-          <Route
-            path="/approval"
-            element={
-              <PrivateRoute>
-                <Approval />
-              </PrivateRoute>
-            }
-          />
-          <Route
-            path="/approval/:id"
-            element={
-              <PrivateRoute>
-                <Approval />
-              </PrivateRoute>
-            }
-          />
+                    {/* Approval Routes */}
+                    <Route
+                        path="/approval"
+                        element={
+                            <PrivateRoute>
+                                <Approval />
+                            </PrivateRoute>
+                        }
+                    />
+                    <Route
+                        path="/approval/:id"
+                        element={
+                            <PrivateRoute>
+                                <Approval />
+                            </PrivateRoute>
+                        }
+                    />
 
-          {/* Layout and Component Routes */}
-          <Route
-            path="/invoice/:id/:doc"
-            element={
-              <PrivateRoute>
-                <Invoice />
-              </PrivateRoute>
-            }
-          />
+                    {/* Layout and Component Routes */}
+                    <Route
+                        path="/invoice/:id/:doc"
+                        element={
+                            <PrivateRoute>
+                                <Invoice />
+                            </PrivateRoute>
+                        }
+                    />
 
-          {/* Dashboard Routes */}
-          <Route
-            path="/dashboard/:path"
-            element={
-              <PrivateRoute>
-                <Dashboard />
-              </PrivateRoute>
-            }
-          />
-        </Routes>
-      </Router>
-    </section>
-  );
+                    {/* Dashboard Routes */}
+                    <Route
+                        path="/dashboard/:path"
+                        element={
+                            <PrivateRoute>
+                                <Dashboard />
+                            </PrivateRoute>
+                        }
+                    />
+                </Routes>
+            </Router>
+        </section>
+    )
 }
 
-export default App;
+export default App
