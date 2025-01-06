@@ -1,10 +1,8 @@
 import { useState, useEffect } from 'react'
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
-import { ToastContainer } from 'react-toastify'
+import { toast, ToastContainer } from 'react-toastify'
 
 import Loading from '../Loading'
-
 import axios from '@axios'
 
 const Approval = () => {
@@ -24,6 +22,7 @@ const Approval = () => {
                 setFormData(response.data)
             } catch (error) {
                 console.error('Error fetching data:', error)
+                toast.error('Failed to fetch data.')
             }
         }
 
@@ -49,6 +48,7 @@ const Approval = () => {
             }, 2000)
         } catch (error) {
             toast.error('Failed to update status.')
+            console.error(error)
         }
     }
 

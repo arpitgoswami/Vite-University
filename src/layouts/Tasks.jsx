@@ -39,7 +39,7 @@ function Tasks() {
         <>
             <div className="m-2">
                 <div className="my-4 flex items-center justify-between">
-                    <div className="text-2xl font-semibold">Tasks Board.</div>
+                    <div className="text-xl font-semibold">Tasks Board.</div>
                     <div className="space-x-2">
                         <div
                             className="btn btn-circle btn-info"

@@ -10,9 +10,10 @@ import axios from '@axios'
 import { HiMiniBars3 } from 'react-icons/hi2'
 import { IoCloseOutline } from 'react-icons/io5'
 
+import { FaTable } from 'react-icons/fa'
 import { BiTask } from 'react-icons/bi'
 import { RxDashboard } from 'react-icons/rx'
-import { TbProgressAlert } from 'react-icons/tb'
+import { FaShoppingBag } from 'react-icons/fa'
 import { HiOutlineDocumentReport } from 'react-icons/hi'
 import { LuUsersRound } from 'react-icons/lu'
 import { CgProfile } from 'react-icons/cg'
@@ -55,8 +56,13 @@ function Sidebar() {
             path: 'employees',
         },
         {
+            label: 'Attendance',
+            icon: <FaTable size={20} />,
+            path: 'attendance',
+        },
+        {
             label: 'Sales Report',
-            icon: <TbProgressAlert size={20} />,
+            icon: <FaShoppingBag size={20} />,
             path: 'sales',
         },
         {
@@ -120,7 +126,7 @@ function Sidebar() {
                                     }
                                 >
                                     <a
-                                        className={`hover:bg-base-100 hover:text-neutral ${
+                                        className={`cursor-pointer hover:bg-base-100 hover:text-neutral ${
                                             isCollapsed
                                                 ? `btn btn-square ${item.className || 'btn-ghost'}`
                                                 : 'flex h-12 w-60 items-center space-x-2 rounded-lg px-4 text-sm'

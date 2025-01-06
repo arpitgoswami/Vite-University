@@ -39,7 +39,7 @@ function Overview() {
 
     return (
         <div className="mx-2 my-4 w-[100vh-4rem]">
-            <h1 className="text-2xl font-semibold">Overview</h1>
+            <h1 className="text-xl font-semibold">Overview.</h1>
 
             <p className="mt-2">
                 My Authorization: <span className="font-bold">{username}</span>

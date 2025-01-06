@@ -4,7 +4,7 @@ function Employee() {
     return (
         <DataTable
             url={'users'}
-            header={'Employees Entry'}
+            header={'Employees Data Sheet'}
             isViewAllowed={false}
         />
     )

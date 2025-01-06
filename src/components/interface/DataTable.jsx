@@ -1,8 +1,13 @@
-import React, { useState, useEffect } from 'react'
+import { HandleDelete } from '../../utils/HandleDelete'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { fetchData } from '@function'
+
+import { MdFolderDelete } from 'react-icons/md'
+import { IoMdAddCircle } from 'react-icons/io'
+import { IoReloadCircle } from 'react-icons/io5'
+
 import Loading from '../Loading'
-import { HandleDelete } from '../../utils/HandleDelete'
 
 function DataTable({ url, header, isViewAllowed }) {
     const [data, setData] = useState([])
@@ -11,11 +16,9 @@ function DataTable({ url, header, isViewAllowed }) {
     const [searchQuery, setSearchQuery] = useState('')
     const [selectedRows, setSelectedRows] = useState([])
 
-    // Pagination states
     const [currentPage, setCurrentPage] = useState(1)
     const [itemsPerPage, setItemsPerPage] = useState(20) // Rows per page
 
-    // Sorting states
     const [sortColumn, setSortColumn] = useState(null)
     const [sortOrder, setSortOrder] = useState('asc')
 
@@ -52,7 +55,6 @@ function DataTable({ url, header, isViewAllowed }) {
         return <div>No data available</div>
     }
 
-    // Filter data based on search query
     const filteredData = data.filter((item) => {
         return Object.values(item)
             .map((value) => String(value).toLowerCase()) // Convert all values to lowercase
@@ -60,7 +62,6 @@ function DataTable({ url, header, isViewAllowed }) {
             .includes(searchQuery.toLowerCase()) // Check if search query is present
     })
 
-    // Sort data
     const sortedData = [...filteredData].sort((a, b) => {
         if (!sortColumn) return 0
         const aValue = a[sortColumn]
@@ -71,7 +72,6 @@ function DataTable({ url, header, isViewAllowed }) {
         return 0
     })
 
-    // Paginate data
     const totalItems = sortedData.length
     const totalPages = Math.ceil(totalItems / itemsPerPage)
     const paginatedData = sortedData.slice(
@@ -83,7 +83,6 @@ function DataTable({ url, header, isViewAllowed }) {
         .filter((column) => column !== '_id')
         .slice(0, 8)
 
-    // Handle sorting
     const handleSort = (column) => {
         if (sortColumn === column) {
             setSortOrder((prevOrder) => (prevOrder === 'asc' ? 'desc' : 'asc'))
@@ -93,7 +92,6 @@ function DataTable({ url, header, isViewAllowed }) {
         }
     }
 
-    // Handle row selection
     const handleRowSelect = (id) => {
         setSelectedRows((prevSelected) => {
             if (prevSelected.includes(id)) {
@@ -104,28 +102,97 @@ function DataTable({ url, header, isViewAllowed }) {
         })
     }
 
-    // Handle bulk delete
     const handleBulkDelete = () => {
         if (selectedRows.length > 0) {
             selectedRows.forEach((id) => HandleDelete(id, url, false))
-            setSelectedRows([]) // Clear selected rows after bulk delete
+            setSelectedRows([])
         } else {
             alert('Please select rows to delete.')
         }
     }
 
     return (
-        <div className="p-4">
+        <div className="mx-2 my-4">
             <div>
                 <div>
-                    <p className="text-3xl font-bold">{header} Data</p>
-                    <p className="text-md opacity-50">Live {header} Record</p>
-                    <div className="mt-8 flex space-x-2">
+                    <div className="flex justify-between">
+                        <div className="text-xl font-semibold">{header}.</div>
+                        <div className="flex space-x-2">
+                            <div
+                                className="btn btn-circle btn-error"
+                                onClick={handleBulkDelete}
+                                disabled={selectedRows.length <= 1}
+                            >
+                                <MdFolderDelete size={30} />
+                            </div>
+                            <div
+                                className="btn btn-circle btn-info"
+                                onClick={() => navigate(`/testCreate/${url}`)}
+                            >
+                                <IoMdAddCircle size={30} />
+                            </div>
+                            <div
+                                className="btn btn-circle btn-success"
+                                onClick={() => {
+                                    window.location.reload()
+                                }}
+                            >
+                                <IoReloadCircle size={30} />
+                            </div>
+                        </div>
+                    </div>
+                    <div className="divider"></div>
+                    <div className="flex justify-between space-x-2">
+                        {/* Rows per page dropdown */}
+                        <select
+                            className="select select-bordered"
+                            value={itemsPerPage}
+                            onChange={(e) =>
+                                setItemsPerPage(Number(e.target.value))
+                            }
+                        >
+                            <option value={5}>5 rows</option>
+                            <option value={10}>10 rows</option>
+                            <option value={20}>20 rows</option>
+                            <option value={50}>50 rows</option>
+                        </select>
+
+                        {/* Pagination Controls */}
+                        <div className="join">
+                            <button
+                                className="btn join-item"
+                                onClick={() =>
+                                    setCurrentPage((prev) =>
+                                        Math.max(prev - 1, 1)
+                                    )
+                                }
+                                disabled={currentPage === 1}
+                            >
+                                «
+                            </button>
+                            <button className="btn join-item">
+                                Page {currentPage} of {totalPages}
+                            </button>
+                            <button
+                                className="btn join-item"
+                                onClick={() =>
+                                    setCurrentPage((prev) =>
+                                        Math.min(prev + 1, totalPages)
+                                    )
+                                }
+                                disabled={currentPage === totalPages}
+                            >
+                                »
+                            </button>
+                        </div>
+                    </div>
+                    <div className="mt-4 flex space-x-2">
                         <label className="input input-bordered flex w-full items-center gap-2">
+                            Search
                             <input
                                 className="w-full"
                                 type="text"
-                                placeholder="Search Entry..."
+                                placeholder="Search Entry .."
                                 value={searchQuery}
                                 onChange={(e) => setSearchQuery(e.target.value)}
                             />
@@ -142,68 +209,6 @@ function DataTable({ url, header, isViewAllowed }) {
                                 />
                             </svg>
                         </label>
-                        <button
-                            className="btn btn-primary"
-                            onClick={fetchDataAsync}
-                        >
-                            Reload
-                        </button>
-                        <button
-                            className="btn btn-primary"
-                            onClick={() => navigate(`/testCreate/${url}`)}
-                        >
-                            Add New Entry
-                        </button>
-                        <button
-                            className="btn btn-error"
-                            onClick={handleBulkDelete}
-                            disabled={selectedRows.length === 0}
-                        >
-                            Bulk Delete
-                        </button>
-                    </div>
-                </div>
-
-                <div className="mt-4 flex justify-end space-x-2">
-                    {/* Rows per page dropdown */}
-                    <select
-                        className="select select-bordered"
-                        value={itemsPerPage}
-                        onChange={(e) =>
-                            setItemsPerPage(Number(e.target.value))
-                        }
-                    >
-                        <option value={5}>5 rows</option>
-                        <option value={10}>10 rows</option>
-                        <option value={20}>20 rows</option>
-                        <option value={50}>50 rows</option>
-                    </select>
-
-                    {/* Pagination Controls */}
-                    <div className="join">
-                        <button
-                            className="btn join-item"
-                            onClick={() =>
-                                setCurrentPage((prev) => Math.max(prev - 1, 1))
-                            }
-                            disabled={currentPage === 1}
-                        >
-                            «
-                        </button>
-                        <button className="btn join-item">
-                            Page {currentPage} of {totalPages}
-                        </button>
-                        <button
-                            className="btn join-item"
-                            onClick={() =>
-                                setCurrentPage((prev) =>
-                                    Math.min(prev + 1, totalPages)
-                                )
-                            }
-                            disabled={currentPage === totalPages}
-                        >
-                            »
-                        </button>
                     </div>
                 </div>
 

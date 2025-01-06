@@ -37,7 +37,12 @@ const TaskCard = forwardRef(({ data }, ref) => {
                         </div>
                     </div>
                     <div>{data.DESCRIPTION}</div>
-                    <div> {data['DEADLINE DATE'].slice(0, 10)}</div>
+                    <div className="flex justify-between">
+                        <div> {data['DEADLINE DATE'].slice(0, 10)}</div>
+                        <div className="rounded-2xl bg-primary px-2">
+                            {data['ASSIGNED TO'].slice(0, 10)}
+                        </div>
+                    </div>
                     <div
                         className={`absolute bottom-0 left-0 w-full overflow-auto rounded-b-2xl px-4 py-2 ${
                             data.STATUS === 'Completed'

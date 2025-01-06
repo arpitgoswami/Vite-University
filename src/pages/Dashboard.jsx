@@ -12,6 +12,7 @@ import Users from '../layouts/Users'
 import Rejected from '../layouts/employees/Rejected'
 import Employee from '../layouts/employees/Employees'
 
+import Attendance from '../layouts/employees/Attendance'
 import Calendar from '../layouts/tasks/Calendar'
 
 function Dashboard() {
@@ -32,6 +33,7 @@ function Dashboard() {
                 {params.path === 'employees' && <Employee />}
 
                 {params.path === 'calendar' && <Calendar />}
+                {params.path === 'attendance' && <Attendance />}
             </div>
         </>
     )

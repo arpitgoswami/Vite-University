@@ -1,7 +1,10 @@
-import axios from '@axios'
 import { useState, useEffect } from 'react'
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
+
+import Loading from '../components/Loading'
+
+import axios from '@axios'
 
 const TestUpdate = () => {
     const [formData, setFormData] = useState(null)
@@ -60,7 +63,7 @@ const TestUpdate = () => {
     }
 
     if (!formData) {
-        return <div>Loading...</div>
+        return <Loading />
     }
 
     return (
