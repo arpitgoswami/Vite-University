@@ -61,9 +61,9 @@ const Approval = () => {
     }
 
     return (
-        <div className="flex h-full w-full items-center justify-center bg-gray-900">
-            <div className="my-8 h-auto w-[60vw] rounded-xl bg-gray-800 p-8 shadow-lg">
-                <h2 className="mb-6 text-center text-2xl font-semibold text-white">
+        <div className="flex h-full w-full items-center justify-center bg-gray-100">
+            <div className="my-8 h-auto w-[60vw] rounded-xl border border-gray-300 bg-white p-8 shadow-lg">
+                <h2 className="mb-6 text-center text-2xl font-semibold text-gray-800">
                     Approval
                 </h2>
 
@@ -73,12 +73,12 @@ const Approval = () => {
                             key !== '_id' && (
                                 <div
                                     key={key}
-                                    className="flex items-center justify-between text-white"
+                                    className="flex items-center justify-between text-gray-800"
                                 >
                                     <div className="font-medium capitalize">
                                         {key.replace(/_/g, ' ')}
                                     </div>
-                                    <div className="text-gray-400">
+                                    <div className="text-gray-600">
                                         {formData[key] || '-'}
                                     </div>
                                 </div>
@@ -88,26 +88,26 @@ const Approval = () => {
 
                 <form onSubmit={handleFormSubmit} className="space-y-6">
                     <div>
-                        <label className="mb-2 block text-sm font-semibold text-white">
+                        <label className="mb-2 block text-sm font-semibold text-gray-700">
                             Sales ID
                         </label>
                         <input
                             type="text"
                             value={sales_id}
                             readOnly
-                            className="w-full rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-white"
+                            className="w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-2 text-gray-800"
                         />
                     </div>
 
                     <div>
-                        <label className="mb-2 block text-sm font-semibold text-white">
+                        <label className="mb-2 block text-sm font-semibold text-gray-700">
                             Status
                         </label>
                         <select
                             value={statusInput}
                             onChange={(e) => setStatusInput(e.target.value)}
                             required
-                            className="w-full rounded-md border border-gray-600 bg-gray-700 px-4 py-2 text-white"
+                            className="w-full rounded-md border border-gray-300 bg-gray-100 px-4 py-2 text-gray-800"
                         >
                             <option value="Approved">Approved</option>
                             <option value="Disapproved">Disapproved</option>

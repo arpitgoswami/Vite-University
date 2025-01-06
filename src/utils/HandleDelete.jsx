@@ -20,7 +20,6 @@ export const HandleDelete = (id, url, bulk = false) => {
             })
     }
 
-    // Only show the confirmation dialog if 'bulk' is true
     if (bulk) {
         toast.info(
             <div>
@@ -31,13 +30,12 @@ export const HandleDelete = (id, url, bulk = false) => {
                 <button onClick={() => toast.dismiss()}>No</button>
             </div>,
             {
-                autoClose: false, // Prevent auto close
-                closeButton: false, // Hide the close button
+                autoClose: false,
+                closeButton: false,
                 position: 'top-center',
             }
         )
     } else {
-        // If bulk is false, directly call the delete action without confirmation
         confirmDelete()
     }
 }

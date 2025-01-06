@@ -4,7 +4,7 @@ import axios from 'axios'
 // http://localhost:3000/
 
 const instance = axios.create({
-    baseURL: 'https://aplex-backend.onrender.com/',
+    baseURL: 'http://localhost:3000/',
     headers: {
         'Content-Type': 'application/json',
     },

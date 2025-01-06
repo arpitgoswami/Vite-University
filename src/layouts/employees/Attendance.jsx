@@ -1,26 +1,33 @@
 import { useEffect, useState } from 'react'
 import { readCookie } from '../../utils/cookieUtils'
-import { IoReloadCircle } from 'react-icons/io5'
-import { LuAlarmClockPlus } from 'react-icons/lu'
-import { LuAlarmClockMinus } from 'react-icons/lu'
 
+import { IoReloadCircle } from 'react-icons/io5'
+import { LuAlarmClockPlus, LuAlarmClockMinus } from 'react-icons/lu'
+
+import AttendanceCard from '../../components/cards/AttendanceCard'
+import Loading from '../../components/Loading'
 import axios from '@axios'
 
 function Attendance() {
     const username = readCookie('username')
     const [details, setDetails] = useState([])
-    const [search, setSearch] = useState(username)
+    const [search, setSearch] = useState('')
+    const [loading, setLoading] = useState(true)
 
     useEffect(() => {
         axios
-            .get(`/attendance/${search}`)
+            .get(`/users`)
             .then((response) => {
                 setDetails(response.data)
+                setLoading(false)
             })
             .catch((error) => {
+                setDetails('')
                 console.error(error)
             })
-    }, [search])
+    }, [])
+
+    console.log(details)
 
     const handleTimeout = () => {
         axios
@@ -32,7 +39,6 @@ function Attendance() {
                 console.error(error)
             })
     }
-    console.log(search)
 
     const handleTimein = () => {
         axios
@@ -43,6 +49,14 @@ function Attendance() {
             .catch((error) => {
                 console.error(error)
             })
+    }
+
+    const filteredDetails = details.filter((attendance) =>
+        attendance.username.toLowerCase().includes(search.toLowerCase())
+    )
+
+    if (loading) {
+        return <Loading />
     }
 
     return (
@@ -62,9 +76,7 @@ function Attendance() {
                     </div>
                     <div
                         className="btn btn-circle btn-success"
-                        onClick={() => {
-                            window.location.reload()
-                        }}
+                        onClick={() => window.location.reload()}
                     >
                         <IoReloadCircle size={30} />
                     </div>
@@ -73,38 +85,25 @@ function Attendance() {
 
             <div className="divider"></div>
 
-            <div className="mb-4">
-                <label className="input input-bordered flex items-center gap-2">
-                    Username
+            <div className="mb-4 flex space-x-2">
+                <label className="input input-bordered flex w-full items-center gap-2">
+                    Username :
                     <input
                         type="text"
                         className="grow"
                         placeholder="Search attendance here .."
-                        value={search} // Bind the value to the 'search' state
-                        onChange={(e) => setSearch(e.target.value)} // Update 'search' state when the user types
+                        value={search}
+                        onChange={(e) =>
+                            setSearch(e.target.value.toLowerCase())
+                        }
                     />
                 </label>
             </div>
 
-            <div>
-                {details.length > 0 ? (
-                    details.map((attendance, index) => (
-                        <div key={index} className="mb-4">
-                            <div>
-                                <strong>Date:</strong> {attendance.date}
-                            </div>
-                            <div>
-                                <strong>Status:</strong> {attendance.status}
-                            </div>
-                            <div>
-                                <strong>Time In:</strong>{' '}
-                                {attendance.timeIn || 'N/A'}
-                            </div>
-                            <div>
-                                <strong>Time Out:</strong>{' '}
-                                {attendance.timeOut || 'N/A'}
-                            </div>
-                        </div>
+            <div className="space-y-2">
+                {filteredDetails.length > 0 ? (
+                    filteredDetails.map((attendance, index) => (
+                        <AttendanceCard data={attendance} key={index} />
                     ))
                 ) : (
                     <div>No attendance records found.</div>

@@ -1,243 +1,58 @@
-import React, { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-import { fetchData, handleDelete } from '@function'
-import Loading from '../Loading'
-import { DataGrid } from '@mui/x-data-grid'
+import React, { useState } from 'react'
 
-import {
-    Button,
-    Typography,
-    Tooltip,
-    IconButton,
-    TextField,
-    Alert,
-    Box,
-} from '@mui/material'
+function EventCalendar() {
+    const [events, setEvents] = useState({})
+    const [selectedDate, setSelectedDate] = useState('')
+    const [eventText, setEventText] = useState('')
 
-import {
-    Visibility as ViewIcon,
-    Refresh as ReloadIcon,
-    Edit as EditIcon,
-    Delete as DeleteIcon,
-} from '@mui/icons-material'
+    const days = Array.from({ length: 31 }, (_, i) => i + 1)
 
-function ExcelView({ url, header, isViewAllowed }) {
-    url = 'sales'
-    header = 'Sales Entry'
-    isViewAllowed = 'true'
-
-    const [data, setData] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
-    const [searchQuery, setSearchQuery] = useState('')
-
-    const navigate = useNavigate()
-
-    // Fetch data asynchronously from the given URL
-    const fetchDataAsync = async () => {
-        setLoading(true)
-        setError(null)
-        try {
-            await fetchData(url, setData, setLoading)
-        } catch (err) {
-            setError('Failed to fetch data. Please try again later.')
-            console.error('Error fetching data:', err)
-        }
+    const addEvent = () => {
+        if (!selectedDate || !eventText) return
+        setEvents({ ...events, [selectedDate]: eventText })
+        setEventText('')
     }
-
-    useEffect(() => {
-        fetchDataAsync()
-    }, [url])
-
-    if (loading) {
-        return (
-            <Box
-                sx={{
-                    backgroundColor: '#f5f5f5', // Background color
-                    minHeight: '100vh', // Full viewport height
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}
-            >
-                <Loading />
-            </Box>
-        )
-    }
-
-    if (error) {
-        return <Alert severity="error">{error}</Alert>
-    }
-
-    if (data.length === 0) {
-        return (
-            <Box
-                sx={{
-                    backgroundColor: '#f5f5f5',
-                    minHeight: '100vh',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    alignItems: 'center',
-                }}
-            >
-                <Typography variant="h6">No data available</Typography>
-            </Box>
-        )
-    }
-
-    const filteredData = data.filter((item) =>
-        Object.values(item)
-            .join(' ')
-            .toLowerCase()
-            .includes(searchQuery.toLowerCase())
-    )
-
-    const columns = [
-        ...Object.keys(data[0])
-            .filter((column) => column !== '_id')
-            .map((column) => ({
-                field: column,
-                headerName: column.charAt(0).toUpperCase() + column.slice(1),
-                flex: 1,
-            })),
-        {
-            field: 'actions',
-            headerName: 'Actions',
-            width: 200,
-            sortable: false,
-            renderCell: (params) => {
-                const isDeleteDisabled = data.length === 1
-
-                return (
-                    <Box sx={{ display: 'flex', gap: 1 }}>
-                        <Tooltip title="View" arrow>
-                            <IconButton
-                                color="info"
-                                sx={{
-                                    display: isViewAllowed ? 'block' : 'none',
-                                }}
-                                onClick={() =>
-                                    window.open(
-                                        `/invoice/${params.row._id}/${url}`,
-                                        '_blank'
-                                    )
-                                }
-                            >
-                                <ViewIcon />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Edit" arrow>
-                            <IconButton
-                                color="primary"
-                                onClick={() =>
-                                    navigate(
-                                        `/testUpdate/${params.row._id}?doc=${url}`
-                                    )
-                                }
-                            >
-                                <EditIcon />
-                            </IconButton>
-                        </Tooltip>
-                        <Tooltip title="Delete" arrow>
-                            <IconButton
-                                color="secondary"
-                                disabled={isDeleteDisabled}
-                                onClick={() =>
-                                    handleDelete(params.row._id, url)
-                                }
-                            >
-                                <DeleteIcon />
-                            </IconButton>
-                        </Tooltip>
-                    </Box>
-                )
-            },
-        },
-    ]
-
-    const rows = filteredData.map((item) => ({
-        id: item._id,
-        ...item,
-    }))
 
     return (
-        <Box
-            sx={{
-                backgroundColor: '#f5f5f5',
-                minHeight: '100vh',
-                padding: '16px',
-            }}
-        >
-            <Box
-                sx={{
-                    backgroundColor: '#ffffff',
-                    borderRadius: '8px',
-                    padding: '16px',
-                    boxShadow: '0 2px 4px rgba(0, 0, 0, 0.1)',
-                }}
-            >
-                <Box
-                    sx={{
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        marginBottom: '16px',
-                    }}
-                >
-                    <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                        {header}
-                    </Typography>
-                    <Box sx={{ display: 'flex', gap: '8px' }}>
-                        <Button
-                            startIcon={<ReloadIcon />}
-                            variant="contained"
-                            color="primary"
-                            onClick={fetchDataAsync}
-                        >
-                            Reload
-                        </Button>
-                        <Button
-                            startIcon={<EditIcon />}
-                            variant="contained"
-                            color="success"
-                            onClick={() => navigate(`/testCreate/${url}`)}
-                        >
-                            Add New Entry
-                        </Button>
-                    </Box>
-                </Box>
-
-                <TextField
-                    variant="outlined"
-                    label="Search"
-                    fullWidth
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    sx={{ marginBottom: '16px' }}
-                />
-
-                {filteredData.length === 0 ? (
-                    <Typography
-                        variant="body1"
-                        color="textSecondary"
-                        sx={{ textAlign: 'center' }}
+        <div className="p-4">
+            <h1 className="mb-4 text-2xl font-bold">Event Calendar</h1>
+            <div className="grid grid-cols-7 gap-4 border p-4">
+                {days.map((day) => (
+                    <div
+                        key={day}
+                        className={`cursor-pointer border p-4 ${
+                            selectedDate === day.toString()
+                                ? 'bg-blue-200'
+                                : 'bg-gray-100'
+                        }`}
+                        onClick={() => setSelectedDate(day.toString())}
                     >
-                        No matching records found.
-                    </Typography>
-                ) : (
-                    <Box sx={{ height: 400, width: '100%' }}>
-                        <DataGrid
-                            rows={rows}
-                            columns={columns}
-                            pageSize={5}
-                            rowsPerPageOptions={[5, 10, 25]}
-                            disableSelectionOnClick
-                        />
-                    </Box>
-                )}
-            </Box>
-        </Box>
+                        <div>{day}</div>
+                        <div className="text-sm text-gray-500">
+                            {events[day] || 'No Events'}
+                        </div>
+                    </div>
+                ))}
+            </div>
+
+            <div className="mt-4">
+                <h2 className="text-xl font-semibold">Add Event</h2>
+                <input
+                    type="text"
+                    placeholder="Enter event"
+                    value={eventText}
+                    onChange={(e) => setEventText(e.target.value)}
+                    className="mr-2 border p-2"
+                />
+                <button
+                    onClick={addEvent}
+                    className="rounded bg-blue-500 px-4 py-2 text-white"
+                >
+                    Add Event
+                </button>
+            </div>
+        </div>
     )
 }
 
-export default ExcelView
+export default EventCalendar
