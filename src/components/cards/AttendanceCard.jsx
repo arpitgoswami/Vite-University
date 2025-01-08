@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import Draggable from 'react-draggable'
 
 import AttendanceModal from './AttendanceModal'
 
@@ -21,26 +22,36 @@ function AttendanceCard({ data }) {
 
     return (
         <>
-            <div
-                className="tooltip tooltip-right flex w-max cursor-pointer items-center space-x-4 rounded-xl bg-base-300 p-4 text-sm"
-                data-tip={data.authorization}
-                onClick={() => document.getElementById('my_modal').showModal()}
-            >
-                <div className="flex items-center space-x-2">
-                    <div className="btn btn-circle overflow-hidden">
-                        <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+            {' '}
+            <Draggable grid={[10, 10]}>
+                <div
+                    className="tooltip tooltip-right flex w-max cursor-pointer items-center space-x-4 rounded-xl bg-base-300 p-4 text-sm"
+                    data-tip={data.authorization}
+                >
+                    <div className="flex items-center space-x-2">
+                        <div className="btn btn-circle overflow-hidden">
+                            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                        </div>
+                        <div>
+                            {data.name} /{data.username}
+                        </div>
                     </div>
-                    <div>
-                        {data.name} /{data.username}
+                    <div>{data.department}</div>
+                    <div>{data.designation}</div>
+                    <div>{data.createdAt.slice(0, 10)}</div>
+                    <div className="rounded-xl bg-primary px-2 text-base-100">
+                        {data.shiftType.slice(0, 10)} Shift
                     </div>
+                    <button
+                        className="btn btn-primary btn-xs"
+                        onClick={() =>
+                            document.getElementById('my_modal').showModal()
+                        }
+                    >
+                        Show
+                    </button>
                 </div>
-                <div>{data.department}</div>
-                <div>{data.designation}</div>
-                <div>{data.createdAt.slice(0, 10)}</div>
-                <div className="rounded-xl bg-primary px-2 text-base-100">
-                    {data.shiftType.slice(0, 10)} Shift
-                </div>
-            </div>
+            </Draggable>
             <AttendanceModal data={details} />
         </>
     )

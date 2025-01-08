@@ -7,7 +7,6 @@ import Tasks from '../layouts/Tasks'
 
 import SalesReport from '../layouts/SalesReport'
 import PPIC from '../layouts/PPIC'
-import Users from '../layouts/Users'
 
 import Rejected from '../layouts/employees/Rejected'
 import Employee from '../layouts/employees/Employees'
@@ -26,7 +25,6 @@ function Dashboard() {
                 {params.path === 'tasks' && <Tasks />}
                 {params.path === 'sales' && <SalesReport />}
                 {params.path === 'ppic' && <PPIC />}
-                {params.path === 'users' && <Users />}
 
                 {params.path === 'rejected' && <Rejected />}
 

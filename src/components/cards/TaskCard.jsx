@@ -7,7 +7,7 @@ import { HandleDelete } from '../../utils/HandleDelete'
 
 import { useNavigate } from 'react-router-dom'
 
-const TaskCard = forwardRef(({ data }, ref) => {
+const TaskCard = forwardRef(({ data }) => {
     const navigate = useNavigate()
     return (
         <>
