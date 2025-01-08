@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import Draggable from 'react-draggable'
-
 import AttendanceModal from './AttendanceModal'
-
 import axios from '@axios'
 
 function AttendanceCard({ data }) {
@@ -22,33 +20,46 @@ function AttendanceCard({ data }) {
 
     return (
         <>
-            {' '}
             <Draggable grid={[10, 10]}>
-                <div
-                    className="tooltip tooltip-right flex w-max cursor-pointer items-center space-x-4 rounded-xl bg-base-300 p-4 text-sm"
-                    data-tip={data.authorization}
-                >
+                <div className="flex cursor-move flex-col items-start space-y-2 rounded-lg bg-neutral p-4 text-base-100 shadow-md hover:scale-105">
                     <div className="flex items-center space-x-2">
                         <div className="btn btn-circle overflow-hidden">
-                            <img src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp" />
+                            <img
+                                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
+                                alt="Profile"
+                                className="h-10 w-10 rounded-full"
+                            />
                         </div>
-                        <div>
-                            {data.name} /{data.username}
+                        <div className="text-sm font-semibold">
+                            {data.name}{' '}
+                            <span className="text-gray-400">
+                                /{data.username}
+                            </span>
                         </div>
                     </div>
-                    <div>{data.department}</div>
-                    <div>{data.designation}</div>
-                    <div>{data.createdAt.slice(0, 10)}</div>
-                    <div className="rounded-xl bg-primary px-2 text-base-100">
-                        {data.shiftType.slice(0, 10)} Shift
+                    <div className="w-full space-y-2 text-xs text-base-100">
+                        <div>Dept: {data.department}</div>
+                        <div>Designation: {data.designation}</div>
+                        <p>Joining Date: {data.createdAt.slice(0, 10)}</p>
+                        <div className="flex justify-between">
+                            <div
+                                className={`rounded-full bg-primary px-2 text-xs ${data.status === 'Active' ? 'bg-success' : 'bg-error'}`}
+                            >
+                                {data.status}
+                            </div>
+                            <div className="rounded-full bg-primary px-2 text-xs">
+                                {data.shiftType.slice(0, 10)} Shift
+                            </div>
+                        </div>
                     </div>
+
                     <button
-                        className="btn btn-primary btn-xs"
+                        className="btn btn-primary btn-sm w-full text-xs"
                         onClick={() =>
                             document.getElementById('my_modal').showModal()
                         }
                     >
-                        Show
+                        Show Attendances
                     </button>
                 </div>
             </Draggable>

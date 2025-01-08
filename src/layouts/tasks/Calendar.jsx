@@ -1,78 +1,117 @@
-import { createEventsServicePlugin } from '@schedule-x/events-service'
-import { useCalendarApp, ScheduleXCalendar } from '@schedule-x/react'
-import { useEffect, useState } from 'react'
-import {
-    createViewMonthAgenda,
-    createViewMonthGrid,
-} from '@schedule-x/calendar'
-import '@schedule-x/theme-default/dist/index.css'
+import React, { useEffect, useState } from 'react'
+import Calendar from 'react-calendar'
+import 'react-calendar/dist/Calendar.css'
 import axios from '@axios'
 
-function Calendar() {
-    const [tasks, setTasks] = useState([])
-    const [loading, setLoading] = useState(true)
-    const [error, setError] = useState(null)
+function AttendanceCalendar() {
+    const [attendanceData, setAttendanceData] = useState([])
+    const [selectedDate, setSelectedDate] = useState(null)
+    const [details, setDetails] = useState(null)
+    const [presentDaysCount, setPresentDaysCount] = useState(0)
 
-    // Initialize eventsService plugin
-    const eventsService = useState(() => createEventsServicePlugin())[0]
+    const username = 'arpit'
 
-    // Fetch tasks data
     useEffect(() => {
-        const fetchTasks = async () => {
-            try {
-                const response = await axios.get('tasks')
-                console.log('API Response:', response.data) // Debug API response
-                setTasks(response.data || []) // Ensure response data is an array
-            } catch (err) {
-                console.error('Failed to fetch tasks:', err)
-                setError('Failed to fetch tasks. Please try again.')
-            } finally {
-                setLoading(false)
-            }
-        }
-
-        fetchTasks()
+        axios
+            .get(`attendance/${username}`)
+            .then((response) => {
+                setAttendanceData(response.data)
+                calculateMonthlyPresence(response.data, new Date()) // Calculate for the current month initially
+            })
+            .catch((err) => {
+                console.error(err)
+            })
     }, [])
 
-    // Map tasks to events for the calendar
-    const events = tasks.map((task) => {
-        const event = {
-            id: task?._id || 'No ID',
-            title: task?.TITLE || 'Untitled Task',
-            start: task?.['CREATED DATE']?.slice(0, 10) || '2025-01-10',
-            end: task?.['DEADLINE DATE']?.slice(0, 10) || '2025-01-20',
-        }
-        console.log('Mapped Event:', event) // Debug each mapped event
-        return event
-    })
-
-    console.log('Mapped Events:', events) // Debug final events array
-
-    // Initialize the calendar
-    const calendar = useCalendarApp({
-        views: [createViewMonthGrid(), createViewMonthAgenda()],
-        events: events,
-        plugins: [eventsService],
-    })
-
-    if (loading) {
-        return <div>Loading...</div>
+    const calculateMonthlyPresence = (data, month) => {
+        const year = month.getFullYear()
+        const monthIndex = month.getMonth() // 0-based index
+        const presentDays = data.filter(
+            (entry) =>
+                entry.status === 'Present' &&
+                new Date(entry.date).getFullYear() === year &&
+                new Date(entry.date).getMonth() === monthIndex
+        )
+        setPresentDaysCount(presentDays.length)
     }
 
-    if (error) {
-        return <div className="text-red-500">{error}</div>
+    const getTileContent = ({ date }) => {
+        const formattedDate = date.toISOString().split('T')[0]
+        const attendance = attendanceData.find(
+            (entry) => entry.date === formattedDate
+        )
+
+        if (attendance) {
+            return (
+                <div
+                    style={{
+                        textAlign: 'center',
+                        color:
+                            attendance.status === 'Present' ? 'green' : 'red',
+                    }}
+                >
+                    {attendance.status === 'Present' ? '✔️' : '❌'}
+                </div>
+            )
+        }
+
+        return null
+    }
+
+    const handleDateClick = (date) => {
+        const formattedDate = date.toISOString().split('T')[0]
+        const attendance = attendanceData.find(
+            (entry) => entry.date === formattedDate
+        )
+        setSelectedDate(formattedDate)
+        setDetails(
+            attendance || {
+                date: formattedDate,
+                status: 'No Data',
+                remarks: 'No Remarks',
+            }
+        )
+    }
+
+    const handleMonthChange = (date) => {
+        calculateMonthlyPresence(attendanceData, date)
     }
 
     return (
-        <div className="mx-2 my-4">
-            <div className="mb-4 text-xl font-semibold">Event Calendar</div>
-            {tasks.length > 0 ? (
-                <ScheduleXCalendar calendarApp={calendar} />
-            ) : (
-                <div>No data available</div>
+        <div>
+            <h1>Attendance Calendar</h1>
+            <Calendar
+                onClickDay={handleDateClick}
+                onActiveStartDateChange={({ activeStartDate }) =>
+                    handleMonthChange(activeStartDate)
+                }
+                tileContent={getTileContent}
+            />
+            <div style={{ marginTop: '20px' }}>
+                <h2>Summary for the Month</h2>
+                <p>Days Present: {presentDaysCount}</p>
+            </div>
+            {selectedDate && details && (
+                <div style={{ marginTop: '20px' }}>
+                    <h2>Details for {selectedDate}</h2>
+                    <p>Status: {details.status}</p>
+                    <p>Remarks: {details.remarks}</p>
+                    {details.timeIn && (
+                        <p>
+                            Time In:{' '}
+                            {new Date(details.timeIn).toLocaleTimeString()}
+                        </p>
+                    )}
+                    {details.timeOut && (
+                        <p>
+                            Time Out:{' '}
+                            {new Date(details.timeOut).toLocaleTimeString()}
+                        </p>
+                    )}
+                </div>
             )}
         </div>
     )
 }
 
-export default Calendar
+export default AttendanceCalendar

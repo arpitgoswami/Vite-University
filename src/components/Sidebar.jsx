@@ -120,16 +120,22 @@ function Sidebar() {
                             {sidebarItems.map((item, index) => (
                                 <li
                                     key={index}
-                                    onClick={() =>
-                                        item.path &&
-                                        navigate('../dashboard/' + item.path)
-                                    }
+                                    onClick={() => {
+                                        if (item.path) {
+                                            navigate(
+                                                '../dashboard/' + item.path
+                                            )
+                                        }
+                                        if (!isCollapsed) {
+                                            setIsCollapsed(true)
+                                        }
+                                    }}
                                 >
                                     <a
                                         className={`cursor-pointer hover:bg-base-100 hover:text-neutral ${
                                             isCollapsed
                                                 ? `btn btn-square ${item.className || 'btn-ghost'}`
-                                                : 'flex h-12 w-60 items-center space-x-2 rounded-lg px-4 text-sm'
+                                                : `flex h-12 w-60 items-center space-x-2 rounded-lg px-4 text-sm`
                                         }`}
                                         onClick={item.action}
                                     >
