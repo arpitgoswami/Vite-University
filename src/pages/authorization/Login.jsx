@@ -1,24 +1,22 @@
 import axios from '@axios'
-
 import { useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
+import Loading from '../../components/Loading'
 
 function Login() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [isLoading, setIsLoading] = useState(false)
 
     const handleSubmit = async (e) => {
         e.preventDefault()
+        setIsLoading(true)
+
         try {
-            const response = await axios.post('login', {
-                username,
-                password,
-            })
+            const response = await axios.post('login', { username, password })
 
             if (response.status === 200) {
-                const token = response.data.token
-                const authorization = response.data.authorization
-                const username = response.data.username
+                const { token, authorization, username } = response.data
                 document.cookie = `authToken=${token};`
                 document.cookie = `authorization=${authorization};`
                 document.cookie = `username=${username};`
@@ -31,9 +29,7 @@ function Login() {
             }
         } catch (error) {
             if (error.response?.status === 400) {
-                toast.error('The password is incorrect.', {
-                    autoClose: 2000,
-                })
+                toast.error('The password is incorrect.', { autoClose: 2000 })
             } else if (error.response?.status === 404) {
                 toast.error('No user found with this username.', {
                     autoClose: 2000,
@@ -44,83 +40,86 @@ function Login() {
                     autoClose: 2000,
                 })
             }
+        } finally {
+            setIsLoading(false)
         }
     }
 
     return (
-        <div className="flex h-[100vh] flex-1 flex-col justify-center px-6 py-12 lg:px-8">
-            <div className="sm:mx-auto sm:w-full sm:max-w-sm">
-                <img src="/logo.jpg" className="mx-auto h-10 w-auto" />
-                <h2 className="mt-10 text-center text-2xl/9 font-bold tracking-tight text-gray-900">
-                    Sign in to your account
-                </h2>
-            </div>
-            <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                <form className="space-y-6" onSubmit={handleSubmit}>
-                    <div>
-                        <label className="block text-sm/6 font-medium text-gray-900">
-                            Username
+        <div className="flex h-screen flex-col justify-center bg-gray-50 px-4 sm:px-6 lg:px-8">
+            <div className="mx-auto w-full max-w-sm">
+                <div className="text-center">
+                    <img src="/logo.jpg" alt="Logo" className="mx-auto h-12" />
+                    <h2 className="mt-6 text-2xl font-bold text-gray-900">
+                        Sign in to your account
+                    </h2>
+                </div>
+                <form
+                    className="card mt-8 space-y-6 rounded-lg bg-white p-6 shadow-lg"
+                    onSubmit={handleSubmit}
+                >
+                    <div className="form-control">
+                        <label className="label">
+                            <span className="label-text">Username</span>
                         </label>
-                        <div className="mt-2">
-                            <input
-                                type="text"
-                                placeholder="Enter your username"
-                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                onChange={(e) =>
-                                    setUsername(e.target.value.toLowerCase())
-                                }
-                                required
-                            />
-                        </div>
+                        <input
+                            type="text"
+                            placeholder="Enter your username"
+                            className="input input-bordered w-full"
+                            onChange={(e) =>
+                                setUsername(e.target.value.toLowerCase())
+                            }
+                            required
+                        />
                     </div>
-                    <div>
-                        <div className="flex items-center justify-between">
-                            <label className="block text-sm/6 font-medium text-gray-900">
-                                Password
-                            </label>
-                            <div className="text-sm">
+                    <div className="form-control">
+                        <label className="label">
+                            <span className="label-text">Password</span>
+                        </label>
+                        <input
+                            type="password"
+                            placeholder="Enter your password"
+                            className="input input-bordered w-full"
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                        />
+                        <label className="label">
+                            <span className="label-text-alt">
                                 <a
                                     href="#"
-                                    className="font-semibold text-indigo-600 hover:text-indigo-500"
+                                    className="link link-primary"
                                     onClick={() =>
                                         (window.location.href = '../contact')
                                     }
                                 >
                                     Forgot password?
                                 </a>
-                            </div>
-                        </div>
-                        <div className="mt-2">
-                            <input
-                                type="password"
-                                placeholder="Enter your password"
-                                className="block w-full rounded-md bg-white px-3 py-1.5 text-base text-gray-900 outline outline-1 -outline-offset-1 outline-gray-300 placeholder:text-gray-400 focus:outline focus:outline-2 focus:-outline-offset-2 focus:outline-indigo-600 sm:text-sm/6"
-                                onChange={(e) => setPassword(e.target.value)}
-                                required
-                            />
-                        </div>
+                            </span>
+                        </label>
                     </div>
                     <div>
                         <button
                             type="submit"
-                            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm/6 font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            className={`btn btn-primary ${
+                                isLoading ? 'loading loading-dots' : 'w-full'
+                            }`}
+                            disabled={isLoading}
                         >
-                            Sign in
+                            {isLoading ? 'Logging in...' : 'Sign in'}
                         </button>
                     </div>
                 </form>
-                <p className="mt-10 text-center text-sm/6 text-gray-500">
+                <p className="mt-6 text-center text-sm">
                     Not a member?{' '}
                     <a
                         href="#"
-                        className="font-semibold text-indigo-600 hover:text-indigo-500"
+                        className="link link-primary"
                         onClick={() => (window.location.href = '../contact')}
                     >
                         Raise a query
                     </a>
                 </p>
             </div>
-
             <ToastContainer />
         </div>
     )

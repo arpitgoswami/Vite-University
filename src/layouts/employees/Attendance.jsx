@@ -27,8 +27,6 @@ function Attendance() {
             })
     }, [])
 
-    console.log(details)
-
     const handleTimeout = () => {
         axios
             .post('/attendance/timeout', { username })

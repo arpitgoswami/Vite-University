@@ -7,7 +7,7 @@ import { HandleDelete } from '../../utils/HandleDelete'
 
 import { useNavigate } from 'react-router-dom'
 
-const TaskCard = forwardRef(({ data }) => {
+function TaskCard({ data }) {
     const navigate = useNavigate()
     return (
         <>
@@ -60,6 +60,6 @@ const TaskCard = forwardRef(({ data }) => {
             </Draggable>
         </>
     )
-})
+}
 
 export default TaskCard
