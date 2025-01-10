@@ -1,4 +1,3 @@
-import React, { forwardRef } from 'react'
 import Draggable from 'react-draggable'
 
 import { TiDelete } from 'react-icons/ti'

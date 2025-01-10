@@ -3,17 +3,15 @@ import Calendar from 'react-calendar'
 import 'react-calendar/dist/Calendar.css'
 import axios from '@axios'
 
-function AttendanceModal({ username }) {
+function AttendanceModal({ username, id }) {
     const [attendanceData, setAttendanceData] = useState([])
     const [selectedDate, setSelectedDate] = useState(null)
     const [details, setDetails] = useState(null)
     const [presentDaysCount, setPresentDaysCount] = useState(0)
 
-    console.log(username)
-
     useEffect(() => {
         axios
-            .get(`attendance/aryan`)
+            .get(`attendance/${username}`)
             .then((response) => {
                 setAttendanceData(response.data)
                 calculateMonthlyPresence(response.data, new Date()) // Calculate for the current month initially

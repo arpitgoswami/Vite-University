@@ -21,6 +21,9 @@ function Login() {
                 document.cookie = `authToken=${token};`
                 document.cookie = `authorization=${authorization};`
                 document.cookie = `username=${username};`
+
+                localStorage.setItem('username', username)
+
                 toast.success('Login successful!', {
                     onClose: () => {
                         window.location.href = '../dashboard/overview'

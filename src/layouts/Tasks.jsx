@@ -14,6 +14,8 @@ function Tasks() {
     const ref = useRef()
     const navigate = useNavigate()
 
+    const username = localStorage.getItem('username')
+
     useEffect(() => {
         const fetchTasks = async () => {
             try {
@@ -37,7 +39,7 @@ function Tasks() {
 
     const assignedData = () => {
         const result = tasks.filter(
-            (item) => item['ASSIGNED TO'].toLowerCase() == 'arpit'
+            (item) => item['ASSIGNED TO'].toLowerCase() == username
         )
         setTasks(result)
     }

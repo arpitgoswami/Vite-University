@@ -4,7 +4,6 @@ import AttendanceModal from './AttendanceModal'
 import axios from '@axios'
 
 function AttendanceCard({ data }) {
-    const [details, setDetails] = useState([])
     useEffect(() => {
         axios
             .get(`/attendance/${data.username}`)
@@ -14,7 +13,7 @@ function AttendanceCard({ data }) {
             .catch((err) => {
                 console.log(err)
             })
-    }, [])
+    }, [data.username])
 
     return (
         <>
@@ -41,7 +40,11 @@ function AttendanceCard({ data }) {
                         <p>Joining Date: {data.createdAt.slice(0, 10)}</p>
                         <div className="flex justify-between">
                             <div
-                                className={`rounded-full px-2 text-xs ${data.status === 'Active' ? 'bg-success' : 'bg-error'}`}
+                                className={`rounded-full px-2 text-xs ${
+                                    data.status === 'Active'
+                                        ? 'bg-success'
+                                        : 'bg-error'
+                                }`}
                             >
                                 {data.status}
                             </div>
@@ -54,14 +57,20 @@ function AttendanceCard({ data }) {
                     <button
                         className="btn btn-primary btn-sm w-full text-xs"
                         onClick={() =>
-                            document.getElementById('my_modal').showModal()
+                            document
+                                .getElementById(`modal_${data.username}`)
+                                .showModal()
                         }
                     >
                         Show Attendances
                     </button>
                 </div>
             </Draggable>
-            <AttendanceModal username={data.username} />
+            <AttendanceModal
+                key={data.index}
+                id={`modal_${data.username}`}
+                username={data.username}
+            />
         </>
     )
 }
