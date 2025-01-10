@@ -1,7 +1,8 @@
-import axios from '@axios'
 import { useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
-import Loading from '../../components/Loading'
+import { LiaSignInAltSolid } from 'react-icons/lia'
+
+import axios from '@axios'
 
 function Login() {
     const [username, setUsername] = useState('')
@@ -47,15 +48,15 @@ function Login() {
 
     return (
         <div className="flex h-screen flex-col justify-center bg-gray-50 px-4 sm:px-6 lg:px-8">
-            <div className="mx-auto w-full max-w-sm">
+            <div className="mx-auto w-full max-w-md">
                 <div className="text-center">
                     <img src="/logo.jpg" alt="Logo" className="mx-auto h-12" />
-                    <h2 className="mt-6 text-2xl font-bold text-gray-900">
+                    <h2 className="mt-6 text-xl font-bold text-gray-900">
                         Sign in to your account
                     </h2>
                 </div>
                 <form
-                    className="card mt-8 space-y-6 rounded-lg bg-white p-6 shadow-lg"
+                    className="card mt-8 space-y-2 rounded-lg bg-white p-6 shadow-lg"
                     onSubmit={handleSubmit}
                 >
                     <div className="form-control">
@@ -83,11 +84,11 @@ function Login() {
                             onChange={(e) => setPassword(e.target.value)}
                             required
                         />
-                        <label className="label">
+                        <label className="label mt-2">
                             <span className="label-text-alt">
                                 <a
                                     href="#"
-                                    className="link link-primary"
+                                    className="link link-primary no-underline"
                                     onClick={() =>
                                         (window.location.href = '../contact')
                                     }
@@ -100,20 +101,28 @@ function Login() {
                     <div>
                         <button
                             type="submit"
-                            className={`btn btn-primary ${
-                                isLoading ? 'loading loading-dots' : 'w-full'
-                            }`}
+                            className="btn btn-primary w-full"
                             disabled={isLoading}
                         >
-                            {isLoading ? 'Logging in...' : 'Sign in'}
+                            {isLoading ? (
+                                'Signing In'
+                            ) : (
+                                <>
+                                    Sign in{' '}
+                                    <LiaSignInAltSolid
+                                        size={20}
+                                        strokeWidth={1}
+                                    />
+                                </>
+                            )}
                         </button>
                     </div>
                 </form>
-                <p className="mt-6 text-center text-sm">
+                <p className="mt-8 text-center text-xs">
                     Not a member?{' '}
                     <a
                         href="#"
-                        className="link link-primary"
+                        className="link link-primary no-underline"
                         onClick={() => (window.location.href = '../contact')}
                     >
                         Raise a query

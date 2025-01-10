@@ -35,12 +35,27 @@ function Tasks() {
         )
     }
 
+    const assignedData = () => {
+        const result = tasks.filter(
+            (item) => item['ASSIGNED TO'].toLowerCase() == 'arpit'
+        )
+        setTasks(result)
+    }
+
+    const reload = () => window.location.reload()
+
     return (
         <>
             <div className="m-2">
                 <div className="my-4 flex items-center justify-between">
                     <div className="text-xl font-semibold">Tasks Board.</div>
-                    <div className="space-x-2">
+                    <div className="flex space-x-2">
+                        <div className="btn btn-primary" onClick={assignedData}>
+                            Assigned to Me
+                        </div>
+                        <div className="btn btn-primary" onClick={reload}>
+                            All
+                        </div>
                         <div
                             className="btn btn-circle btn-info"
                             onClick={() => navigate('/testCreate/tasks')}
@@ -49,9 +64,7 @@ function Tasks() {
                         </div>
                         <div
                             className="btn btn-circle btn-success"
-                            onClick={() => {
-                                window.location.reload()
-                            }}
+                            onClick={reload}
                         >
                             <IoReloadCircle size={30} />
                         </div>
