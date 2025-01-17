@@ -14,6 +14,8 @@ import Employee from '../layouts/employees/Employees'
 import Attendance from '../layouts/employees/Attendance'
 import Calendar from '../layouts/tasks/Calendar'
 
+import WorkPlace from '../layouts/employees/WorkPlace'
+
 function Dashboard() {
     const params = useParams()
 
@@ -21,7 +23,7 @@ function Dashboard() {
         <>
             <Sidebar />
             <div className="ml-16">
-                {params.path === 'overview' && <Overview />}
+                {params.path === 'overview' && <WorkPlace />}
                 {params.path === 'tasks' && <Tasks />}
                 {params.path === 'sales' && <SalesReport />}
                 {params.path === 'ppic' && <PPIC />}

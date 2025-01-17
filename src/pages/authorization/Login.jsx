@@ -29,19 +29,18 @@ function Login() {
                 document.cookie = `authorization=${authorization};`
                 document.cookie = `username=${username};`
 
-                localStorage.setItem('username', username)
-                localStorage.setItem('auth', token)
-
                 toast.success('Login successful!', {
                     onClose: () => {
+                        localStorage.setItem('username', username)
+                        localStorage.setItem('auth', token)
                         window.location.href = '../dashboard/overview'
                     },
                     autoClose: 1000,
                 })
             }
         } catch (error) {
-            if (error.response?.status === 400) {
-                toast.error('User is already active.', { autoClose: 2000 })
+            if (error.response?.status === 401) {
+                toast.error('Internal Application Error.', { autoClose: 2000 })
             } else if (error.response?.status === 404) {
                 toast.error('Invalid Credentials', {
                     autoClose: 2000,

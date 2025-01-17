@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { verifyToken } from '@function'
 
@@ -10,7 +10,7 @@ const PrivateRoute = ({ children }) => {
             const result = await verifyToken()
 
             if (!result.valid) {
-                navigate('/login')
+                navigate('*')
             }
         }
 
