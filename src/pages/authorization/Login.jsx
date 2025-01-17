@@ -1,13 +1,20 @@
 import { useState } from 'react'
 import { ToastContainer, toast } from 'react-toastify'
 import { LiaSignInAltSolid } from 'react-icons/lia'
-
+import { AiOutlineEye, AiOutlineEyeInvisible } from 'react-icons/ai'
 import axios from '@axios'
 
 function Login() {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
+    const [isPasswordVisible, setIsPasswordVisible] = useState(false)
     const [isLoading, setIsLoading] = useState(false)
+
+    const auth = localStorage.getItem('auth')
+
+    if (auth) {
+        window.location.href = '../dashboard/overview'
+    }
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -23,6 +30,7 @@ function Login() {
                 document.cookie = `username=${username};`
 
                 localStorage.setItem('username', username)
+                localStorage.setItem('auth', token)
 
                 toast.success('Login successful!', {
                     onClose: () => {
@@ -33,9 +41,9 @@ function Login() {
             }
         } catch (error) {
             if (error.response?.status === 400) {
-                toast.error('The password is incorrect.', { autoClose: 2000 })
+                toast.error('User is already active.', { autoClose: 2000 })
             } else if (error.response?.status === 404) {
-                toast.error('No user found with this username.', {
+                toast.error('Invalid Credentials', {
                     autoClose: 2000,
                 })
             } else {
@@ -80,13 +88,28 @@ function Login() {
                         <label className="label">
                             <span className="label-text">Password</span>
                         </label>
-                        <input
-                            type="password"
-                            placeholder="Enter your password"
-                            className="input input-bordered w-full"
-                            onChange={(e) => setPassword(e.target.value)}
-                            required
-                        />
+                        <div className="relative">
+                            <input
+                                type={isPasswordVisible ? 'text' : 'password'}
+                                placeholder="Enter your password"
+                                className="input input-bordered w-full pr-10"
+                                onChange={(e) => setPassword(e.target.value)}
+                                required
+                            />
+                            <button
+                                type="button"
+                                className="absolute inset-y-0 right-0 flex items-center pr-4 duration-300 hover:opacity-50"
+                                onClick={() =>
+                                    setIsPasswordVisible(!isPasswordVisible)
+                                }
+                            >
+                                {isPasswordVisible ? (
+                                    <AiOutlineEye size={20} />
+                                ) : (
+                                    <AiOutlineEyeInvisible size={20} />
+                                )}
+                            </button>
+                        </div>
                         <label className="label mt-2">
                             <span className="label-text-alt">
                                 <a
@@ -108,7 +131,7 @@ function Login() {
                             disabled={isLoading}
                         >
                             {isLoading ? (
-                                'Signing In'
+                                'Signing in ..'
                             ) : (
                                 <>
                                     Sign in{' '}

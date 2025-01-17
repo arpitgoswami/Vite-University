@@ -106,16 +106,17 @@ function Sidebar() {
     return (
         <div className="flex">
             <aside
-                className={`fixed z-10 h-screen bg-zinc-800 text-lg text-base-100 transition-all duration-200 ${
+                className={`fixed z-10 h-screen bg-zinc-800 text-lg text-base-100 transition-all duration-100 ${
                     isCollapsed ? 'w-16' : 'w-64'
                 }`}
             >
                 <nav className="flex justify-center p-2">
                     <div>
-                        <img
-                            src="/logo.jpg"
-                            className={`${isCollapsed ? 'hidden' : 'mb-2 block h-[3rem] rounded-lg'}`}
-                        />
+                        <div
+                            className={`${isCollapsed ? 'hidden' : 'btn btn-ghost'}`}
+                        >
+                            <img src="/logo.jpg" className="rounded-md" />
+                        </div>
                         <ul className="space-y-2">
                             {sidebarItems.map((item, index) => (
                                 <li
@@ -151,7 +152,7 @@ function Sidebar() {
                 </nav>
             </aside>
             <div
-                className={`z-10 flex-1 transition-all duration-200 ${
+                className={`z-10 flex-1 transition-all duration-100 ${
                     isCollapsed ? 'ml-16' : 'ml-64'
                 }`}
             >

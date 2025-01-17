@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { FaEye } from 'react-icons/fa'
 
-import { readCookie } from '../utils/cookieUtils'
 import Loading from '../components/Loading'
 
 import axios from '@axios'
@@ -27,7 +26,8 @@ function Overview() {
         fetchPendingCount()
     }, [])
 
-    const username = readCookie('authorization')
+    let username = localStorage.getItem('username')
+    username = username.charAt(0).toUpperCase() + username.slice(1)
 
     if (loading) {
         return (
@@ -37,14 +37,66 @@ function Overview() {
         )
     }
 
+    const steps = [
+        { id: 1, title: 'Sales', completed: true },
+        { id: 2, title: 'Approval', completed: true },
+        { id: 3, title: 'Designer', completed: true },
+        { id: 4, title: 'Accounts', completed: false },
+        { id: 5, title: 'MD Approval', completed: false },
+        { id: 6, title: 'PPIC', completed: false },
+        { id: 7, title: 'Production', completed: false },
+    ]
+
     return (
         <div className="mx-2 my-4 w-[100vh-4rem]">
             <h1 className="text-xl font-semibold">Overview.</h1>
-
             <p className="mt-2">
                 My Authorization: <span className="font-bold">{username}</span>
             </p>
             <div className="divider"></div>
+            <div className="flex flex-col items-center justify-center">
+                <div className="flex items-center space-x-8">
+                    {steps.map((step, index) => (
+                        <div
+                            key={step.id}
+                            className="flex items-center space-x-4"
+                        >
+                            <div className="flex flex-col items-center">
+                                <div
+                                    className={`flex h-8 w-8 items-center justify-center rounded-full ${
+                                        step.completed
+                                            ? 'bg-green-500 text-white'
+                                            : 'bg-gray-300 text-gray-600'
+                                    }`}
+                                >
+                                    {index + 1}
+                                </div>
+                                <h4
+                                    className={`mt-2 text-sm font-medium ${
+                                        step.completed
+                                            ? 'text-green-700'
+                                            : 'text-gray-600'
+                                    }`}
+                                >
+                                    {step.title}
+                                </h4>
+                            </div>
+                            {index < steps.length - 1 && (
+                                <div
+                                    className={`h-1 w-12 ${
+                                        steps[index + 1].completed
+                                            ? 'bg-green-500'
+                                            : 'bg-gray-300'
+                                    }`}
+                                ></div>
+                            )}
+                        </div>
+                    ))}
+                </div>
+            </div>
+
+            <div className="divider"></div>
+
             <div className="mt-4">
                 <h2 className="font-semibold">
                     Pending Sales Records ({pendingCount} Pending)
