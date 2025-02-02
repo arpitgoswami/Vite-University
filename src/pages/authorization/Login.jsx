@@ -40,9 +40,9 @@ function Login() {
             }
         } catch (error) {
             if (error.response?.status === 401) {
-                toast.error('Internal Application Error.', { autoClose: 2000 })
+                toast.error('User Not Found.', { autoClose: 2000 })
             } else if (error.response?.status === 404) {
-                toast.error('Invalid Credentials', {
+                toast.error('Server Could not be accessed', {
                     autoClose: 2000,
                 })
             } else {

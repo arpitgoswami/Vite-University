@@ -45,24 +45,32 @@ function SalesCard({ data }) {
 
 function PPICCard({ data }) {
     const navigate = useNavigate()
+
+    const displayKeys = [
+        'PO NUMBER',
+        'PO DATE',
+        'DISPATCH DATE',
+        'BRAND NAME',
+        'PARTY NAME',
+        'BATCH NUMBER',
+    ]
+
     return (
-        <>
-            <div
-                className="my-2 flex cursor-pointer justify-between rounded-lg border border-gray-300 bg-green-100 p-2 shadow-sm transition-all duration-200 hover:border-primary hover:shadow-md"
-                onClick={() =>
-                    navigate(`/testUpdate/${data._id}?doc=${'ppic'}`)
-                }
-            >
-                <div className="gap 2 grid grid-cols-3">
-                    {Object.keys(data).map((key) => (
-                        <div className={key}>
-                            <span>{key}:</span>
-                            <span>{data[key]}</span>
-                        </div>
-                    ))}
-                </div>
+        <div
+            className="my-2 flex cursor-pointer justify-between rounded-lg border border-gray-300 bg-green-100 p-2 shadow-sm transition-all duration-200 hover:border-primary hover:shadow-md"
+            onClick={() => navigate(`/testUpdatePPIC/${data._id}?doc=ppic`)}
+        >
+            <div className="grid grid-cols-3 gap-2">
+                {displayKeys.map((key) => (
+                    <div key={key} className="flex flex-col">
+                        <span className="font-medium">{key}:</span>
+                        <span className="text-sm text-gray-700">
+                            {data[key] || 'N/A'}
+                        </span>
+                    </div>
+                ))}
             </div>
-        </>
+        </div>
     )
 }
 

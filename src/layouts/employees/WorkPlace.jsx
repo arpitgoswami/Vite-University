@@ -1,25 +1,27 @@
 import { useEffect, useState } from 'react'
-
 import { IoIosAddCircleOutline } from 'react-icons/io'
 import { GrDatabase } from 'react-icons/gr'
-
-import { ApprovalCard, SalesCard, PPICCard } from '../../components/cards/Card'
-
 import { useNavigate } from 'react-router-dom'
 
+import { ApprovalCard, SalesCard, PPICCard } from '../../components/cards/Card'
+import Loading from '@loading'
 import axios from '@axios'
 
 function WorkPlace() {
     const [data, setData] = useState([])
     const [sales, setSales] = useState([])
     const [ppic, setPpic] = useState([])
+    const [isloading, setLoading] = useState(true)
 
     const navigate = useNavigate()
 
     useEffect(() => {
         axios
             .get('/status/pending')
-            .then((response) => setData(response.data.pendingRecords))
+            .then((response) => {
+                setData(response.data.pendingRecords)
+                setLoading(false)
+            })
             .catch((err) => console.log('Error fetching sales data:', err))
 
         axios
@@ -32,6 +34,14 @@ function WorkPlace() {
             .then((response) => setPpic(response.data))
             .catch((err) => console.log('Error fetching sales data:', err))
     }, [])
+
+    if (isloading) {
+        return (
+            <>
+                <Loading />
+            </>
+        )
+    }
 
     return (
         <>
@@ -109,7 +119,7 @@ function WorkPlace() {
                                     <button
                                         className="hover:opacity-60"
                                         onClick={() => {
-                                            navigate(`/testCreate/${'ppic'}`)
+                                            navigate(`/testPPIC/${'ppic'}`)
                                         }}
                                     >
                                         <IoIosAddCircleOutline size={22} />

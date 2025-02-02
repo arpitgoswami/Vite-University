@@ -12,6 +12,7 @@ export default defineConfig({
     resolve: {
         alias: {
             '@axios': path.resolve(__dirname, 'src/utils/axios'),
+            '@loading': path.resolve(__dirname, 'src/components/Loading'),
             '@interface': path.resolve(__dirname, 'src/components/interface'),
             '@cookie': path.resolve(__dirname, 'src/utils/cookieUtils'),
             '@function': path.resolve(__dirname, 'src/utils/functions'),

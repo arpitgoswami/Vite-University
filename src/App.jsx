@@ -10,7 +10,10 @@ import Contact from './pages/others/Contact'
 
 import Approval from './components/interface/Approval'
 import Invoice from './components/Invoice'
-import PrivateRoute from './pages/others/PrivateRoute' // Import PrivateRoute
+import PrivateRoute from './pages/others/PrivateRoute'
+
+import TestPPIC from './test/testPPIC'
+import TestUpdatePPIC from './test/testUpdatePPIC'
 
 import ExcelView from './components/interface/ExcelView'
 import Tasks from './layouts/Tasks'
@@ -36,6 +39,24 @@ function App() {
                         element={
                             <PrivateRoute>
                                 <TestUpdate />
+                            </PrivateRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/testUpdatePPIC/:id"
+                        element={
+                            <PrivateRoute>
+                                <TestUpdatePPIC />
+                            </PrivateRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/testPPIC/:doc"
+                        element={
+                            <PrivateRoute>
+                                <TestPPIC />
                             </PrivateRoute>
                         }
                     />

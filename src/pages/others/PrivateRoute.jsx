@@ -10,6 +10,7 @@ const PrivateRoute = ({ children }) => {
             const result = await verifyToken()
 
             if (!result.valid) {
+                localStorage.clear()
                 navigate('*')
             }
         }
