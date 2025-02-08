@@ -106,7 +106,7 @@ function Sidebar() {
     return (
         <div className="flex">
             <aside
-                className={`fixed z-10 h-screen bg-zinc-800 text-lg text-base-100 transition-all duration-100 ${
+                className={`fixed z-10 h-screen bg-neutral text-lg text-base-100 transition-all duration-100 ${
                     isCollapsed ? 'w-16' : 'w-64'
                 }`}
             >
@@ -165,7 +165,7 @@ function Sidebar() {
                     isCollapsed ? 'ml-16' : 'ml-64'
                 }`}
             >
-                <div className="navbar bg-zinc-800 text-base-100">
+                <div className="navbar bg-neutral text-base-100">
                     <div className="navbar-start space-x-2">
                         <div className="hidden">
                             <button
