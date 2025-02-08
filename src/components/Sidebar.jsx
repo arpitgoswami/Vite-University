@@ -22,7 +22,7 @@ import { MdOutlineNotificationsActive } from 'react-icons/md'
 import { IoCalendarNumber } from 'react-icons/io5'
 
 function Sidebar() {
-    const [isCollapsed, setIsCollapsed] = useState(true)
+    const [isCollapsed, setIsCollapsed] = useState(false)
     const [pendingCount, setPendingCount] = useState(null)
     const [pendingSales, setPendingSales] = useState([])
     const location = useLocation()
@@ -36,7 +36,7 @@ function Sidebar() {
 
     const sidebarItems = [
         {
-            label: 'Dashboard',
+            label: 'Overview',
             icon: <RxDashboard size={20} />,
             path: 'overview',
         },
@@ -86,7 +86,7 @@ function Sidebar() {
             action: () => {
                 handleDeleteCookie(username)
             },
-            className: 'btn-error',
+            className: 'btn-error bg-error',
         },
     ]
 
@@ -113,40 +113,49 @@ function Sidebar() {
                 <nav className="flex justify-center p-2">
                     <div>
                         <div
-                            className={`${isCollapsed ? 'hidden' : 'btn btn-ghost'}`}
+                            className={`${isCollapsed ? 'hidden' : 'hover:op mb-2 cursor-pointer'}`}
                         >
                             <img src="/logo.jpg" className="rounded-md" />
                         </div>
                         <ul className="space-y-2">
-                            {sidebarItems.map((item, index) => (
-                                <li
-                                    key={index}
-                                    onClick={() => {
-                                        if (item.path) {
-                                            navigate(
-                                                '../dashboard/' + item.path
-                                            )
-                                        }
-                                        if (!isCollapsed) {
-                                            setIsCollapsed(true)
-                                        }
-                                    }}
-                                >
-                                    <a
-                                        className={`cursor-pointer hover:bg-base-100 hover:text-neutral ${
-                                            isCollapsed
-                                                ? `btn btn-square ${item.className || 'btn-ghost'}`
-                                                : `flex h-12 w-60 items-center space-x-2 rounded-lg px-4 text-sm`
-                                        }`}
-                                        onClick={item.action}
+                            {sidebarItems.map((item, index) => {
+                                const isActive = location.pathname.includes(
+                                    item.path
+                                )
+                                return (
+                                    <li
+                                        key={index}
+                                        onClick={() => {
+                                            if (item.path) {
+                                                navigate(
+                                                    '../dashboard/' + item.path
+                                                )
+                                            }
+                                            if (!isCollapsed) {
+                                                setIsCollapsed(false)
+                                            }
+                                        }}
                                     >
-                                        {item.icon}
-                                        {!isCollapsed && (
-                                            <span>{item.label}</span>
-                                        )}
-                                    </a>
-                                </li>
-                            ))}
+                                        <a
+                                            className={`cursor-pointer hover:bg-base-100 hover:text-neutral ${
+                                                isActive
+                                                    ? 'bg-white text-neutral'
+                                                    : `${item.className}`
+                                            } ${
+                                                isCollapsed
+                                                    ? `btn btn-square ${item.className || 'btn-ghost'}`
+                                                    : `flex h-12 w-60 items-center space-x-2 rounded-lg px-4 text-sm`
+                                            }`}
+                                            onClick={item.action}
+                                        >
+                                            {item.icon}
+                                            {!isCollapsed && (
+                                                <span>{item.label}</span>
+                                            )}
+                                        </a>
+                                    </li>
+                                )
+                            })}
                         </ul>
                     </div>
                 </nav>
@@ -158,10 +167,10 @@ function Sidebar() {
             >
                 <div className="navbar bg-zinc-800 text-base-100">
                     <div className="navbar-start space-x-2">
-                        <div>
+                        <div className="hidden">
                             <button
                                 onClick={() => setIsCollapsed(!isCollapsed)}
-                                className="btn btn-square"
+                                className="btn btn-square btn-ghost"
                             >
                                 {isCollapsed ? (
                                     <HiMiniBars3 size={26} />
@@ -181,7 +190,7 @@ function Sidebar() {
                             <div
                                 tabIndex={0}
                                 role="button"
-                                className="btn btn-square"
+                                className="btn btn-ghost"
                             >
                                 <div className="indicator">
                                     <svg

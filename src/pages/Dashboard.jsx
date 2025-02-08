@@ -22,8 +22,8 @@ function Dashboard() {
     return (
         <>
             <Sidebar />
-            <div className="ml-16">
-                {params.path === 'overview' && <WorkPlace />}
+            <div className="ml-64">
+                {params.path === 'overview' && <Overview />}
                 {params.path === 'tasks' && <Tasks />}
                 {params.path === 'sales' && <SalesReport />}
                 {params.path === 'ppic' && <PPIC />}

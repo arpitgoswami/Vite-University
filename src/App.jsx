@@ -15,12 +15,14 @@ import PrivateRoute from './pages/others/PrivateRoute'
 import TestPPIC from './test/testPPIC'
 import TestUpdatePPIC from './test/testUpdatePPIC'
 
-import ExcelView from './components/interface/ExcelView'
 import Tasks from './layouts/Tasks'
+
+import DesignerApproval from './layouts/DesignerApproval'
+import AccountsApproval from './layouts/AccountsApproval'
 
 function App() {
     return (
-        <section style={{ fontFamily: 'Poppins' }}>
+        <section>
             <Router>
                 <Routes>
                     {/* Fallback route for unmatched paths */}
@@ -32,6 +34,9 @@ function App() {
                     <Route path="/comingsoon" element={<ComingSoon />} />
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/tasks" element={<Tasks />} />
+
+                    <Route path="/designer" element={<DesignerApproval />} />
+                    <Route path="/accounts" element={<AccountsApproval />} />
 
                     {/* Test Routes */}
                     <Route
@@ -61,14 +66,6 @@ function App() {
                         }
                     />
 
-                    <Route
-                        path="/excelview"
-                        element={
-                            <PrivateRoute>
-                                <ExcelView />
-                            </PrivateRoute>
-                        }
-                    />
                     <Route
                         path="/testCreate/:doc"
                         element={

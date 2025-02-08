@@ -40,13 +40,12 @@ function Login() {
             }
         } catch (error) {
             if (error.response?.status === 401) {
-                toast.error('User Not Found.', { autoClose: 2000 })
+                toast.error(error.response.data.message, { autoClose: 2000 })
             } else if (error.response?.status === 404) {
-                toast.error('Server Could not be accessed', {
+                toast.error(error.response.data.message, {
                     autoClose: 2000,
                 })
             } else {
-                console.error('Error during login:', error)
                 toast.error('Server could not be accessed.', {
                     autoClose: 2000,
                 })
