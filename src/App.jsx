@@ -19,6 +19,7 @@ import Tasks from './layouts/Tasks'
 
 import DesignerApproval from './layouts/DesignerApproval'
 import AccountsApproval from './layouts/AccountsApproval'
+import Overview from './layouts/Overview'
 
 function App() {
     return (
@@ -37,6 +38,7 @@ function App() {
 
                     <Route path="/designer" element={<DesignerApproval />} />
                     <Route path="/accounts" element={<AccountsApproval />} />
+                    <Route path="/overview" element={<Overview />} />
 
                     {/* Test Routes */}
                     <Route

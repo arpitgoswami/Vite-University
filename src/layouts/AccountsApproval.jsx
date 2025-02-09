@@ -1,7 +1,11 @@
 import { useEffect, useState } from 'react'
-import { RiLogoutCircleLine } from 'react-icons/ri'
-import { ToastContainer } from 'react-toastify'
 import { handleDeleteCookie } from '../utils/cookieUtils'
+import { Dialog } from '@headlessui/react'
+import { Toaster } from 'react-hot-toast'
+import toast from 'react-hot-toast'
+
+import { RiLogoutCircleLine } from 'react-icons/ri'
+import { IoIosWarning } from 'react-icons/io'
 
 import Loading from '@loading'
 import axios from '@axios'
@@ -9,6 +13,8 @@ import axios from '@axios'
 function AccountsApproval() {
     const [records, setRecords] = useState([])
     const [loading, setLoading] = useState(true)
+    const [selectedId, setSelectedId] = useState(null)
+    const [isOpen, setIsOpen] = useState(false)
     const username = localStorage.username
 
     useEffect(() => {
@@ -23,16 +29,17 @@ function AccountsApproval() {
             .catch((err) => console.error(err))
     }, [])
 
-    function handleApproval(selectedId) {
+    function handleApproval() {
         axios
             .put(`/sales/approve/accounts/${selectedId}`)
             .then(() => {
-                alert('Approval successful')
+                toast.success('Successfully Approved!')
                 setRecords(
                     records.filter((record) => record._id !== selectedId)
                 )
+                setIsOpen(false)
             })
-            .catch((err) => alert(`Error: ${err.message}`))
+            .catch((err) => console.log(err))
     }
 
     if (loading) {
@@ -41,6 +48,7 @@ function AccountsApproval() {
 
     return (
         <div className="min-h-[100vh] bg-primary">
+            <Toaster />
             <div className="flex items-center justify-between bg-neutral p-4 text-white">
                 <div>Accounts Approval</div>
                 <button
@@ -79,8 +87,19 @@ function AccountsApproval() {
                                     <div className="font-semibold">Pending</div>
                                 </div>
                                 <button
-                                    onClick={() => handleApproval(data._id)}
-                                    className="mt-3 rounded-lg bg-green-500 px-4 py-2 text-sm font-semibold text-white shadow-md transition-all hover:bg-green-600"
+                                    onClick={() => {
+                                        window.location.href = `../invoice/${data._id}/sales`
+                                    }}
+                                    className="btn btn-primary btn-sm mr-4 mt-4"
+                                >
+                                    View
+                                </button>
+                                <button
+                                    onClick={() => {
+                                        setSelectedId(data._id)
+                                        setIsOpen(true)
+                                    }}
+                                    className="btn btn-success btn-sm mt-4"
                                 >
                                     Approve
                                 </button>
@@ -93,7 +112,39 @@ function AccountsApproval() {
                     </div>
                 )}
             </div>
-            <ToastContainer />
+
+            {/* Confirmation Modal */}
+            <Dialog
+                open={isOpen}
+                onClose={() => setIsOpen(false)}
+                className="fixed inset-0 flex items-center justify-center bg-neutral bg-opacity-60"
+            >
+                <div className="rounded bg-white shadow-lg">
+                    <Dialog.Title className="flex items-center rounded-t bg-yellow-500 p-4 text-lg font-bold">
+                        <IoIosWarning size={30} />
+                        <div className="ml-1">Confirm Approval</div>
+                    </Dialog.Title>
+                    <div className="p-4">
+                        <Dialog.Description className="mt-2">
+                            Are you sure you want to approve this entry?
+                        </Dialog.Description>
+                        <div className="mt-4 flex justify-end space-x-2">
+                            <button
+                                onClick={() => setIsOpen(false)}
+                                className="btn btn-error btn-sm"
+                            >
+                                Cancel
+                            </button>
+                            <button
+                                onClick={handleApproval}
+                                className="btn btn-success btn-sm"
+                            >
+                                Confirm
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </Dialog>
         </div>
     )
 }

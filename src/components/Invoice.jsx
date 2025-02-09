@@ -43,10 +43,10 @@ const InvoiceTable = () => {
         return <div>{error}</div>
     }
 
-    const amount = data[0].RATE * data[0].QTY
-    const gst = (amount / 100) * data[0].GST
+    const amount = data[0].rate * data[0].quantity
+    const gst = (amount / 100) * data[0].gst
     const gstAmount = gst + amount
-    const grandTotal = gstAmount + data[0].CYC - data[0].ADVANCE
+    const grandTotal = gstAmount + data[0].cyc - data[0].advance
 
     return (
         <>
@@ -84,7 +84,7 @@ const InvoiceTable = () => {
                                     contentEditable
                                     suppressContentEditableWarning
                                 >
-                                    {data[0]['COMPANY NAME']}
+                                    {data[0].companyName}
                                 </td>
                             </tr>
                             <tr>
@@ -96,7 +96,7 @@ const InvoiceTable = () => {
                                     contentEditable
                                     suppressContentEditableWarning
                                 >
-                                    {data[0]['COMPANY ADDRESS']}
+                                    {data[0].companyAddress}
                                 </td>
                             </tr>
                             <tr>
@@ -175,11 +175,18 @@ const InvoiceTable = () => {
                                         (column) =>
                                             ![
                                                 '_id',
-                                                'GST',
-                                                'CYC',
-                                                'ADVANCE',
-                                                'COMPANY NAME',
-                                                'COMPANY ADDRESS',
+                                                'gst',
+                                                'cyc',
+                                                'advance',
+                                                'companyName',
+                                                'companyAddress',
+                                                'designerApproval',
+                                                'accountsApproval',
+                                                'finalApproval',
+                                                'approvedBy',
+                                                'createdAt',
+                                                'updatedAt',
+                                                'comments',
                                             ].includes(column)
                                     ) // Exclude unwanted columns
                                     .map((column) => (
@@ -204,11 +211,18 @@ const InvoiceTable = () => {
                                         (column) =>
                                             ![
                                                 '_id',
-                                                'GST',
-                                                'CYC',
-                                                'ADVANCE',
-                                                'COMPANY NAME',
-                                                'COMPANY ADDRESS',
+                                                'gst',
+                                                'cyc',
+                                                'advance',
+                                                'companyName',
+                                                'companyAddress',
+                                                'designerApproval',
+                                                'accountsApproval',
+                                                'finalApproval',
+                                                'approvedBy',
+                                                'createdAt',
+                                                'updatedAt',
+                                                'comments',
                                             ].includes(column)
                                     ) // Exclude unwanted columns
                                     .map((column) => (
@@ -352,7 +366,7 @@ const InvoiceTable = () => {
                                     GST
                                 </td>
                                 <td className="border border-gray-300 px-1 py-0.5 text-left">
-                                    {data[0].GST}
+                                    {data[0].gst}
                                 </td>
                                 <td className="border border-gray-300 bg-gray-100 px-1 py-0.5 font-bold">
                                     Amount
@@ -366,7 +380,7 @@ const InvoiceTable = () => {
                                     CYC
                                 </td>
                                 <td className="border border-gray-300 px-1 py-0.5 text-left">
-                                    {data[0].CYC}
+                                    {data[0].cyc}
                                 </td>
                                 <td className="border border-gray-300 bg-gray-100 px-1 py-0.5 font-bold">
                                     GST Included Amount
@@ -380,7 +394,7 @@ const InvoiceTable = () => {
                                     Advance
                                 </td>
                                 <td className="border border-gray-300 px-1 py-0.5 text-left">
-                                    {data[0].ADVANCE}
+                                    {data[0].advance}
                                 </td>
                                 <td className="border border-gray-300 bg-gray-100 px-1 py-0.5 font-bold">
                                     Grand Total

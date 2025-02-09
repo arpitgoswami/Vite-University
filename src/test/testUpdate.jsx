@@ -2,8 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useLocation, useNavigate } from 'react-router-dom'
 import { ToastContainer, toast } from 'react-toastify'
 
-import Loading from '../components/Loading'
-
+import Loading from '@loading'
 import axios from '@axios'
 
 const TestUpdate = () => {
@@ -12,6 +11,7 @@ const TestUpdate = () => {
 
     const location = useLocation()
     const params = new URLSearchParams(location.search)
+
     const { id } = useParams()
     const doc = params.get('doc')
 
@@ -41,7 +41,7 @@ const TestUpdate = () => {
     }
 
     const handleBack = () => {
-        navigate(-1) // Go back to the previous page
+        navigate(-1)
     }
 
     const handleSubmit = async (e) => {

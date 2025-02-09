@@ -1,5 +1,6 @@
 import axios from '@axios'
-import { toast } from 'react-toastify'
+
+import toast from 'react-hot-toast'
 
 export const readCookie = (cookieName) => {
     const cookies = document.cookie.split('; ')
@@ -44,4 +45,21 @@ export const handleDeleteCookie = (username) => {
                 toast.error('An error occurred.')
             }
         })
+}
+
+export const handleDelete = (route, key) => {
+    axios
+        .delete(`/${route}/${key}`)
+        .then((res) => {
+            toast.success('Deletion successful.', {
+                duration: 3000,
+                onClose: () => window.location.reload(),
+            })
+        })
+        .catch((err) =>
+            console.error(
+                'Error deleting sale:',
+                err.response?.data || err.message
+            )
+        )
 }
