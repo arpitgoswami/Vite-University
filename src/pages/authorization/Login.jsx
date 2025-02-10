@@ -33,6 +33,7 @@ function Login() {
                     onClose: () => {
                         localStorage.setItem('username', username)
                         localStorage.setItem('auth', token)
+                        localStorage.setItem('role', authorization)
                         window.location.href = '../dashboard/overview'
                     },
                     autoClose: 1000,

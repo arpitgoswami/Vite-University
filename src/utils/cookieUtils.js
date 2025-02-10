@@ -31,6 +31,9 @@ export const handleDeleteCookie = (username) => {
                     },
                     autoClose: 1000,
                 })
+                setTimeout(() => {
+                    window.location.href = '/'
+                }, 2000)
             }
         })
         .catch((error) => {

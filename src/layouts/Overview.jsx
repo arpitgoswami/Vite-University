@@ -5,6 +5,7 @@ import { Toaster } from 'react-hot-toast'
 import { handleDelete } from '../utils/cookieUtils'
 
 import { MdDelete } from 'react-icons/md'
+import { TiTick } from 'react-icons/ti'
 
 import Loading from '@loading'
 import axios from '@axios'
@@ -16,15 +17,21 @@ function Overview() {
     const [pendingRecords, setPendingRecords] = useState([])
     const [finalApprovalRecords, setFinalApprovalRecords] = useState([])
     const [error, setError] = useState(null)
-    const [showDialog, setShowDialog] = useState(false)
+
     const [deleteId, setDeleteId] = useState('')
+    const [approveId, setApproveId] = useState('')
+
+    const [showDialog, setShowDialog] = useState(false)
+    const [showApproval, setShowApproval] = useState(false)
 
     useEffect(() => {
         axios
             .get('/sales')
             .then((res) => {
                 const filteredPending = res.data.filter(
-                    (sale) => !(sale.accountsApproval && sale.designerApproval) // Include only if at least one is false
+                    (sale) =>
+                        !(sale.accountsApproval && sale.designerApproval) &&
+                        sale.approvedBy !== 'Nil'
                 )
                 setPendingRecords(filteredPending)
                 setLoading(false)
@@ -66,7 +73,7 @@ function Overview() {
             <div className="mb-6 flex items-center justify-between">
                 <h2 className="text-xl font-semibold">Overview</h2>
                 <button
-                    onClick={() => navigate('../testCreate/sales')}
+                    onClick={() => navigate('../createSales')}
                     className="btn btn-outline btn-primary btn-sm"
                 >
                     Create New Entry
@@ -197,6 +204,11 @@ function Overview() {
                                         GST Number:
                                     </div>
                                     <div>{sale.gstNumber}</div>
+
+                                    <div className="font-semibold">
+                                        Comment:
+                                    </div>
+                                    <div>{sale.comments}</div>
                                 </div>
                                 <div className="mt-3 flex space-x-2">
                                     <button
@@ -210,7 +222,10 @@ function Overview() {
 
                                     <button
                                         className="btn btn-primary btn-xs"
-                                        onClick={() => finalApproval(sale._id)}
+                                        onClick={() => {
+                                            setApproveId(sale._id)
+                                            setShowApproval(true)
+                                        }}
                                     >
                                         Final Approve
                                     </button>
@@ -237,7 +252,7 @@ function Overview() {
             <Dialog
                 open={showDialog}
                 onClose={() => setShowDialog(false)}
-                className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 shadow-lg"
+                className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 shadow-lg"
             >
                 <div className="rounded bg-white shadow-lg">
                     <Dialog.Title className="flex items-center rounded-t bg-error p-4 text-lg font-bold text-neutral">
@@ -261,6 +276,39 @@ function Overview() {
                             <button
                                 className="btn btn-primary btn-sm"
                                 onClick={() => setShowDialog(false)}
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </Dialog>
+
+            <Dialog
+                open={showApproval}
+                onClose={() => setShowApproval(false)}
+                className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-80 shadow-lg"
+            >
+                <div className="rounded bg-white shadow-lg">
+                    <Dialog.Title className="flex items-center rounded-t bg-success p-4 text-lg font-bold text-neutral">
+                        <TiTick size={30} />
+                        <div className="ml-1"> Confirm Approval</div>
+                    </Dialog.Title>
+                    <div className="p-4">
+                        <Dialog.Description className="text-neutral">
+                            Are you sure you want to finally approve this
+                            record?
+                        </Dialog.Description>
+                        <div className="mt-4 flex justify-end space-x-4">
+                            <button
+                                className="btn btn-success btn-sm"
+                                onClick={() => finalApproval(approveId)}
+                            >
+                                Approve
+                            </button>
+                            <button
+                                className="btn btn-primary btn-sm"
+                                onClick={() => setShowApproval(false)}
                             >
                                 Cancel
                             </button>

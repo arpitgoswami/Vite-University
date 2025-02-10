@@ -5,7 +5,7 @@ import Dashboard from './pages/Dashboard'
 import ComingSoon from './pages/others/ComingSoon'
 import Error404 from './pages/others/Error404'
 import TestUpdate from './test/testUpdate'
-import TestCreate from './test/testCreate'
+import CreateSales from './test/CreateSales'
 import Contact from './pages/others/Contact'
 
 import Approval from './components/interface/Approval'
@@ -20,6 +20,8 @@ import Tasks from './layouts/Tasks'
 import DesignerApproval from './layouts/DesignerApproval'
 import AccountsApproval from './layouts/AccountsApproval'
 import Overview from './layouts/Overview'
+
+import RMQuaratine from './layouts/RMQuaratine'
 
 function App() {
     return (
@@ -39,7 +41,7 @@ function App() {
                     <Route path="/designer" element={<DesignerApproval />} />
                     <Route path="/accounts" element={<AccountsApproval />} />
                     <Route path="/overview" element={<Overview />} />
-
+                    <Route path="/rm" element={<RMQuaratine />} />
                     {/* Test Routes */}
                     <Route
                         path="/testUpdate/:id"
@@ -69,10 +71,10 @@ function App() {
                     />
 
                     <Route
-                        path="/testCreate/:doc"
+                        path="/createSales"
                         element={
                             <PrivateRoute>
-                                <TestCreate />
+                                <CreateSales />
                             </PrivateRoute>
                         }
                     />
