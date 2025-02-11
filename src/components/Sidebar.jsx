@@ -1,10 +1,7 @@
-import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify'
 import { readCookie, handleDeleteCookie } from '../utils/cookieUtils'
-import axios from '@axios'
 
-// Import only needed icons
 import { RxDashboard } from 'react-icons/rx'
 import { BiTask } from 'react-icons/bi'
 import { LuUsersRound } from 'react-icons/lu'
@@ -30,11 +27,16 @@ function Sidebar() {
             icon: <IoCalendarNumber size={20} />,
             path: 'rmquaratine',
         },
-        { label: 'Tasks', icon: <BiTask size={20} />, path: 'tasks' },
+        { label: 'Todos', icon: <BiTask size={20} />, path: 'todos' },
         {
             label: 'Employees',
             icon: <LuUsersRound size={20} />,
             path: 'employees',
+        },
+        {
+            label: 'Candidates',
+            icon: <LuUsersRound size={20} />,
+            path: 'candidates',
         },
         {
             label: 'Attendance',
@@ -42,16 +44,25 @@ function Sidebar() {
             path: 'attendance',
         },
         {
-            label: 'Sales Report',
+            label: 'PO Data',
             icon: <FaShoppingBag size={20} />,
-            path: 'sales',
+            path: 'po',
         },
         {
-            label: 'PPIC Register',
+            label: 'Raw Material',
             icon: <HiOutlineDocumentReport size={20} />,
-            path: 'ppic',
+            path: 'rawmaterial',
         },
-        { label: 'Profile', icon: <CgProfile size={20} />, path: 'profile' },
+        {
+            label: 'Packing Material',
+            icon: <CgProfile size={20} />,
+            path: 'packingmaterial',
+        },
+        {
+            label: 'Customers',
+            icon: <CgProfile size={20} />,
+            path: 'customers',
+        },
         {
             label: 'Logout',
             icon: <BiLogOutCircle size={20} />,
@@ -62,10 +73,10 @@ function Sidebar() {
 
     const getItemClassName = (item) => {
         const baseClasses =
-            'flex items-center cursor-pointer rounded space-x-2 m-2 text-sm hover:bg-base-100 hover:text-neutral p-3'
+            'flex items-center cursor-pointer rounded space-x-3 mx-3 my-1 px-4 py-3 text-sm transition-all duration-200 hover:bg-gray-700'
         const activeClasses = location.pathname.includes(item.path)
-            ? 'bg-neutral'
-            : ''
+            ? 'bg-gray-700 text-white font-medium'
+            : 'text-gray-300'
         const customClasses = item.className || ''
 
         return `${baseClasses} ${activeClasses} ${customClasses}`.trim()
@@ -82,24 +93,24 @@ function Sidebar() {
 
     return (
         <div className="flex">
-            <aside className="fixed z-10 h-screen w-56 bg-gray-800 text-white">
-                <nav>
-                    <div>
-                        <div className="cursor-pointer">
-                            <img
-                                src="/logo.jpg"
-                                alt="Logo"
-                                className="mx-2 my-2 w-52 rounded"
-                            />
-                        </div>
-                        <ul className="space-y-2">
+            <aside className="fixed z-10 h-screen w-64 bg-gray-800 shadow-xl">
+                <nav className="flex h-full flex-col">
+                    <div className="border-b border-gray-700 px-3 py-4">
+                        <img
+                            src="/logo.jpg"
+                            alt="Logo"
+                            className="w-full rounded shadow-md transition-opacity duration-200 hover:opacity-90"
+                        />
+                    </div>
+                    <div className="flex-1 overflow-y-auto">
+                        <ul className="py-3">
                             {sidebarItems.map((item, index) => (
                                 <li
                                     key={index}
                                     onClick={() => handleItemClick(item)}
                                 >
                                     <a className={getItemClassName(item)}>
-                                        {item.icon}
+                                        <span>{item.icon}</span>
                                         <span>{item.label}</span>
                                     </a>
                                 </li>

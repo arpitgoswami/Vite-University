@@ -1,6 +1,6 @@
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 
-import Login from './pages/authorization/Login'
+import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import ComingSoon from './pages/others/ComingSoon'
 import Error404 from './pages/others/Error404'
@@ -8,14 +8,13 @@ import TestUpdate from './test/testUpdate'
 import CreateSales from './test/CreateSales'
 import Contact from './pages/others/Contact'
 
-import Approval from './components/interface/Approval'
 import Invoice from './components/Invoice'
 import PrivateRoute from './pages/others/PrivateRoute'
 
 import TestPPIC from './test/testPPIC'
 import TestUpdatePPIC from './test/testUpdatePPIC'
 
-import Tasks from './layouts/Tasks'
+import Tasks from './pages/Todos'
 
 import DesignerApproval from './layouts/DesignerApproval'
 import AccountsApproval from './layouts/AccountsApproval'
@@ -78,14 +77,6 @@ function App() {
                     />
 
                     {/* Approval Routes */}
-                    <Route
-                        path="/approval"
-                        element={
-                            <PrivateRoute>
-                                <Approval />
-                            </PrivateRoute>
-                        }
-                    />
 
                     <Route
                         path="/designer"
@@ -101,15 +92,6 @@ function App() {
                         element={
                             <PrivateRoute>
                                 <AccountsApproval />
-                            </PrivateRoute>
-                        }
-                    />
-
-                    <Route
-                        path="/approval/:id"
-                        element={
-                            <PrivateRoute>
-                                <Approval />
                             </PrivateRoute>
                         }
                     />
