@@ -16,7 +16,10 @@ const PrivateRoute = ({ children }) => {
 
             if (result.authorization === 'designer') {
                 navigate('/designer')
-            } else if (result.authorization === 'accounts') {
+            } else if (
+                result.authorization === 'accounts' &&
+                !window.location.pathname.includes('invoice')
+            ) {
                 navigate('/accounts')
             }
         }

@@ -96,7 +96,7 @@ function RMQuaratine() {
                         />
                     </div>
                     {pendingRecords.length > 0 ? (
-                        <div className="grid grid-cols-4 gap-2">
+                        <div className="grid grid-cols-3 gap-2">
                             {pendingRecords
                                 .filter((record) =>
                                     record.gstNumber
@@ -126,7 +126,7 @@ function RMQuaratine() {
                                             <button
                                                 className="btn btn-primary btn-xs"
                                                 onClick={() => {
-                                                    window.location.href = `../invoice/${sale._id}/sales`
+                                                    window.location.href = `../invoice/${record._id}/sales`
                                                 }}
                                             >
                                                 View
@@ -134,7 +134,7 @@ function RMQuaratine() {
                                             <button
                                                 className="btn btn-primary btn-xs"
                                                 onClick={() => {
-                                                    window.location.href = `../testUpdate/${sale._id}?doc=sales`
+                                                    window.location.href = `../testUpdate/${record._id}?doc=sales`
                                                 }}
                                             >
                                                 Edit
