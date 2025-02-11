@@ -58,13 +58,13 @@ function CreateSales() {
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-neutral p-6">
+        <div className="flex min-h-screen items-center justify-center bg-gray-50 p-6">
             <Toaster position="top-right" />
             <div className="mx-auto w-full max-w-5xl rounded-xl bg-white shadow-xl">
                 <div className="mt-8 flex items-center justify-between px-4">
                     <button
                         onClick={() => navigate(-1)}
-                        className="btn btn-ghost"
+                        className="btn rounded-lg"
                     >
                         <IoMdArrowRoundBack className="h-5 w-5" />
                         Back
@@ -76,7 +76,7 @@ function CreateSales() {
                     />
                     <button
                         onClick={() => navigate('/dashboard/overview')}
-                        className="btn btn-ghost"
+                        className="btn rounded-lg"
                     >
                         Home
                     </button>
@@ -91,7 +91,7 @@ function CreateSales() {
                     className="mt-4 grid grid-cols-1 gap-y-6 md:grid-cols-2"
                 >
                     {Object.keys(formData).map((key) => (
-                        <div key={key} className="group px-6">
+                        <div key={key} className="group px-4">
                             <label className="mb-2 block text-sm font-semibold capitalize text-gray-700">
                                 {formatFieldLabel(key)}
                             </label>

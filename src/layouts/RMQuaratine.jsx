@@ -58,9 +58,9 @@ function RMQuaratine() {
 
     return (
         <>
-            <div className="min-h-screen bg-neutral p-4 text-white">
+            <div className="min-h-screen bg-gray-50 p-4">
                 <div className="flex justify-between">
-                    <div className="text-lg font-bold">
+                    <div className="text-xl font-bold">
                         RM Qurantine Records
                     </div>
                     <div>
@@ -90,7 +90,7 @@ function RMQuaratine() {
                         <input
                             type="text"
                             placeholder="Search by GST Number"
-                            className="input input-bordered w-full border-white bg-gray-800 text-white"
+                            className="input input-bordered w-full"
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
@@ -106,7 +106,7 @@ function RMQuaratine() {
                                 .map((record, index) => (
                                     <div
                                         key={index}
-                                        className="rounded bg-gray-800 p-4"
+                                        className="rounded bg-white p-4 shadow-lg"
                                     >
                                         <div className="grid grid-cols-2 gap-y-1 text-sm">
                                             <p className="font-semibold">

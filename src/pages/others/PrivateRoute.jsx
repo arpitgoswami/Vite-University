@@ -13,6 +13,12 @@ const PrivateRoute = ({ children }) => {
                 localStorage.clear()
                 navigate('*')
             }
+
+            if (result.authorization === 'designer') {
+                navigate('/designer')
+            } else if (result.authorization === 'accounts') {
+                navigate('/accounts')
+            }
         }
 
         checkToken()

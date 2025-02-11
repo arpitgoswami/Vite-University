@@ -38,8 +38,6 @@ function App() {
                     <Route path="/contact" element={<Contact />} />
                     <Route path="/tasks" element={<Tasks />} />
 
-                    <Route path="/designer" element={<DesignerApproval />} />
-                    <Route path="/accounts" element={<AccountsApproval />} />
                     <Route path="/overview" element={<Overview />} />
                     <Route path="/rm" element={<RMQuaratine />} />
                     {/* Test Routes */}
@@ -88,6 +86,25 @@ function App() {
                             </PrivateRoute>
                         }
                     />
+
+                    <Route
+                        path="/designer"
+                        element={
+                            <PrivateRoute>
+                                <DesignerApproval />
+                            </PrivateRoute>
+                        }
+                    />
+
+                    <Route
+                        path="/accounts"
+                        element={
+                            <PrivateRoute>
+                                <AccountsApproval />
+                            </PrivateRoute>
+                        }
+                    />
+
                     <Route
                         path="/approval/:id"
                         element={

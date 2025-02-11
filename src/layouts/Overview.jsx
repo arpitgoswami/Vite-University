@@ -66,12 +66,12 @@ function Overview() {
     }
 
     return (
-        <div className="min-h-screen bg-neutral p-4 text-white shadow-lg">
+        <div className="min-h-screen bg-gray-50 p-4 shadow-lg">
             <Toaster />
             {error && <div className="mb-4 text-red-500">{error}</div>}
 
             <div className="mb-6 flex items-center justify-between">
-                <h2 className="text-xl font-semibold">Overview</h2>
+                <h2 className="text-xl font-bold">Overview</h2>
                 <button
                     onClick={() => navigate('../createSales')}
                     className="btn btn-outline btn-primary btn-sm"
@@ -89,7 +89,7 @@ function Overview() {
                         pendingRecords.map((sale) => (
                             <div
                                 key={sale._id}
-                                className="rounded-lg bg-gray-800 p-4 shadow-md"
+                                className="card rounded-lg bg-white p-4 shadow-lg"
                             >
                                 <div className="grid grid-cols-2 gap-2 text-sm">
                                     <div className="font-semibold">
