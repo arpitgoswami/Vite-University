@@ -5,7 +5,7 @@ import axios from 'axios'
 // http://localhost:3000/
 
 const instance = axios.create({
-    baseURL: 'http://localhost:3000/',
+    baseURL: 'https://aplex-backend-production.up.railway.app/',
 
     headers: {
         'Content-Type': 'application/json',
